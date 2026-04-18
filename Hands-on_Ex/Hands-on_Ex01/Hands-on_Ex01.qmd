@@ -1,5 +1,13 @@
 ---
 title: "Hands-on Exercise 1"
+author: "Persis Evangeline"
+date: "April 18, 2026"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
 ---
 
 # Getting started
@@ -19,6 +27,8 @@ exam_data <- read_csv("Exam_data.csv")
 ```
 
 # Plotting a simple bar chart
+
+The below code is to plot a bar chart of the distribution by race.
 
 ```{r}
 ggplot(data=exam_data,
