@@ -10,7 +10,7 @@ execute:
   freeze: true
 ---
 
-#Getting started
+# Getting started
 
 There is a need to check if we have installed the relevant packages.
 
@@ -26,7 +26,7 @@ Import and read the data set, which is the Exam_data.csv file
 exam_data <- read_csv("Exam_data.csv")
 ```
 
-Making different plots using ggplot.
+# Making different plots using ggplot.
 
 First plot is to compare the English and Maths scores for Primary 3.
 
