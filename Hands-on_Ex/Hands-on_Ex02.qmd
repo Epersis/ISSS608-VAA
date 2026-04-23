@@ -1,0 +1,21 @@
+---
+title: "Hands-on Exercise 2"
+author: "Persis Evangeline"
+date: "April 23, 2026"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+#Getting started
+
+There is a need to check if we have installed the relevant packages.
+
+```{r}
+pacman::p_load(ggrepel, patchwork, 
+               ggthemes, hrbrthemes, 
+               tidyverse)
+```
