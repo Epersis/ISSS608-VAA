@@ -1,0 +1,15 @@
+{
+  "hash": "5524cbecad0a8423efcdd10f6c971f8c",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Hands-on Exercise 2\"\nauthor: \"Persis Evangeline\"\ndate: \"April 23, 2026\"\ndate-modified: \"last-modified\"\nexecute: \n  eval: true\n  echo: true\n  warning: false\n  freeze: true\n---\n\n#Getting started\n\nThere is a need to check if we have installed the relevant packages.\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(ggrepel, patchwork, \n               ggthemes, hrbrthemes, \n               tidyverse)\n```\n:::\n\n\nImport and read the data set, which is the Exam_data.csv file\n\n\n::: {.cell}\n\n```{.r .cell-code}\nexam_data <- read_csv(\"Exam_data.csv\")\n```\n:::\n\n\nMaking different plots using ggplot.\n\nFirst plot is to compare the English and Maths scores for Primary 3.\n\n\n::: {.cell}\n\n```{.r .cell-code}\n#ggplot(data=exam_data,\n#       aes(x=MATHS,\n#           y=ENGLISH))\n#+ geom_point() \n#+ geom_smooth(method=lm, size=0.5,\n#              vjust= -.5)\n#+ coord_cartesian(xlim=c(0,100),\n#                  ylim=c(0,100))\n#+ ggtitle(\"English scores versus Math scores for Primary 3\")\n```\n:::\n\n\nSecond plot is to compare the\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
