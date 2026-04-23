@@ -249,5 +249,117 @@ ggplot(data=exam_data,
 
 # Using coordinate
 
+Default form of bar chart:
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar()
+```
 
+1. Flip horizontal bar chart into vertical bar chart
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip()
+```
 
+2. Changing range of the X and Y axis
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, size=0.5)
+```
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, 
+              size=0.5) +  
+  coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100))
+```
+
+# Working with theme:
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_gray()
+```
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_classic()
+```
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_minimal()
+```
+
+# Alternatives
+1. Frequency plot for categorical data
+```{r}
+ggplot(data=exam_data, aes(x=RACE)) +
+  geom_bar(stat="count")
+```
+
+2. Proportion/Percentage bar chart
+```{r}
+ggplot(data=exam_data, aes(x=RACE)) +
+  geom_bar(aes(y = after_stat(prop))) +
+  ylab("Proportion")
+```
+
+3. Scatterplot for color grouping + trend line
+```{r}
+ggplot(data=exam_data, aes(x=MATHS, y=ENGLISH, colour=GENDER)) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE)
+```
+
+4. Boxplot + jitter
+```{r}
+ggplot(data=exam_data, aes(x=GENDER, y=MATHS)) +
+  geom_boxplot() +
+  geom_jitter(width=0.2, alpha=0.5)
+```
+
+5. Histogram + density overlay
+
+```{r}
+ggplot(data=exam_data, aes(x=MATHS)) +
+  geom_histogram(aes(y=after_stat(density)), bins=20, fill="grey") +
+  geom_density(color="blue")
+```
+
+6. Facet with multiples variables
+```{r}
+ggplot(data=exam_data, aes(x=MATHS)) +
+  geom_histogram(bins=20) +
+  facet_grid(GENDER ~ CLASS)
+```
+
+7. Flip coordinates for readability 
+```{r}
+ggplot(data=exam_data, aes(x=RACE)) +
+  geom_bar() +
+  coord_flip()
+```
+
+8. Highlight subset of data
+```{r}
+ggplot(data=exam_data, aes(x=MATHS, y=ENGLISH)) +
+  geom_point(color="grey") +
+  geom_point(data=subset(exam_data, MATHS > 80), color="red")
+```
