@@ -107,3 +107,59 @@ ggplot(data = exam_data,
   ggtitle("Distribution of Race") +
   theme_economist()
 ```
+
+Combining more than one graph into a single display:
+Here we will assign the individual plots to a variable.
+
+```{r}
+p1 <- ggplot(data=exam_data, 
+          aes(x=MATHS))+
+      geom_histogram(bins=20,
+                     boundary=100,
+                     color="grey25",
+                     fill="grey90")+
+  coord_cartesian(xlim=c(0,100))+
+  ggtitle("Distribution of Maths Score")
+```
+
+
+```{r}
+p2 <- ggplot(data=exam_data,
+             aes(x=ENGLISH))+
+  geom_histogram(bins=20,
+                 boundary=100,
+                 color="blue2",
+                 fill="white")+
+  coord_cartesian(xlim=c(0,100))+
+  ggtitle("Distribution of English scores")
+```
+
+```{r}
+p3 <- ggplot(data=exam_data, 
+             aes(x= MATHS, 
+                 y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, 
+              size=0.5) +  
+  coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100)) +
+  ggtitle("English scores versus Maths scores for Primary 3")
+
+```
+Now, combine the plots into one.
+```{r}
+p1 + p2
+
+```
+
+Lets combine 3 into one. 
+```{r}
+p1+p2+p3
+
+```
+In the above plot, some portions of the title are cut out. So, we increase the width and height of the
+area to plot.
+
+```{r, fig.width=15, fig.height=10}
+p1 + p2 + p3
+```
