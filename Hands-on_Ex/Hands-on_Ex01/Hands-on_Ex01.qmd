@@ -41,7 +41,7 @@ ggplot(data=exam_data,
   geom_bar()
 ```
 
-#Plotting histogram using ggplot2.
+# Plotting histogram using ggplot2.
 ```{r}
 ggplot(data=exam_data, aes(x = MATHS)) +
   geom_histogram(bins=10, 
@@ -71,6 +71,14 @@ ggplot(data=exam_data,
 ```
 
 # Looking at histograms again:
+
+default histogram: 
+```{r}
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_histogram()       
+```
+
 We can modify a geometric object by changing aes.
 the fill() is what differentiates the color.
 ```{r}
@@ -80,6 +88,15 @@ ggplot(data=exam_data,
   geom_histogram(bins=20, 
                  color="grey30")
 ```
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20,            
+                 color="black",      
+                 fill="light blue")  
+```
+
 
 When using continuous data, an alternative to histogram would be geom-density().
 ```{r}
@@ -103,6 +120,8 @@ ggplot(data=exam_data,
   geom_density()
 ```
 # Boxplot:
+
+
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS,       
@@ -142,6 +161,7 @@ particular score range. So, for both male and female, the widest is around 75-85
 4. Look at upper range.
 
 # Scatterplot:
+geom_point is used to create scatterplot.
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, 
@@ -161,6 +181,15 @@ ggplot(data=exam_data,
 ```
 
 # Working with stat():
+
+Incomplete boxplot without indicating mean:
+```{r}
+ggplot(data=exam_data, 
+       aes(y = MATHS, x= GENDER)) +
+  geom_boxplot()
+```
+
+stat_summary adds mean values.
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, x= GENDER)) +
@@ -171,6 +200,7 @@ ggplot(data=exam_data,
                size=4)               
 ```
 
+an alternative code to showing the mean values.
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, x= GENDER)) +
@@ -182,6 +212,14 @@ ggplot(data=exam_data,
 ```
 
 To visualise a line on scatterplot to see trend:
+geom_smooth() is used to plot a best fit curve on scatterplot.
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(size=0.5)
+```
 
 ```{r}
 ggplot(data=exam_data, 
@@ -192,7 +230,7 @@ ggplot(data=exam_data,
               linewidth=0.5)
 ```
 
-#Trellis plot:
+# Trellis plot:
 1. Using facet_wrap()
 ```{r}
 ggplot(data=exam_data, 
@@ -208,3 +246,8 @@ ggplot(data=exam_data,
   geom_histogram(bins=20) +
     facet_grid(~ CLASS)
 ```
+
+# Using coordinate
+
+
+
