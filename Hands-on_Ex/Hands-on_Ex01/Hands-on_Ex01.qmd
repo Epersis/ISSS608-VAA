@@ -41,7 +41,7 @@ ggplot(data=exam_data,
   geom_bar()
 ```
 
-Plotting histogram using ggplot2.
+#Plotting histogram using ggplot2.
 ```{r}
 ggplot(data=exam_data, aes(x = MATHS)) +
   geom_histogram(bins=10, 
@@ -51,7 +51,8 @@ ggplot(data=exam_data, aes(x = MATHS)) +
   ggtitle("Distribution of Maths scores")
 ```
 
-Another alternative is to use dotplot. In a dot plot, each dot represents one observation and the dots are stacked. However, the y scale is misleading.
+# Another alternative is to use dotplot. 
+In a dot plot, each dot represents one observation and the dots are stacked. However, the y scale is misleading.
 
 ```{r}
 ggplot(data=exam_data, 
@@ -69,7 +70,7 @@ ggplot(data=exam_data,
                      breaks = NULL)  
 ```
 
-Looking at histograms again:
+# Looking at histograms again:
 We can modify a geometric object by changing aes.
 the fill() is what differentiates the color.
 ```{r}
@@ -101,7 +102,7 @@ ggplot(data=exam_data,
            colour = CLASS)) +
   geom_density()
 ```
-Boxplot:
+# Boxplot:
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS,       
@@ -125,4 +126,85 @@ statistically significant difference in median Maths scores between genders.
 3. Look at IQR 
 4. Look at whiskers & outliers. 
 
+# geom_violin is used for creating violin plot.
 
+```{r}
+ggplot(data=exam_data, 
+       aes(y = MATHS, 
+           x= GENDER)) +
+  geom_violin()
+
+```
+1. Width = density. The wider, the more students there are at that 
+particular score range. So, for both male and female, the widest is around 75-85. So, most students score around the mid to high 70s to 80s. 
+2. Overall shape/distribution pattern. Both violins have very similar shapes. There is a slight bulge around the higher scores(80+). The distribution of Math scores is very similar for both genders. 
+3. Both males and females have thin lower tails. Males have a slightly longer lower tail. There may be more low-score extremes among males.
+4. Look at upper range.
+
+# Scatterplot:
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, 
+           y=ENGLISH)) +
+  geom_point()            
+```
+
+
+Combining different geom objects:
+```{r}
+ggplot(data=exam_data, 
+       aes(y = MATHS, 
+           x= GENDER)) +
+  geom_boxplot() +                    
+  geom_point(position="jitter", 
+             size = 0.5)        
+```
+
+# Working with stat():
+```{r}
+ggplot(data=exam_data, 
+       aes(y = MATHS, x= GENDER)) +
+  geom_boxplot() +
+  stat_summary(geom = "point",       
+               fun = "mean",         
+               colour ="red",        
+               size=4)               
+```
+
+```{r}
+ggplot(data=exam_data, 
+       aes(y = MATHS, x= GENDER)) +
+  geom_boxplot() +
+  geom_point(stat="summary",        
+             fun="mean",           
+             colour="red",          
+             size=4)          
+```
+
+To visualise a line on scatterplot to see trend:
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, 
+           y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, 
+              linewidth=0.5)
+```
+
+#Trellis plot:
+1. Using facet_wrap()
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20) +
+    facet_wrap(~ CLASS)
+```
+
+2. Using facet_grid()
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20) +
+    facet_grid(~ CLASS)
+```
