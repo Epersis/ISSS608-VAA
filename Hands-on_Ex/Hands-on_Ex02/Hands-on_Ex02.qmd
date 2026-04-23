@@ -31,16 +31,79 @@ Making different plots using ggplot.
 First plot is to compare the English and Maths scores for Primary 3.
 
 ```{r}
-#ggplot(data=exam_data,
-#       aes(x=MATHS,
-#           y=ENGLISH))
-#+ geom_point() 
-#+ geom_smooth(method=lm, size=0.5,
-#              vjust= -.5)
-#+ coord_cartesian(xlim=c(0,100),
-#                  ylim=c(0,100))
-#+ ggtitle("English scores versus Math scores for Primary 3")
+ggplot(data=exam_data,
+       aes(x=MATHS,
+           y=ENGLISH)) +
+  geom_point() + 
+  geom_smooth(method=lm, size=0.5,
+              vjust= -.5)+ 
+  coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100))+ 
+  ggtitle("English scores versus Math scores for Primary 3")
 ```
 
-Second plot is to compare the graph for,
+Second plot is to compare the Science and Maths scores for Primary 3.
+```{r}
+ggplot(data=exam_data,
+       aes(x=MATHS,
+           y=SCIENCE)) +
+  geom_point() + 
+  geom_smooth(method=lm, size=0.5,
+              vjust= -.5)+ 
+  coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100))+ 
+  ggtitle("English scores versus Math scores for Primary 3")
+```
 
+I am going to plot the same type of graph to compare race and Maths scores. 
+```{r}
+ggplot(data=exam_data,
+       aes(x=RACE,
+           y=SCIENCE)) +
+  geom_point() + 
+  geom_smooth(method=lm, size=0.5,
+              vjust= -.5)+ 
+  coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100))+ 
+  ggtitle("English scores versus Math scores for Primary 3")
+```
+This plot appears strange as RACE is a categorical data type. Hence, the few values of RACE are compressed to the 
+far left, making it difficult to interpret. 
+
+A histogram or bar chart would be a better choice to plot a categorical and numerical into one plot. 
+```{r}
+ggplot(data=exam_data,
+       aes(x=SCIENCE))+
+  geom_histogram(bins=25,
+                 boundary=100,
+                 color="grey25",
+                 fill="grey90")+
+  ggtitle("Distribution of Science scores")+
+  theme_economist()
+```
+
+This plot is much easier to interpret. It is important to take note of data types when deciding what plots,charts
+and graphs to use.
+
+I will make another plot to see the count of students by race.
+However, the code below will give an error as geom_histogram() is for continuous numeric data, but RACE is a categorical/discrete variable.That is why ggplot says:stat_bin() requires a continuous x aesthetic.
+```{r}
+#ggplot(data=exam_data,
+#       aes(x=RACE))+
+#  geom_histogram(bins=25,
+#                 boundary=100,
+#                 color="grey25",
+#                fill="grey90")+
+#  ggtitle("Distribution of Science scores")+
+#  theme_economist()
+```
+
+Instead, we can use geom_bar().
+```{r}
+ggplot(data = exam_data,
+       aes(x = RACE)) +
+  geom_bar(color = "grey25",
+           fill = "grey90") +
+  ggtitle("Distribution of Race") +
+  theme_economist()
+```
