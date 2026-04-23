@@ -108,7 +108,58 @@ ggplot(data = exam_data,
   theme_economist()
 ```
 
-Combining more than one graph into a single display:
+# Using ggrepel:
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, 
+           y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, 
+              size=0.5) +  
+  geom_label_repel(aes(label = ID), 
+                   fontface = "bold") +
+  coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100)) +
+  ggtitle("English scores versus Maths scores for Primary 3")
+```
+
+# Working with ggtheme package:
+```{r}
+ggplot(data=exam_data, 
+             aes(x = MATHS)) +
+  geom_histogram(bins=20, 
+                 boundary = 100,
+                 color="grey25", 
+                 fill="grey90") +
+  ggtitle("Distribution of Maths scores") +
+  theme_economist()
+```
+
+```{r}
+ggplot(data=exam_data, 
+             aes(x = MATHS)) +
+  geom_histogram(bins=20, 
+                 boundary = 100,
+                 color="grey25", 
+                 fill="grey90") +
+  ggtitle("Distribution of Maths scores") +
+  theme_ipsum()
+```
+
+```{r}
+ggplot(data=exam_data, 
+             aes(x = MATHS)) +
+  geom_histogram(bins=20, 
+                 boundary = 100,
+                 color="grey25", 
+                 fill="grey90") +
+  ggtitle("Distribution of Maths scores") +
+  theme_ipsum(axis_title_size = 18,
+              base_size = 15,
+              grid = "Y")
+```
+
+# Combining more than one graph into a single display:
 Here we will assign the individual plots to a variable.
 
 ```{r}
@@ -146,7 +197,7 @@ p3 <- ggplot(data=exam_data,
   ggtitle("English scores versus Maths scores for Primary 3")
 
 ```
-Now, combine the plots into one.
+Now, combine the 2 plots into one.
 ```{r}
 p1 + p2
 
@@ -169,12 +220,17 @@ There are other ways to display the charts into 1.
 “/” operator to stack two ggplot2 graphs,
 “|” operator to place the plots beside each other,
 “()” operator the define the sequence of the plotting.
+```{r}
+(p1 / p2) | p3
+```
 
+tagging/numbering:
 ```{r}
 ((p1 / p2) | p3) + 
   plot_annotation(tag_levels = 'I')
 ```
 
+Inserting the plot at specific locations/areas:
 ```{r}
 p3 + inset_element(p2, 
                    left = 0.02, 
@@ -187,4 +243,100 @@ p3 + inset_element(p2,
 ```{r}
 patchwork <- (p1 / p2) | p3
 patchwork & theme_economist()
+```
+
+# Alternatives
+1. Label only selected points instead of every point
+```{r}
+nrow(subset(exam_data, MATHS > 80 | ENGLISH > 80))
+
+ggplot(data = exam_data,
+       aes(x = MATHS, y = ENGLISH)) +
+  geom_point() +
+  geom_smooth(method = lm, linewidth = 0.5) +
+  geom_label_repel(
+    data = subset(exam_data, MATHS > 80 | ENGLISH > 80),
+    aes(label = ID),
+    fontface = "bold"
+  ) +
+  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) +
+  ggtitle("English scores versus Maths scores for P3")
+```
+
+2. Use geom_text_repel()
+```{r}
+ggplot(data = exam_data,
+       aes(x = MATHS, y = ENGLISH)) +
+  geom_point() +
+  geom_smooth(method = lm, linewidth = 0.5) +
+  geom_text_repel(
+    aes(label = ID),
+    fontface = "bold",
+    size = 3
+  ) +
+  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) +
+  ggtitle("English scores versus Maths scores for P3")
+```
+
+3. Map color to a grouping variable in the labelled scatterplot
+```{r}
+ggplot(data = exam_data,
+       aes(x = MATHS, y = ENGLISH, colour = GENDER)) +
+  geom_point() +
+  geom_smooth(method = lm, linewidth = 0.5, se = FALSE) +
+  geom_text_repel(
+    data = subset(exam_data, MATHS > 85 | ENGLISH > 85),
+    aes(label = ID),
+    show.legend = FALSE
+  ) +
+  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) +
+  ggtitle("English V Maths scores by Gender")
+```
+
+4. Using a different theme instead of ggthemes. Use theme_wsj()
+```{r}
+ggplot(data = exam_data,
+       aes(x = MATHS)) +
+  geom_histogram(
+    bins = 20,
+    boundary = 100,
+    color = "grey25",
+    fill = "grey90"
+  ) +
+  ggtitle("Distribution of Maths scores") +
+  theme_fivethirtyeight()
+```
+
+5. Use theme()
+```{r}
+ggplot(data = exam_data,
+       aes(x = MATHS)) +
+  geom_histogram(
+    bins = 20,
+    boundary = 100,
+    color = "grey25",
+    fill = "grey90"
+  ) +
+  ggtitle("Distribution of Maths scores") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 13),
+    axis.text = element_text(size = 11)
+  )
+```
+
+6. Combine 2 plots with wrap_plots()
+```{r}
+wrap_plots(p1, p2, ncol = 2)
+```
+
+7. Adding overall title and subtitle
+```{r}
+(p1 / p2) | p3 +
+  plot_annotation(
+    title = "Exam Performance",
+    subtitle = "Distribution of Maths & English scores with relationship plot",
+    tag_levels = "A"
+  )
 ```
