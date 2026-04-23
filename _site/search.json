@@ -33,5 +33,12 @@
     "title": "Hands-on Exercise 1",
     "section": "",
     "text": "exam_data &lt;- read_csv(\"Exam_data.csv\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex02.html",
+    "href": "Hands-on_Ex/Hands-on_Ex02.html",
+    "title": "Hands-on Exercise 2",
+    "section": "",
+    "text": "#Getting started\nThere is a need to check if we have installed the relevant packages.\n\npacman::p_load(ggrepel, patchwork, \n               ggthemes, hrbrthemes, \n               tidyverse)"
   }
 ]

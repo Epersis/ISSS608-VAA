@@ -1,0 +1,15 @@
+{
+  "hash": "1e0d2d6d1e8f67bae1713f6d93f9040e",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Hands-on Exercise 2\"\nauthor: \"Persis Evangeline\"\ndate: \"April 23, 2026\"\ndate-modified: \"last-modified\"\nexecute: \n  eval: true\n  echo: true\n  warning: false\n  freeze: true\n---\n\n#Getting started\n\nThere is a need to check if we have installed the relevant packages.\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(ggrepel, patchwork, \n               ggthemes, hrbrthemes, \n               tidyverse)\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -19,3 +19,26 @@ pacman::p_load(ggrepel, patchwork,
                ggthemes, hrbrthemes, 
                tidyverse)
 ```
+
+Import and read the data set, which is the Exam_data.csv file
+```{r} 
+exam_data <- read_csv("Hands-on_Ex01/Exam_data.csv")
+```
+
+Making different plots using ggplot.
+
+First plot is to compare the English and Maths scores for Primary 3. 
+```{r}
+ggplot(data=exam_data,
+       aes(x=MATHS,
+           y=ENGLISH))
++ geom_point() +
+  geom_smooth(method=lm, size=0.5,
+              vjust= -.5)
++ coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100))
++ ggtitle("English scores versus Math scores for Primary 3")
+```
+
+Second plot is to compare the 
+
