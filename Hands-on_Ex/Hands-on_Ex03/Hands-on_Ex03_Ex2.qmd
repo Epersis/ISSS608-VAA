@@ -1,0 +1,292 @@
+---
+title: "Hands-on Exercise 3"
+author: "Persis Evangeline"
+date: "April 30, 2026"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+# Getting started
+
+```{r}
+pacman::p_load(readxl, gifski, gapminder,
+               plotly, gganimate, tidyverse)    
+```
+
+# Importing data
+
+```{r}
+col <- c("Country", "Continent")
+globalPop <- read_xls("GlobalPopulation.xls",
+                      sheet="Data") %>%
+  mutate_at(col, as.factor) %>%
+  mutate(Year = as.integer(Year))
+```
+
+# Animated data visualisations
+Using gganimate, which includes animations, beyond what ggplot2 does.
+
+::: {.panel-tabset}
+## The plot
+
+```{r}
+#| echo: false
+ggplot(globalPop, aes(x = Old, y = Young, 
+                      size = Population, 
+                      colour = Country)) +
+  geom_point(alpha = 0.7, 
+             show.legend = FALSE) +
+  scale_colour_manual(values = country_colors) +
+  scale_size(range = c(2, 12)) +
+  labs(title = 'Year: {frame_time}', 
+       x = '% Aged', 
+       y = '% Young') +
+  transition_time(Year) +       
+  ease_aes('linear')           
+```
+
+## The code
+```{r}
+#| eval: false
+ggplot(globalPop, aes(x = Old, y = Young, 
+                      size = Population, 
+                      colour = Country)) +
+  geom_point(alpha = 0.7, 
+             show.legend = FALSE) +
+  scale_colour_manual(values = country_colors) +
+  scale_size(range = c(2, 12)) +
+  labs(title = 'Year: {frame_time}', 
+       x = '% Aged', 
+       y = '% Young') +
+  transition_time(Year) +       
+  ease_aes('linear')                 
+```
+:::
+
+# Animated bubble plot
+
+::: {.panel-tabset}
+## The plot
+
+```{r}
+#| echo: false
+bp <- globalPop %>%
+  plot_ly(x = ~Old, 
+          y = ~Young, 
+          size = ~Population, 
+          color = ~Continent,
+          sizes = c(2, 100),
+          frame = ~Year, 
+          text = ~Country, 
+          hoverinfo = "text",
+          type = 'scatter',
+          mode = 'markers'
+          ) %>%
+  layout(showlegend = FALSE)
+bp     
+```
+
+## The code
+```{r}
+#| eval: false
+bp <- globalPop %>%
+  plot_ly(x = ~Old, 
+          y = ~Young, 
+          size = ~Population, 
+          color = ~Continent,
+          sizes = c(2, 100),
+          frame = ~Year, 
+          text = ~Country, 
+          hoverinfo = "text",
+          type = 'scatter',
+          mode = 'markers'
+          ) %>%
+  layout(showlegend = FALSE)
+bp                
+```
+:::
+
+# Alternatives
+## Animated line chart
+
+::: {.panel-tabset}
+## The plot
+
+```{r}
+#| echo: false
+ggplot(globalPop, aes(x = Year, y = Population, colour = Country)) +
+  geom_line(show.legend = FALSE) +
+  labs(title = "Population Growth Over Time: {frame_along}") +
+  transition_reveal(Year)   
+```
+
+## The code
+```{r}
+#| eval: false
+ggplot(globalPop, aes(x = Year, y = Population, colour = Country)) +
+  geom_line(show.legend = FALSE) +
+  labs(title = "Population Growth Over Time: {frame_along}") +
+  transition_reveal(Year)               
+```
+:::
+
+
+## Animated bar chart
+
+::: {.panel-tabset}
+## The plot
+
+```{r}
+#| echo: false
+globalPop_continent <- globalPop %>%
+  group_by(Year, Continent) %>%
+  summarise(Population = sum(Population), .groups = "drop")
+
+ggplot(globalPop_continent,
+       aes(x = Continent,
+           y = Population,
+           fill = Continent)) +
+  geom_col(show.legend = FALSE) +
+  labs(title = "Year: {frame_time}",
+       x = "Continent",
+       y = "Population") +
+  transition_time(Year) +
+  ease_aes("linear")
+```
+
+## The code
+```{r}
+#| eval: false
+globalPop_continent <- globalPop %>%
+  group_by(Year, Continent) %>%
+  summarise(Population = sum(Population), .groups = "drop")
+
+ggplot(globalPop_continent,
+       aes(x = Continent,
+           y = Population,
+           fill = Continent)) +
+  geom_col(show.legend = FALSE) +
+  labs(title = "Year: {frame_time}",
+       x = "Continent",
+       y = "Population") +
+  transition_time(Year) +
+  ease_aes("linear")         
+```
+:::
+
+## Animated area chart
+
+::: {.panel-tabset}
+## The plot
+
+```{r}
+#| echo: false
+globalPop %>%
+  group_by(Year, Continent) %>%
+  summarise(Population = sum(Population), .groups = "drop") %>%
+  ggplot(aes(x = Year, 
+             y = Population, 
+             fill = Continent,
+             group = Continent)) +
+  geom_area(stat = "identity", alpha = 0.8) +
+  labs(title = "Global Population by Continent: {frame_along}") +
+  transition_reveal(along = Year)
+```
+
+## The code
+```{r}
+#| eval: false
+globalPop %>%
+  group_by(Year, Continent) %>%
+  summarise(Population = sum(Population), .groups = "drop") %>%
+  ggplot(aes(x = Year, 
+             y = Population, 
+             fill = Continent,
+             group = Continent)) +
+  geom_area(stat = "identity", alpha = 0.8) +
+  labs(title = "Global Population by Continent: {frame_along}") +
+  transition_reveal(along = Year)             
+```
+:::
+
+## Animated histogram
+
+::: {.panel-tabset}
+## The plot
+
+```{r}
+#| echo: false
+ggplot(globalPop, aes(x = Old)) +
+  geom_histogram(bins = 20, fill = "steelblue", color = "white") +
+  labs(
+    title = "Distribution of Ageing Population: {frame_time}",
+    x = "% Aged",
+    y = "Count"
+  ) +
+  transition_time(Year) +
+  ease_aes("linear")
+```
+
+## The code
+```{r}
+#| eval: false
+ggplot(globalPop, aes(x = Old)) +
+  geom_histogram(bins = 20, fill = "steelblue", color = "white") +
+  labs(
+    title = "Distribution of Ageing Population: {frame_time}",
+    x = "% Aged",
+    y = "Count"
+  ) +
+  transition_time(Year) +
+  ease_aes("linear")          
+```
+:::
+
+## Animated scatter
+
+::: {.panel-tabset}
+## The plot
+
+```{r}
+#| echo: false
+ggplot(globalPop,
+       aes(x = Old,
+           y = Young,
+           colour = Country)) +
+  geom_point(show.legend = FALSE) +
+  facet_wrap(~Continent) +
+  labs(
+    title = "Age Structure by Continent: {frame_time}",
+    x = "% Aged",
+    y = "% Young"
+  ) +
+  transition_time(Year) +
+  ease_aes("linear")
+```
+
+## The code
+```{r}
+#| eval: false
+ggplot(globalPop,
+       aes(x = Old,
+           y = Young,
+           colour = Country)) +
+  geom_point(show.legend = FALSE) +
+  facet_wrap(~Continent) +
+  labs(
+    title = "Age Structure by Continent: {frame_time}",
+    x = "% Aged",
+    y = "% Young"
+  ) +
+  transition_time(Year) +
+  ease_aes("linear")         
+```
+:::
+
+
+
+

@@ -47,5 +47,285 @@
     "title": "Hands-on Exercise 2",
     "section": "",
     "text": "Getting started\nThere is a need to check if we have installed the relevant packages.\n\npacman::p_load(ggrepel, patchwork, \n               ggthemes, hrbrthemes, \n               tidyverse)\n\nImport and read the data set, which is the Exam_data.csv file\n\nexam_data &lt;- read_csv(\"Exam_data.csv\")\n\n\n\nMaking different plots using ggplot.\nFirst plot is to compare the English and Maths scores for Primary 3.\n\nggplot(data=exam_data,\n       aes(x=MATHS,\n           y=ENGLISH)) +\n  geom_point() + \n  geom_smooth(method=lm, size=0.5,\n              vjust= -.5)+ \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))+ \n  ggtitle(\"English scores versus Math scores for Primary 3\")\n\n\n\n\n\n\n\n\nSecond plot is to compare the Science and Maths scores for Primary 3.\n\nggplot(data=exam_data,\n       aes(x=MATHS,\n           y=SCIENCE)) +\n  geom_point() + \n  geom_smooth(method=lm, size=0.5,\n              vjust= -.5)+ \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))+ \n  ggtitle(\"English scores versus Math scores for Primary 3\")\n\n\n\n\n\n\n\n\nI am going to plot the same type of graph to compare race and Maths scores.\n\nggplot(data=exam_data,\n       aes(x=RACE,\n           y=SCIENCE)) +\n  geom_point() + \n  geom_smooth(method=lm, size=0.5,\n              vjust= -.5)+ \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))+ \n  ggtitle(\"English scores versus Math scores for Primary 3\")\n\n\n\n\n\n\n\n\nThis plot appears strange as RACE is a categorical data type. Hence, the few values of RACE are compressed to the far left, making it difficult to interpret.\nA histogram or bar chart would be a better choice to plot a categorical and numerical into one plot.\n\nggplot(data=exam_data,\n       aes(x=SCIENCE))+\n  geom_histogram(bins=25,\n                 boundary=100,\n                 color=\"grey25\",\n                 fill=\"grey90\")+\n  ggtitle(\"Distribution of Science scores\")+\n  theme_economist()\n\n\n\n\n\n\n\n\nThis plot is much easier to interpret. It is important to take note of data types when deciding what plots,charts and graphs to use.\nI will make another plot to see the count of students by race. However, the code below will give an error as geom_histogram() is for continuous numeric data, but RACE is a categorical/discrete variable.That is why ggplot says:stat_bin() requires a continuous x aesthetic.\n\n#ggplot(data=exam_data,\n#       aes(x=RACE))+\n#  geom_histogram(bins=25,\n#                 boundary=100,\n#                 color=\"grey25\",\n#                fill=\"grey90\")+\n#  ggtitle(\"Distribution of Science scores\")+\n#  theme_economist()\n\nInstead, we can use geom_bar().\n\nggplot(data = exam_data,\n       aes(x = RACE)) +\n  geom_bar(color = \"grey25\",\n           fill = \"grey90\") +\n  ggtitle(\"Distribution of Race\") +\n  theme_economist()\n\n\n\n\n\n\n\n\n\n\nUsing ggrepel:\n\nggplot(data=exam_data, \n       aes(x= MATHS, \n           y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              size=0.5) +  \n  geom_label_repel(aes(label = ID), \n                   fontface = \"bold\") +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100)) +\n  ggtitle(\"English scores versus Maths scores for Primary 3\")\n\n\n\n\n\n\n\n\n\n\nWorking with ggtheme package:\n\nggplot(data=exam_data, \n             aes(x = MATHS)) +\n  geom_histogram(bins=20, \n                 boundary = 100,\n                 color=\"grey25\", \n                 fill=\"grey90\") +\n  ggtitle(\"Distribution of Maths scores\") +\n  theme_economist()\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n             aes(x = MATHS)) +\n  geom_histogram(bins=20, \n                 boundary = 100,\n                 color=\"grey25\", \n                 fill=\"grey90\") +\n  ggtitle(\"Distribution of Maths scores\") +\n  theme_ipsum()\n\n\n\n\n\n\n\n\n\nggplot(data=exam_data, \n             aes(x = MATHS)) +\n  geom_histogram(bins=20, \n                 boundary = 100,\n                 color=\"grey25\", \n                 fill=\"grey90\") +\n  ggtitle(\"Distribution of Maths scores\") +\n  theme_ipsum(axis_title_size = 18,\n              base_size = 15,\n              grid = \"Y\")\n\n\n\n\n\n\n\n\n\n\nCombining more than one graph into a single display:\nHere we will assign the individual plots to a variable.\n\np1 &lt;- ggplot(data=exam_data, \n          aes(x=MATHS))+\n      geom_histogram(bins=20,\n                     boundary=100,\n                     color=\"grey25\",\n                     fill=\"grey90\")+\n  coord_cartesian(xlim=c(0,100))+\n  ggtitle(\"Distribution of Maths Score\")\n\n\np2 &lt;- ggplot(data=exam_data,\n             aes(x=ENGLISH))+\n  geom_histogram(bins=20,\n                 boundary=100,\n                 color=\"blue2\",\n                 fill=\"white\")+\n  coord_cartesian(xlim=c(0,100))+\n  ggtitle(\"Distribution of English scores\")\n\n\np3 &lt;- ggplot(data=exam_data, \n             aes(x= MATHS, \n                 y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              size=0.5) +  \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100)) +\n  ggtitle(\"English scores versus Maths scores for Primary 3\")\n\nNow, combine the 2 plots into one.\n\np1 + p2\n\n\n\n\n\n\n\n\nLets combine 3 into one.\n\np1+p2+p3\n\n\n\n\n\n\n\n\nIn the above plot, some portions of the title are cut out. So, we increase the width and height of the area to plot.\n\np1 + p2 + p3\n\n\n\n\n\n\n\n\nThere are other ways to display the charts into 1.\n“/” operator to stack two ggplot2 graphs, “|” operator to place the plots beside each other, “()” operator the define the sequence of the plotting.\n\n(p1 / p2) | p3\n\n\n\n\n\n\n\n\ntagging/numbering:\n\n((p1 / p2) | p3) + \n  plot_annotation(tag_levels = 'I')\n\n\n\n\n\n\n\n\nInserting the plot at specific locations/areas:\n\np3 + inset_element(p2, \n                   left = 0.02, \n                   bottom = 0.7, \n                   right = 0.5, \n                   top = 1)\n\n\n\n\n\n\n\n\n\npatchwork &lt;- (p1 / p2) | p3\npatchwork & theme_economist()\n\n\n\n\n\n\n\n\n\n\nAlternatives\n\nLabel only selected points instead of every point\n\n\nnrow(subset(exam_data, MATHS &gt; 80 | ENGLISH &gt; 80))\n\n[1] 117\n\nggplot(data = exam_data,\n       aes(x = MATHS, y = ENGLISH)) +\n  geom_point() +\n  geom_smooth(method = lm, linewidth = 0.5) +\n  geom_label_repel(\n    data = subset(exam_data, MATHS &gt; 80 | ENGLISH &gt; 80),\n    aes(label = ID),\n    fontface = \"bold\"\n  ) +\n  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) +\n  ggtitle(\"English scores versus Maths scores for P3\")\n\n\n\n\n\n\n\n\n\nUse geom_text_repel()\n\n\nggplot(data = exam_data,\n       aes(x = MATHS, y = ENGLISH)) +\n  geom_point() +\n  geom_smooth(method = lm, linewidth = 0.5) +\n  geom_text_repel(\n    aes(label = ID),\n    fontface = \"bold\",\n    size = 3\n  ) +\n  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) +\n  ggtitle(\"English scores versus Maths scores for P3\")\n\n\n\n\n\n\n\n\n\nMap color to a grouping variable in the labelled scatterplot\n\n\nggplot(data = exam_data,\n       aes(x = MATHS, y = ENGLISH, colour = GENDER)) +\n  geom_point() +\n  geom_smooth(method = lm, linewidth = 0.5, se = FALSE) +\n  geom_text_repel(\n    data = subset(exam_data, MATHS &gt; 85 | ENGLISH &gt; 85),\n    aes(label = ID),\n    show.legend = FALSE\n  ) +\n  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100)) +\n  ggtitle(\"English V Maths scores by Gender\")\n\n\n\n\n\n\n\n\n\nUsing a different theme instead of ggthemes. Use theme_wsj()\n\n\nggplot(data = exam_data,\n       aes(x = MATHS)) +\n  geom_histogram(\n    bins = 20,\n    boundary = 100,\n    color = \"grey25\",\n    fill = \"grey90\"\n  ) +\n  ggtitle(\"Distribution of Maths scores\") +\n  theme_fivethirtyeight()\n\n\n\n\n\n\n\n\n\nUse theme()\n\n\nggplot(data = exam_data,\n       aes(x = MATHS)) +\n  geom_histogram(\n    bins = 20,\n    boundary = 100,\n    color = \"grey25\",\n    fill = \"grey90\"\n  ) +\n  ggtitle(\"Distribution of Maths scores\") +\n  theme_minimal() +\n  theme(\n    plot.title = element_text(size = 16, face = \"bold\"),\n    axis.title = element_text(size = 13),\n    axis.text = element_text(size = 11)\n  )\n\n\n\n\n\n\n\n\n\nCombine 2 plots with wrap_plots()\n\n\nwrap_plots(p1, p2, ncol = 2)\n\n\n\n\n\n\n\n\n\nAdding overall title and subtitle\n\n\n(p1 / p2) | p3 +\n  plot_annotation(\n    title = \"Exam Performance\",\n    subtitle = \"Distribution of Maths & English scores with relationship plot\",\n    tag_levels = \"A\"\n  )"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html",
+    "title": "Hands-on Exercise 3",
+    "section": "",
+    "text": "pacman::p_load(ggiraph, plotly, \n               patchwork, DT, tidyverse)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#using-ggiraph-package",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#using-ggiraph-package",
+    "title": "Hands-on Exercise 3",
+    "section": "using ggiraph package",
+    "text": "using ggiraph package\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(\n    aes(tooltip = ID),\n    stackgroups = TRUE, \n    binwidth = 1, \n    method = \"histodot\") +\n  scale_y_continuous(NULL, \n                     breaks = NULL)\ngirafe(\n  ggobj = p,\n  width_svg = 6,\n  height_svg = 6*0.618\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#style-1",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#style-1",
+    "title": "Hands-on Exercise 3",
+    "section": "Style 1",
+    "text": "Style 1\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\ntooltip_css &lt;- \"background-color:white; #&lt;&lt;\nfont-style:bold; color:black;\" #&lt;&lt;\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(tooltip = ID),                   \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618,\n  options = list(    #&lt;&lt;\n    opts_tooltip(    #&lt;&lt;\n      css = tooltip_css)) #&lt;&lt;\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#style-2",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#style-2",
+    "title": "Hands-on Exercise 3",
+    "section": "Style 2",
+    "text": "Style 2\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\ntooltip_css &lt;- \"\nbackground-color: #1f2937;\ncolor: #ffffff;\npadding: 8px 12px;\nborder-radius: 6px;\nfont-size: 14px;\nfont-weight: bold;\nbox-shadow: 0px 2px 8px rgba(0,0,0,0.3);\n\" #&lt;&lt;\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(tooltip = ID),                   \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618,\n  options = list(    #&lt;&lt;\n    opts_tooltip(    #&lt;&lt;\n      css = tooltip_css)) #&lt;&lt;\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#style-3",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#style-3",
+    "title": "Hands-on Exercise 3",
+    "section": "Style 3",
+    "text": "Style 3\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\ntooltip_css &lt;- \"\nbackground: linear-gradient(135deg, #ff7e5f, #feb47b);\ncolor: black;\npadding: 12px 18px;\nborder-radius: 999px;\nfont-size: 16px;\nfont-weight: 600;\nborder: 2px solid #ffffff;\nbox-shadow: 0px 4px 12px rgba(0,0,0,0.25);\ntext-align: center;\n\" #&lt;&lt;\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(tooltip = ID),                   \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618,\n  options = list(    #&lt;&lt;\n    opts_tooltip(    #&lt;&lt;\n      css = tooltip_css)) #&lt;&lt;\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#displaying-median-instead-of-mean",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#displaying-median-instead-of-mean",
+    "title": "Hands-on Exercise 3",
+    "section": "Displaying median instead of mean",
+    "text": "Displaying median instead of mean\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\ntooltip &lt;- function(y, ymin, ymax, accuracy = .01) {\n  median_val &lt;- scales::number(y, accuracy = accuracy)\n  paste(\"Median maths scores:\", median_val)\n}\n\ngg_point &lt;- ggplot(data = exam_data, \n                   aes(x = RACE)) +\n\n  stat_summary(\n    aes(y = MATHS,\n        tooltip = after_stat(\n          tooltip(y, ymin, ymax)\n        )),\n    fun = median,                  \n    geom = GeomInteractiveCol,\n    fill = \"lightblue\"\n  ) +\n\n  stat_summary(\n    aes(y = MATHS),\n    fun.data = median_hilow,       \n    geom = \"errorbar\",\n    width = 0.2,\n    size = 0.2\n  )\n\ngirafe(\n  ggobj = gg_point,\n  width_svg = 8,\n  height_svg = 8 * 0.618\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#displaying-standard-deviation-instead-of-mean",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#displaying-standard-deviation-instead-of-mean",
+    "title": "Hands-on Exercise 3",
+    "section": "Displaying standard deviation instead of mean",
+    "text": "Displaying standard deviation instead of mean"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#displaying-standard-deviation",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#displaying-standard-deviation",
+    "title": "Hands-on Exercise 3",
+    "section": "Displaying standard deviation",
+    "text": "Displaying standard deviation\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nmean_sd &lt;- function(x) {\n  m &lt;- mean(x, na.rm = TRUE)\n  s &lt;- sd(x, na.rm = TRUE)\n  data.frame(\n    y = m,\n    ymin = m - s,\n    ymax = m + s\n  )\n}\n\ntooltip &lt;- function(y, ymin, ymax, accuracy = .01) {\n  mean_val &lt;- scales::number(y, accuracy = accuracy)\n  sd_val &lt;- scales::number(ymax - y, accuracy = accuracy)\n  paste(\"Mean maths scores:\", mean_val, \"\\nSD:\", sd_val)\n}\n\ngg_point &lt;- ggplot(data = exam_data, \n                   aes(x = RACE)) +\n\n  stat_summary(\n    aes(y = MATHS,\n        tooltip = after_stat(\n          tooltip(y, ymin, ymax)\n        )),\n    fun.data = mean_sd,                 \n    geom = GeomInteractiveCol,\n    fill = \"lightblue\"\n  ) +\n\n  stat_summary(\n    aes(y = MATHS),\n    fun.data = mean_sd,                 \n    geom = \"errorbar\",\n    width = 0.2,\n    size = 0.2\n  )\n\ngirafe(\n  ggobj = gg_point,\n  width_svg = 8,\n  height_svg = 8 * 0.618\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#adding-a-visual-element",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#adding-a-visual-element",
+    "title": "Hands-on Exercise 3",
+    "section": "adding a visual element",
+    "text": "adding a visual element\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(data = exam_data, \n        x = ~ENGLISH, \n        y = ~MATHS, \n        color = ~RACE)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#creating-an-interactive-scatterplot-ggplotly-method",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#creating-an-interactive-scatterplot-ggplotly-method",
+    "title": "Hands-on Exercise 3",
+    "section": "Creating an interactive scatterplot, ggplotly method",
+    "text": "Creating an interactive scatterplot, ggplotly method\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\np &lt;- ggplot(data=exam_data, \n            aes(x = MATHS,\n                y = ENGLISH)) +\n  geom_point(size=1) +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\nggplotly(p)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#coordinated-linked-plot-using-plotly",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#coordinated-linked-plot-using-plotly",
+    "title": "Hands-on Exercise 3",
+    "section": "Coordinated linked plot, using plotly",
+    "text": "Coordinated linked plot, using plotly\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nd &lt;- highlight_key(exam_data)\np1 &lt;- ggplot(data=d, \n            aes(x = MATHS,\n                y = ENGLISH)) +\n  geom_point(size=1) +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\n\np2 &lt;- ggplot(data=d, \n            aes(x = MATHS,\n                y = SCIENCE)) +\n  geom_point(size=1) +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\nsubplot(ggplotly(p1),\n        ggplotly(p2))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#linked-brushing",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#linked-brushing",
+    "title": "Hands-on Exercise 3",
+    "section": "Linked Brushing",
+    "text": "Linked Brushing\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nd &lt;- highlight_key(exam_data) \np &lt;- ggplot(d, \n            aes(ENGLISH, \n                MATHS)) + \n  geom_point(size=1) +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\n\ngg &lt;- highlight(ggplotly(p),        \n                \"plotly_selected\")  \n\ncrosstalk::bscols(gg,               \n                  DT::datatable(d), \n                  widths = 5)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#interactive-boxplot",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#interactive-boxplot",
+    "title": "Hands-on Exercise 3",
+    "section": "Interactive boxplot",
+    "text": "Interactive boxplot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(\n  data = exam_data,\n  x = ~RACE,\n  y = ~MATHS,\n  color = ~RACE,\n  type = \"box\"\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#interactive-scatterplot-with-tooltip",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#interactive-scatterplot-with-tooltip",
+    "title": "Hands-on Exercise 3",
+    "section": "Interactive scatterplot with tooltip",
+    "text": "Interactive scatterplot with tooltip\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(\n  data = exam_data,\n  x = ~MATHS,\n  y = ~ENGLISH,\n  color = ~RACE,\n  text = ~paste(\n    \"ID:\", ID,\n    \"&lt;br&gt;Class:\", CLASS,\n    \"&lt;br&gt;Maths:\", MATHS,\n    \"&lt;br&gt;English:\", ENGLISH\n  ),\n  hoverinfo = \"text\",\n  type = \"scatter\",\n  mode = \"markers\"\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#interactive-violin-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#interactive-violin-plot",
+    "title": "Hands-on Exercise 3",
+    "section": "Interactive violin plot",
+    "text": "Interactive violin plot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(\n  data = exam_data,\n  x = ~RACE,\n  y = ~MATHS,\n  color = ~RACE,\n  type = \"violin\",\n  box = list(visible = TRUE),\n  meanline = list(visible = TRUE)\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#interactive-histogram",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#interactive-histogram",
+    "title": "Hands-on Exercise 3",
+    "section": "Interactive histogram",
+    "text": "Interactive histogram\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(\n  data = exam_data,\n  x = ~MATHS,\n  color = ~RACE,\n  type = \"histogram\",\n  opacity = 0.7\n) %&gt;%\n  layout(\n    barmode = \"overlay\",\n    title = \"Interactive Histogram of Maths Scores\"\n  )"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#interactive-density-heatmap",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#interactive-density-heatmap",
+    "title": "Hands-on Exercise 3",
+    "section": "Interactive density heatmap",
+    "text": "Interactive density heatmap\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(\n  data = exam_data,\n  x = ~MATHS,\n  y = ~ENGLISH,\n  type = \"histogram2d\",\n  colorscale = \"YlOrRd\"\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html",
+    "title": "Hands-on Exercise 3",
+    "section": "",
+    "text": "pacman::p_load(ggiraph, plotly, \n               patchwork, DT, tidyverse)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#using-ggiraph-package",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#using-ggiraph-package",
+    "title": "Hands-on Exercise 3",
+    "section": "using ggiraph package",
+    "text": "using ggiraph package\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(\n    aes(tooltip = ID),\n    stackgroups = TRUE, \n    binwidth = 1, \n    method = \"histodot\") +\n  scale_y_continuous(NULL, \n                     breaks = NULL)\ngirafe(\n  ggobj = p,\n  width_svg = 6,\n  height_svg = 6*0.618\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#style-1",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#style-1",
+    "title": "Hands-on Exercise 3",
+    "section": "Style 1",
+    "text": "Style 1\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\ntooltip_css &lt;- \"background-color:white; #&lt;&lt;\nfont-style:bold; color:black;\" #&lt;&lt;\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(tooltip = ID),                   \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618,\n  options = list(    #&lt;&lt;\n    opts_tooltip(    #&lt;&lt;\n      css = tooltip_css)) #&lt;&lt;\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#style-2",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#style-2",
+    "title": "Hands-on Exercise 3",
+    "section": "Style 2",
+    "text": "Style 2\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\ntooltip_css &lt;- \"\nbackground-color: #1f2937;\ncolor: #ffffff;\npadding: 8px 12px;\nborder-radius: 6px;\nfont-size: 14px;\nfont-weight: bold;\nbox-shadow: 0px 2px 8px rgba(0,0,0,0.3);\n\" #&lt;&lt;\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(tooltip = ID),                   \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618,\n  options = list(    #&lt;&lt;\n    opts_tooltip(    #&lt;&lt;\n      css = tooltip_css)) #&lt;&lt;\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#style-3",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#style-3",
+    "title": "Hands-on Exercise 3",
+    "section": "Style 3",
+    "text": "Style 3\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\ntooltip_css &lt;- \"\nbackground: linear-gradient(135deg, #ff7e5f, #feb47b);\ncolor: black;\npadding: 12px 18px;\nborder-radius: 999px;\nfont-size: 16px;\nfont-weight: 600;\nborder: 2px solid #ffffff;\nbox-shadow: 0px 4px 12px rgba(0,0,0,0.25);\ntext-align: center;\n\" #&lt;&lt;\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(tooltip = ID),                   \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618,\n  options = list(    #&lt;&lt;\n    opts_tooltip(    #&lt;&lt;\n      css = tooltip_css)) #&lt;&lt;\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#displaying-median-instead-of-mean",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#displaying-median-instead-of-mean",
+    "title": "Hands-on Exercise 3",
+    "section": "Displaying median instead of mean",
+    "text": "Displaying median instead of mean\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\ntooltip &lt;- function(y, ymin, ymax, accuracy = .01) {\n  median_val &lt;- scales::number(y, accuracy = accuracy)\n  paste(\"Median maths scores:\", median_val)\n}\n\ngg_point &lt;- ggplot(data = exam_data, \n                   aes(x = RACE)) +\n\n  stat_summary(\n    aes(y = MATHS,\n        tooltip = after_stat(\n          tooltip(y, ymin, ymax)\n        )),\n    fun = median,                  \n    geom = GeomInteractiveCol,\n    fill = \"lightblue\"\n  ) +\n\n  stat_summary(\n    aes(y = MATHS),\n    fun.data = median_hilow,       \n    geom = \"errorbar\",\n    width = 0.2,\n    size = 0.2\n  )\n\ngirafe(\n  ggobj = gg_point,\n  width_svg = 8,\n  height_svg = 8 * 0.618\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#displaying-standard-deviation-instead-of-mean",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#displaying-standard-deviation-instead-of-mean",
+    "title": "Hands-on Exercise 3",
+    "section": "Displaying standard deviation instead of mean",
+    "text": "Displaying standard deviation instead of mean"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#displaying-standard-deviation",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#displaying-standard-deviation",
+    "title": "Hands-on Exercise 3",
+    "section": "Displaying standard deviation",
+    "text": "Displaying standard deviation\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nmean_sd &lt;- function(x) {\n  m &lt;- mean(x, na.rm = TRUE)\n  s &lt;- sd(x, na.rm = TRUE)\n  data.frame(\n    y = m,\n    ymin = m - s,\n    ymax = m + s\n  )\n}\n\ntooltip &lt;- function(y, ymin, ymax, accuracy = .01) {\n  mean_val &lt;- scales::number(y, accuracy = accuracy)\n  sd_val &lt;- scales::number(ymax - y, accuracy = accuracy)\n  paste(\"Mean maths scores:\", mean_val, \"\\nSD:\", sd_val)\n}\n\ngg_point &lt;- ggplot(data = exam_data, \n                   aes(x = RACE)) +\n\n  stat_summary(\n    aes(y = MATHS,\n        tooltip = after_stat(\n          tooltip(y, ymin, ymax)\n        )),\n    fun.data = mean_sd,                 \n    geom = GeomInteractiveCol,\n    fill = \"lightblue\"\n  ) +\n\n  stat_summary(\n    aes(y = MATHS),\n    fun.data = mean_sd,                 \n    geom = \"errorbar\",\n    width = 0.2,\n    size = 0.2\n  )\n\ngirafe(\n  ggobj = gg_point,\n  width_svg = 8,\n  height_svg = 8 * 0.618\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#adding-a-visual-element",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#adding-a-visual-element",
+    "title": "Hands-on Exercise 3",
+    "section": "adding a visual element",
+    "text": "adding a visual element\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(data = exam_data, \n        x = ~ENGLISH, \n        y = ~MATHS, \n        color = ~RACE)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#creating-an-interactive-scatterplot-ggplotly-method",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#creating-an-interactive-scatterplot-ggplotly-method",
+    "title": "Hands-on Exercise 3",
+    "section": "Creating an interactive scatterplot, ggplotly method",
+    "text": "Creating an interactive scatterplot, ggplotly method\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\np &lt;- ggplot(data=exam_data, \n            aes(x = MATHS,\n                y = ENGLISH)) +\n  geom_point(size=1) +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\nggplotly(p)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#coordinated-linked-plot-using-plotly",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#coordinated-linked-plot-using-plotly",
+    "title": "Hands-on Exercise 3",
+    "section": "Coordinated linked plot, using plotly",
+    "text": "Coordinated linked plot, using plotly\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nd &lt;- highlight_key(exam_data)\np1 &lt;- ggplot(data=d, \n            aes(x = MATHS,\n                y = ENGLISH)) +\n  geom_point(size=1) +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\n\np2 &lt;- ggplot(data=d, \n            aes(x = MATHS,\n                y = SCIENCE)) +\n  geom_point(size=1) +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\nsubplot(ggplotly(p1),\n        ggplotly(p2))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#linked-brushing",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#linked-brushing",
+    "title": "Hands-on Exercise 3",
+    "section": "Linked Brushing",
+    "text": "Linked Brushing\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nd &lt;- highlight_key(exam_data) \np &lt;- ggplot(d, \n            aes(ENGLISH, \n                MATHS)) + \n  geom_point(size=1) +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\n\ngg &lt;- highlight(ggplotly(p),        \n                \"plotly_selected\")  \n\ncrosstalk::bscols(gg,               \n                  DT::datatable(d), \n                  widths = 5)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#interactive-boxplot",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#interactive-boxplot",
+    "title": "Hands-on Exercise 3",
+    "section": "Interactive boxplot",
+    "text": "Interactive boxplot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(\n  data = exam_data,\n  x = ~RACE,\n  y = ~MATHS,\n  color = ~RACE,\n  type = \"box\"\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#interactive-scatterplot-with-tooltip",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#interactive-scatterplot-with-tooltip",
+    "title": "Hands-on Exercise 3",
+    "section": "Interactive scatterplot with tooltip",
+    "text": "Interactive scatterplot with tooltip\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(\n  data = exam_data,\n  x = ~MATHS,\n  y = ~ENGLISH,\n  color = ~RACE,\n  text = ~paste(\n    \"ID:\", ID,\n    \"&lt;br&gt;Class:\", CLASS,\n    \"&lt;br&gt;Maths:\", MATHS,\n    \"&lt;br&gt;English:\", ENGLISH\n  ),\n  hoverinfo = \"text\",\n  type = \"scatter\",\n  mode = \"markers\"\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#interactive-violin-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#interactive-violin-plot",
+    "title": "Hands-on Exercise 3",
+    "section": "Interactive violin plot",
+    "text": "Interactive violin plot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(\n  data = exam_data,\n  x = ~RACE,\n  y = ~MATHS,\n  color = ~RACE,\n  type = \"violin\",\n  box = list(visible = TRUE),\n  meanline = list(visible = TRUE)\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#interactive-histogram",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#interactive-histogram",
+    "title": "Hands-on Exercise 3",
+    "section": "Interactive histogram",
+    "text": "Interactive histogram\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(\n  data = exam_data,\n  x = ~MATHS,\n  color = ~RACE,\n  type = \"histogram\",\n  opacity = 0.7\n) %&gt;%\n  layout(\n    barmode = \"overlay\",\n    title = \"Interactive Histogram of Maths Scores\"\n  )"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#interactive-density-heatmap",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html#interactive-density-heatmap",
+    "title": "Hands-on Exercise 3",
+    "section": "Interactive density heatmap",
+    "text": "Interactive density heatmap\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(\n  data = exam_data,\n  x = ~MATHS,\n  y = ~ENGLISH,\n  type = \"histogram2d\",\n  colorscale = \"YlOrRd\"\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex2.html",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex2.html",
+    "title": "Hands-on Exercise 3",
+    "section": "",
+    "text": "pacman::p_load(readxl, gifski, gapminder,\n               plotly, gganimate, tidyverse)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex2.html#animated-line-chart",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex2.html#animated-line-chart",
+    "title": "Hands-on Exercise 3",
+    "section": "Animated line chart",
+    "text": "Animated line chart\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(globalPop, aes(x = Year, y = Population, colour = Country)) +\n  geom_line(show.legend = FALSE) +\n  labs(title = \"Population Growth Over Time: {frame_along}\") +\n  transition_reveal(Year)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex2.html#animated-bar-chart",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex2.html#animated-bar-chart",
+    "title": "Hands-on Exercise 3",
+    "section": "Animated bar chart",
+    "text": "Animated bar chart\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nglobalPop_continent &lt;- globalPop %&gt;%\n  group_by(Year, Continent) %&gt;%\n  summarise(Population = sum(Population), .groups = \"drop\")\n\nggplot(globalPop_continent,\n       aes(x = Continent,\n           y = Population,\n           fill = Continent)) +\n  geom_col(show.legend = FALSE) +\n  labs(title = \"Year: {frame_time}\",\n       x = \"Continent\",\n       y = \"Population\") +\n  transition_time(Year) +\n  ease_aes(\"linear\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex2.html#animated-area-chart",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex2.html#animated-area-chart",
+    "title": "Hands-on Exercise 3",
+    "section": "Animated area chart",
+    "text": "Animated area chart\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nglobalPop %&gt;%\n  group_by(Year, Continent) %&gt;%\n  summarise(Population = sum(Population), .groups = \"drop\") %&gt;%\n  ggplot(aes(x = Year, \n             y = Population, \n             fill = Continent,\n             group = Continent)) +\n  geom_area(stat = \"identity\", alpha = 0.8) +\n  labs(title = \"Global Population by Continent: {frame_along}\") +\n  transition_reveal(along = Year)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex2.html#animated-histogram",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex2.html#animated-histogram",
+    "title": "Hands-on Exercise 3",
+    "section": "Animated histogram",
+    "text": "Animated histogram\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(globalPop, aes(x = Old)) +\n  geom_histogram(bins = 20, fill = \"steelblue\", color = \"white\") +\n  labs(\n    title = \"Distribution of Ageing Population: {frame_time}\",\n    x = \"% Aged\",\n    y = \"Count\"\n  ) +\n  transition_time(Year) +\n  ease_aes(\"linear\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex2.html#animated-scatter",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex2.html#animated-scatter",
+    "title": "Hands-on Exercise 3",
+    "section": "Animated scatter",
+    "text": "Animated scatter\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(globalPop,\n       aes(x = Old,\n           y = Young,\n           colour = Country)) +\n  geom_point(show.legend = FALSE) +\n  facet_wrap(~Continent) +\n  labs(\n    title = \"Age Structure by Continent: {frame_time}\",\n    x = \"% Aged\",\n    y = \"% Young\"\n  ) +\n  transition_time(Year) +\n  ease_aes(\"linear\")"
   }
 ]
