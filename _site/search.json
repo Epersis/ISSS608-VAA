@@ -494,7 +494,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#makeover-1",
     "title": "Hands-on_Ex04_FunnelPlots",
     "section": "Makeover 1",
-    "text": "Makeover 1\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nA funnel plot object with 267 points of which 7 are outliers. \nPlot is adjusted for overdispersion. \n\n\n\n\n\nfunnel_plot(\n  .data = covid19,\n  numerator = Death,\n  denominator = Positive,\n  group = `Sub-district`,\n  data_type = \"PR\",     #&lt;&lt;\n  xrange = c(0, 6500),  #&lt;&lt;\n  yrange = c(0, 0.05)   #&lt;&lt;\n)"
+    "text": "Makeover 1\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nA funnel plot object with 267 points of which 7 are outliers. \nPlot is adjusted for overdispersion. \n\n\n\n\n\nfunnel_plot(\n  .data = covid19,\n  numerator = Death,\n  denominator = Positive,\n  group = `Sub-district`,\n  data_type = \"PR\",     \n  xrange = c(0, 6500),  \n  yrange = c(0, 0.05)   \n)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#makeover-2",
