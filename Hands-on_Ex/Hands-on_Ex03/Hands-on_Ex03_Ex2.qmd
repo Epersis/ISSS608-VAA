@@ -28,9 +28,10 @@ globalPop <- read_xls("GlobalPopulation.xls",
 ```
 
 # Animated data visualisations
+
 Using gganimate, which includes animations, beyond what ggplot2 does.
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -50,6 +51,7 @@ ggplot(globalPop, aes(x = Old, y = Young,
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 ggplot(globalPop, aes(x = Old, y = Young, 
@@ -69,7 +71,7 @@ ggplot(globalPop, aes(x = Old, y = Young,
 
 # Animated bubble plot
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -91,6 +93,7 @@ bp
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 bp <- globalPop %>%
@@ -111,9 +114,10 @@ bp
 :::
 
 # Alternatives
+
 ## Animated line chart
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -125,6 +129,7 @@ ggplot(globalPop, aes(x = Year, y = Population, colour = Country)) +
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 ggplot(globalPop, aes(x = Year, y = Population, colour = Country)) +
@@ -134,10 +139,9 @@ ggplot(globalPop, aes(x = Year, y = Population, colour = Country)) +
 ```
 :::
 
-
 ## Animated bar chart
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -159,6 +163,7 @@ ggplot(globalPop_continent,
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 globalPop_continent <- globalPop %>%
@@ -180,7 +185,7 @@ ggplot(globalPop_continent,
 
 ## Animated area chart
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -198,6 +203,7 @@ globalPop %>%
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 globalPop %>%
@@ -215,7 +221,7 @@ globalPop %>%
 
 ## Animated histogram
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -232,6 +238,7 @@ ggplot(globalPop, aes(x = Old)) +
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 ggplot(globalPop, aes(x = Old)) +
@@ -248,7 +255,7 @@ ggplot(globalPop, aes(x = Old)) +
 
 ## Animated scatter
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -269,6 +276,7 @@ ggplot(globalPop,
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 ggplot(globalPop,
@@ -286,7 +294,3 @@ ggplot(globalPop,
   ease_aes("linear")         
 ```
 :::
-
-
-
-

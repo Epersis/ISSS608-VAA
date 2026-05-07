@@ -474,5 +474,68 @@
     "title": "Hands-on_Ex04_Visual_Uncertainty",
     "section": "Half eye plot (ggdist)",
     "text": "Half eye plot (ggdist)\nThe code below creates a half-density + interval plot. It simultaneously shows full distribution, median, credible confidence intervals and uncertainty spread. Compared to traditional error bars, half-eye plots show the full uncertainty distribution, reveal skewness, show density concentration and communicate uncertainty more naturally.\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(ggdist)\n\nexam %&gt;%\n  ggplot(aes(x = MATHS,\n             y = RACE,\n             fill = RACE)) +\n\n  stat_halfeye(\n    .width = c(0.50, 0.95),\n    point_interval = median_qi\n  ) +\n\n  labs(\n    title = \"Half-eye plot of Maths score uncertainty\",\n    subtitle = \"Density + interval uncertainty visualisation\"\n  ) +\n\n  theme_minimal()\n\n\n\n\nThe differences between the 3 alternatives would be: 1. Violin + boxplot is best for detecting clustering/skewness and its main focus is distribution shape + spread. 2. Bootstrapped CI is best for non-normal data and its main focus is robust interval estimation. 3. Half-eye plot is best for Bayesian style uncertainty visualisation and its main focus is density + uncertainty together."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html",
+    "title": "Hands-on_Ex04_FunnelPlots",
+    "section": "",
+    "text": "pacman::p_load(tidyverse, FunnelPlotR, plotly, knitr)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#basic-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#basic-plot",
+    "title": "Hands-on_Ex04_FunnelPlots",
+    "section": "Basic Plot",
+    "text": "Basic Plot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nA funnel plot object with 267 points of which 0 are outliers. \nPlot is adjusted for overdispersion. \n\n\n\n\n\nfunnel_plot(\n  .data = covid19,\n  numerator = Positive,\n  denominator = Death,\n  group = `Sub-district`)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#makeover-1",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#makeover-1",
+    "title": "Hands-on_Ex04_FunnelPlots",
+    "section": "Makeover 1",
+    "text": "Makeover 1\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nA funnel plot object with 267 points of which 7 are outliers. \nPlot is adjusted for overdispersion. \n\n\n\n\n\nfunnel_plot(\n  .data = covid19,\n  numerator = Death,\n  denominator = Positive,\n  group = `Sub-district`,\n  data_type = \"PR\",     #&lt;&lt;\n  xrange = c(0, 6500),  #&lt;&lt;\n  yrange = c(0, 0.05)   #&lt;&lt;\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#makeover-2",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#makeover-2",
+    "title": "Hands-on_Ex04_FunnelPlots",
+    "section": "Makeover 2",
+    "text": "Makeover 2\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nA funnel plot object with 267 points of which 7 are outliers. \nPlot is adjusted for overdispersion. \n\n\n\n\n\nfunnel_plot(\n  .data = covid19,\n  numerator = Death,\n  denominator = Positive,\n  group = `Sub-district`,\n  data_type = \"PR\",   \n  xrange = c(0, 6500),  \n  yrange = c(0, 0.05),\n  label = NA,\n  title = \"Cumulative COVID-19 Fatality Rate by Cumulative Total Number of COVID-19 Positive Cases\", #&lt;&lt;           \n  x_label = \"Cumulative COVID-19 Positive Cases\", #&lt;&lt;\n  y_label = \"Cumulative Fatality Rate\"  #&lt;&lt;\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#interactive-funnel-plot-plotly-ggplot2",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#interactive-funnel-plot-plotly-ggplot2",
+    "title": "Hands-on_Ex04_FunnelPlots",
+    "section": "Interactive Funnel Plot: plotly +ggplot2",
+    "text": "Interactive Funnel Plot: plotly +ggplot2\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nfp_ggplotly &lt;- ggplotly(p,\n  tooltip = c(\"label\", \n              \"x\", \n              \"y\"))\nfp_ggplotly"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#funnel-plot-with-highlighted-outliers",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#funnel-plot-with-highlighted-outliers",
+    "title": "Hands-on_Ex04_FunnelPlots",
+    "section": "Funnel Plot with highlighted outliers",
+    "text": "Funnel Plot with highlighted outliers\nThis classified each sub district as above expected, below expected and within expected range.\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ndf &lt;- covid19 %&gt;%\n  mutate(rate = Death / Positive) %&gt;%\n  filter(Positive &gt; 0, rate &gt; 0)\n\noverall_rate &lt;- sum(df$Death) / sum(df$Positive)\n\ndf &lt;- df %&gt;%\n  mutate(\n    se = sqrt((overall_rate * (1 - overall_rate)) / Positive),\n    lower_95 = overall_rate - 1.96 * se,\n    upper_95 = overall_rate + 1.96 * se,\n    status = case_when(\n      rate &gt; upper_95 ~ \"Above expected\",\n      rate &lt; lower_95 ~ \"Below expected\",\n      TRUE ~ \"Within expected range\"\n    )\n  )\n\nggplot(df, aes(x = Positive, y = rate, colour = status)) +\n  geom_point(size = 2, alpha = 0.8) +\n  geom_hline(yintercept = overall_rate, linetype = \"solid\") +\n  geom_line(aes(y = lower_95), colour = \"grey40\", linetype = \"dashed\") +\n  geom_line(aes(y = upper_95), colour = \"grey40\", linetype = \"dashed\") +\n  labs(\n    title = \"Funnel Plot with Highlighted Outliers\",\n    subtitle = \"Sub-districts outside the 95% control limits are highlighted\",\n    x = \"Cumulative Positive Cases\",\n    y = \"Fatality Rate\",\n    colour = \"Status\"\n  ) +\n  theme_minimal()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#interactive-labelled-funnel-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#interactive-labelled-funnel-plot",
+    "title": "Hands-on_Ex04_FunnelPlots",
+    "section": "Interactive labelled funnel plot",
+    "text": "Interactive labelled funnel plot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\ndf &lt;- covid19 %&gt;%\n  mutate(rate = Death / Positive) %&gt;%\n  filter(Positive &gt; 0, rate &gt; 0)\n\noverall_rate &lt;- sum(df$Death) / sum(df$Positive)\n\ndf &lt;- df %&gt;%\n  mutate(\n    se = sqrt((overall_rate * (1 - overall_rate)) / Positive),\n    lower_95 = overall_rate - 1.96 * se,\n    upper_95 = overall_rate + 1.96 * se,\n    tooltip = paste(\n      \"Sub-district:\", `Sub-district`,\n      \"&lt;br&gt;Positive cases:\", Positive,\n      \"&lt;br&gt;Deaths:\", Death,\n      \"&lt;br&gt;Fatality rate:\", round(rate, 4)\n    )\n  )\n\np &lt;- ggplot(df, aes(x = Positive, y = rate, text = tooltip)) +\n  geom_point(alpha = 0.7) +\n  geom_hline(yintercept = overall_rate, colour = \"grey30\") +\n  geom_line(aes(y = lower_95), colour = \"grey40\", linetype = \"dashed\") +\n  geom_line(aes(y = upper_95), colour = \"grey40\", linetype = \"dashed\") +\n  labs(\n    title = \"Interactive Funnel Plot\",\n    subtitle = \"Hover over each point to view sub-district details\",\n    x = \"Cumulative Positive Cases\",\n    y = \"Fatality Rate\"\n  ) +\n  theme_minimal()\n\nggplotly(p, tooltip = \"text\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#simple-funnel-plot-usinf-funnelplotr",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#simple-funnel-plot-usinf-funnelplotr",
+    "title": "Hands-on_Ex04_FunnelPlots",
+    "section": "Simple funnel plot usinf FunnelPlotR",
+    "text": "Simple funnel plot usinf FunnelPlotR\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nA funnel plot object with 267 points of which 7 are outliers. \nPlot is adjusted for overdispersion. \n\n\n\n\n\nfunnel_plot(\n  .data = covid19,\n  numerator = Death,\n  denominator = Positive,\n  group = `Sub-district`,\n  data_type = \"PR\",\n  label = NA,\n  title = \"COVID-19 Fatality Rate by Sub-district\",\n  x_label = \"Positive Cases\",\n  y_label = \"Fatality Rate\"\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#simple-funnel-plot-using-funnelplotr",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html#simple-funnel-plot-using-funnelplotr",
+    "title": "Hands-on_Ex04_FunnelPlots",
+    "section": "Simple funnel plot using FunnelPlotR",
+    "text": "Simple funnel plot using FunnelPlotR\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nA funnel plot object with 267 points of which 7 are outliers. \nPlot is adjusted for overdispersion. \n\n\n\n\n\nfunnel_plot(\n  .data = covid19,\n  numerator = Death,\n  denominator = Positive,\n  group = `Sub-district`,\n  data_type = \"PR\",\n  label = NA,\n  title = \"COVID-19 Fatality Rate by Sub-district\",\n  x_label = \"Positive Cases\",\n  y_label = \"Fatality Rate\"\n)"
   }
 ]

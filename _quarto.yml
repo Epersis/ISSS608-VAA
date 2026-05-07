@@ -20,7 +20,9 @@ website:
         - text: "Hands-on Exercise 4_Visual_Statistical_Analysis"
           href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_Visual_Statistical_Analysis.html"        
         - text: "Hands-on Exercise 4_Visual_Uncertainty"
-          href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_Visual_Uncertainty.html"        
+          href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_Visual_Uncertainty.html"
+        - text: "Hands-on Exercise 4_FunnelPlots"
+          href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html"  
     right: 
       - href: index.qmd
         text: Home
