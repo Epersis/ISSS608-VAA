@@ -15,6 +15,12 @@ website:
           href: "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex1.html"
         - text: "Hands-on Exercise 3_animation"
           href: "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_Ex2.html"
+        - text: "Hands-on Exercise 4_Visualising distribution"
+          href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_Visualising_Distribution.html"
+        - text: "Hands-on Exercise 4_Visual_Statistical_Analysis"
+          href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_Visual_Statistical_Analysis.html"        
+        - text: "Hands-on Exercise 4_Visual_Uncertainty"
+          href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_Visual_Uncertainty.html"        
     right: 
       - href: index.qmd
         text: Home
