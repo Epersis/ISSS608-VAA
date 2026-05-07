@@ -471,4 +471,244 @@ ggplot(data = exam,
 # Alternatives
 
 ## Violin plot with boxplot overlay
+Unlike error bars which only show interval estimates, violin plots reveal: skewness, multimodal distributions, clustering, spread uncertainty. 
 
+::: {.panel-tabset}
+
+## The plot
+
+
+```{r}
+#| echo: false
+
+ggplot(exam,
+       aes(x = RACE,
+           y = MATHS,
+           fill = RACE)) +
+
+  geom_violin(alpha = 0.6,
+              trim = FALSE) +
+
+  geom_boxplot(width = 0.15,
+               outlier.color = "red",
+               alpha = 0.7) +
+
+  labs(
+    title = "Distribution and uncertainty of Maths scores by race",
+    subtitle = "Violin plot with boxplot overlay"
+  ) +
+
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+ggplot(exam,
+       aes(x = RACE,
+           y = MATHS,
+           fill = RACE)) +
+
+  geom_violin(alpha = 0.6,
+              trim = FALSE) +
+
+  geom_boxplot(width = 0.15,
+               outlier.color = "red",
+               alpha = 0.7) +
+
+  labs(
+    title = "Distribution and uncertainty of Maths scores by race",
+    subtitle = "Violin plot with boxplot overlay"
+  ) +
+
+  theme_minimal()
+```
+
+:::
+
+
+## Bootstrapped mean confidence intervals
+
+::: {.panel-tabset}
+
+## The plot
+
+
+```{r}
+#| echo: false
+
+ggplot(exam,
+       aes(x = RACE,
+           y = MATHS,
+           color = RACE)) +
+
+  stat_summary(
+    fun.data = mean_cl_boot,
+    geom = "pointrange"
+  ) +
+
+  labs(
+    title = "Bootstrapped confidence intervals of Maths scores",
+    subtitle = "Mean with bootstrap confidence intervals"
+  ) +
+
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+ggplot(exam,
+       aes(x = RACE,
+           y = MATHS,
+           color = RACE)) +
+
+  stat_summary(
+    fun.data = mean_cl_boot,
+    geom = "pointrange"
+  ) +
+
+  labs(
+    title = "Bootstrapped confidence intervals of Maths scores",
+    subtitle = "Mean with bootstrap confidence intervals"
+  ) +
+
+  theme_minimal()
+```
+
+:::
+
+In the plot above, it appears blank as the points/error bars are probably very small or hidden due to grouping/ aesthetic issues. 
+Another improved code will be to split geom from pointrange into point and errorbar. This makes the interval and mean point much more visible.
+
+::: {.panel-tabset}
+
+## The plot
+
+
+```{r}
+#| echo: false
+
+ggplot(exam,
+       aes(x = RACE,
+           y = MATHS)) +
+  stat_summary(
+    fun.data = mean_cl_boot,
+    geom = "errorbar",
+    width = 0.2,
+    linewidth = 0.8
+  ) +
+  stat_summary(
+    fun = mean,
+    geom = "point",
+    size = 3
+  ) +
+  labs(
+    title = "Bootstrapped mean confidence intervals",
+    subtitle = "Mean Maths score with bootstrap confidence intervals",
+    x = "Race",
+    y = "Maths score"
+  ) +
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+ggplot(exam,
+       aes(x = RACE,
+           y = MATHS)) +
+  stat_summary(
+    fun.data = mean_cl_boot,
+    geom = "errorbar",
+    width = 0.2,
+    linewidth = 0.8
+  ) +
+  stat_summary(
+    fun = mean,
+    geom = "point",
+    size = 3
+  ) +
+  labs(
+    title = "Bootstrapped mean confidence intervals",
+    subtitle = "Mean Maths score with bootstrap confidence intervals",
+    x = "Race",
+    y = "Maths score"
+  ) +
+  theme_minimal()
+```
+
+:::
+
+## Half eye plot (ggdist)
+The code below creates a half-density + interval plot. It simultaneously shows full distribution, median, credible confidence intervals and uncertainty spread. Compared to traditional error bars, half-eye plots show the full uncertainty distribution, reveal skewness, show density concentration and communicate uncertainty more naturally. 
+
+::: {.panel-tabset}
+
+## The plot
+
+
+```{r}
+#| echo: false
+
+library(ggdist)
+
+exam %>%
+  ggplot(aes(x = MATHS,
+             y = RACE,
+             fill = RACE)) +
+
+  stat_halfeye(
+    .width = c(0.50, 0.95),
+    point_interval = median_qi
+  ) +
+
+  labs(
+    title = "Half-eye plot of Maths score uncertainty",
+    subtitle = "Density + interval uncertainty visualisation"
+  ) +
+
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+library(ggdist)
+
+exam %>%
+  ggplot(aes(x = MATHS,
+             y = RACE,
+             fill = RACE)) +
+
+  stat_halfeye(
+    .width = c(0.50, 0.95),
+    point_interval = median_qi
+  ) +
+
+  labs(
+    title = "Half-eye plot of Maths score uncertainty",
+    subtitle = "Density + interval uncertainty visualisation"
+  ) +
+
+  theme_minimal()
+```
+
+:::
+
+The differences between the 3 alternatives would be:
+1. Violin + boxplot is best for detecting clustering/skewness and its main focus is distribution shape + spread. 
+2. Bootstrapped CI is best for non-normal data and its main focus is robust interval estimation. 
+3. Half-eye plot is best for Bayesian style uncertainty visualisation and its main focus is density + uncertainty together. 
