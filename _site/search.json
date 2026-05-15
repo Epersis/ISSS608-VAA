@@ -655,7 +655,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_visual_multivariate.html",
     "title": "Hands-on_Ex05_visual_multivariate",
     "section": "",
-    "text": "pacman::p_load(GGally, parallelPlot, tidyverse)\n\npackage 'ggstats' successfully unpacked and MD5 sums checked\npackage 'GGally' successfully unpacked and MD5 sums checked\n\nThe downloaded binary packages are in\n    C:\\Users\\Persis Evangeline\\AppData\\Local\\Temp\\RtmpmCeNFt\\downloaded_packages\n\n\npackage 'parallelPlot' successfully unpacked and MD5 sums checked\n\nThe downloaded binary packages are in\n    C:\\Users\\Persis Evangeline\\AppData\\Local\\Temp\\RtmpmCeNFt\\downloaded_packages"
+    "text": "A parallel coordinates plot is used to visualised many numerical variables at the same time. Instead of just 1 x-axis and 1 y-axis, it creates many vertical axes, one for each variable. In the world happiness dataset used in this example, the axes could be GDP, Corruption, Freedom etc and each country becomes one line that passes through all the axes.\nParallel coordinates plots help you compare multivariate patterns. Eg. which variables move together, whether clusters/groups exist, how differently countries behave from each other."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_visual_multivariate.html#basic-plot",
