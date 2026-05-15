@@ -1,0 +1,275 @@
+---
+title: "Hands-on_Ex05_visual_multivariate"
+format: html
+author: "Persis Evangeline"
+date: "May 15, 2026"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+# Installing and launching R packages
+
+```{r}
+
+pacman::p_load(GGally, parallelPlot, tidyverse)
+
+```
+
+# Data preparation
+
+```{r}
+wh <- read_csv("WHData-2018.csv")
+
+```
+
+# Plotting static parallel coordinated plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggparcoord(data = wh, 
+           columns = c(7:12))
+
+```
+## The code
+```{r}
+#| eval: false
+ggparcoord(data = wh, 
+           columns = c(7:12))
+
+```
+:::
+
+
+# Plotting parallel coordinates with boxplot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Parallel Coordinates Plot of World Happines Variables")
+
+```
+## The code
+```{r}
+#| eval: false
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Parallel Coordinates Plot of World Happines Variables")
+
+```
+:::
+
+# Parallel coordinates with facet
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
+  facet_wrap(~ Region)
+
+```
+## The code
+```{r}
+#| eval: false
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
+  facet_wrap(~ Region)
+
+```
+:::
+
+# Rotating x axis text label
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
+  facet_wrap(~ Region) + 
+  theme(axis.text.x = element_text(angle = 30))
+
+```
+## The code
+```{r}
+#| eval: false
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
+  facet_wrap(~ Region) + 
+  theme(axis.text.x = element_text(angle = 30))
+
+```
+:::
+
+# Adjust the rotating x axix text label
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
+  facet_wrap(~ Region) + 
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+
+```
+## The code
+```{r}
+#| eval: false
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
+  facet_wrap(~ Region) + 
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+```
+:::
+
+
+# Plotting interactive parallel coordinates plot:parallelPlot methods
+
+## basic plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+wh <- wh %>%
+  select("Happiness score", c(7:12))
+parallelPlot(wh,
+             width = 320,
+             height = 250)
+
+```
+## The code
+```{r}
+#| eval: false
+wh <- wh %>%
+  select("Happiness score", c(7:12))
+parallelPlot(wh,
+             width = 320,
+             height = 250)
+
+```
+:::
+
+## rotate axis label
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+parallelPlot(wh,
+             rotateTitle = TRUE)
+
+```
+## The code
+```{r}
+#| eval: false
+parallelPlot(wh,
+             rotateTitle = TRUE)
+
+```
+:::
+
+
+## changing colour
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+parallelPlot(wh,
+             continuousCS = "YlOrRd",
+             rotateTitle = TRUE)
+```
+## The code
+```{r}
+#| eval: false
+parallelPlot(wh,
+             continuousCS = "YlOrRd",
+             rotateTitle = TRUE)
+
+```
+:::
+
+## parallel coordinates plot with histogram
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+histoVisibility <- rep(TRUE, ncol(wh))
+parallelPlot(wh,
+             rotateTitle = TRUE,
+             histoVisibility = histoVisibility)
+```
+## The code
+```{r}
+#| eval: false
+histoVisibility <- rep(TRUE, ncol(wh))
+parallelPlot(wh,
+             rotateTitle = TRUE,
+             histoVisibility = histoVisibility)
+
+```
+:::
+
+
+
+

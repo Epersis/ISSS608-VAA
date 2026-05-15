@@ -22,7 +22,15 @@ website:
         - text: "Hands-on Exercise 4_Visual_Uncertainty"
           href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_Visual_Uncertainty.html"
         - text: "Hands-on Exercise 4_FunnelPlots"
-          href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html"  
+          href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_FunnelPlots.html"
+        - text: "Hands-on_Ex05_Building_Ternary_PlotWR"
+          href: "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Ternary_PlotWR.html"
+        - text: "Hands-on_Ex05_Building_Correlation_Matrix"
+          href: "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Correlation_Matrix.html"
+        - text: "Hands-on_Ex05_Heatmap_for_multivariate_data"
+          href: "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html"         
+        - text: "Hands-on_Ex05_visual_multivariate"
+          href: "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_visual_multivariate.html"          
     right: 
       - href: index.qmd
         text: Home

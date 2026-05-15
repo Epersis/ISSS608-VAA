@@ -1,5 +1,5 @@
 ---
-title: "Hands-on_Ex04_Visualising_Distribution"
+title: "Hands-on_Ex04_Visual_Statistical_Analysis"
 format: html
 author: "Persis Evangeline"
 date: "May 7, 2026"
@@ -26,12 +26,10 @@ exam <- read.csv("Exam_data.csv")
 
 # 1 sample test
 
-1 sample test is used when we want to determine whether the mean/ distribution of a sample differs significantly from a known or hypothesised value. Instead of relying on visual inspection, the test provides a statistical method to evaluate whether the difference is meaningful. 
+1 sample test is used when we want to determine whether the mean/ distribution of a sample differs significantly from a known or hypothesised value. Instead of relying on visual inspection, the test provides a statistical method to evaluate whether the difference is meaningful.
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -64,22 +62,18 @@ gghistostats(
   xlab = "English scores"
 )
 ```
-
 :::
 
 # Bayes factor
 
-Bayes factor is a statistical measure used in Bayesian hypothesis testing to compare how well 2 competing hypotheses explain the observed data. There is usually the null and alternative hypothesis. The Bayes Factor is commonly written as the ratio of the likelihood of the data under the alternative hypothesis to the likelihood of the data under the null hypothesis. Bayes factor tells us which hypothesis explains the data better. The Schwarz Criterion is a simple method used to approximate the Bayes Factor. 
-
+Bayes factor is a statistical measure used in Bayesian hypothesis testing to compare how well 2 competing hypotheses explain the observed data. There is usually the null and alternative hypothesis. The Bayes Factor is commonly written as the ratio of the likelihood of the data under the alternative hypothesis to the likelihood of the data under the null hypothesis. Bayes factor tells us which hypothesis explains the data better. The Schwarz Criterion is a simple method used to approximate the Bayes Factor.
 
 # 2 sample mean test: ggbetweenstats()
 
 A two-sample mean test is a statistical test used to determine whether the means of two groups are significantly different from each other.A two-sample mean test evaluates whether the observed difference between these means is large enough to be considered statistically significant, rather than due to random variation.There are 2 common types of 2 sample mean test: independent 2 sample t-test and paired sample t-test.
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -107,18 +101,14 @@ ggbetweenstats(
 )
 
 ```
-
 :::
 
 # 1 way ANOVA test: ggbetweenstats() method
 
-A one-way ANOVA (Analysis of Variance) is a statistical test used to determine whether the means of three or more groups are significantly different from each other.
-It extends the idea of the two-sample t-test.Instead of comparing only 2 groups, ANOVA compares multiple groups simultaneously. If you were to do multiple t-tests instead of ANOVA, it increases the probability of Type I error(false positives). 
+A one-way ANOVA (Analysis of Variance) is a statistical test used to determine whether the means of three or more groups are significantly different from each other. It extends the idea of the two-sample t-test.Instead of comparing only 2 groups, ANOVA compares multiple groups simultaneously. If you were to do multiple t-tests instead of ANOVA, it increases the probability of Type I error(false positives).
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -152,18 +142,14 @@ ggbetweenstats(
   messages = FALSE
 )
 ```
-
 :::
-
 
 # Correlation Analysis
-The goal is to determine whether 2 numeric variables are related, how strong the relationship is and whether the relationship is statistically significant. 
 
+The goal is to determine whether 2 numeric variables are related, how strong the relationship is and whether the relationship is statistically significant.
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -187,16 +173,12 @@ ggscatterstats(
   marginal = FALSE,
   )
 ```
-
 :::
-
 
 # Siginicant test of association (dependence), ggbarstats() method
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -227,18 +209,16 @@ ggbarstats(exam1,
            x = MATHS_bins, 
            y = GENDER)
 ```
-
 :::
 
 # Alternatives
 
 ## Comparing English scores across Classes
+
 This analysis compares English performance across multiple classes
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -271,16 +251,14 @@ ggbetweenstats(
   messages = FALSE
 )
 ```
-
 :::
 
 ## Correlation between Math and Science scores
+
 This checks if students who perform well in Science also tend to perform well in Maths.
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -311,17 +289,14 @@ ggscatterstats(
   messages = FALSE
 )
 ```
-
 :::
 
 ## Association between Race and Gender
-This tests whether there is a significant association between Race and Gender. 
-It checks whether 2 categorical variables are related. 
 
-::: {.panel-tabset}
+This tests whether there is a significant association between Race and Gender. It checks whether 2 categorical variables are related.
 
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -352,5 +327,4 @@ ggbarstats(
   messages = FALSE
 )
 ```
-
 :::

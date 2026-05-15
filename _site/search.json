@@ -537,5 +537,152 @@
     "title": "Hands-on_Ex04_FunnelPlots",
     "section": "Simple funnel plot using FunnelPlotR",
     "text": "Simple funnel plot using FunnelPlotR\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nA funnel plot object with 267 points of which 7 are outliers. \nPlot is adjusted for overdispersion. \n\n\n\n\n\nfunnel_plot(\n  .data = covid19,\n  numerator = Death,\n  denominator = Positive,\n  group = `Sub-district`,\n  data_type = \"PR\",\n  label = NA,\n  title = \"COVID-19 Fatality Rate by Sub-district\",\n  x_label = \"Positive Cases\",\n  y_label = \"Fatality Rate\"\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Ternary_PlotWR.html",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Ternary_PlotWR.html",
+    "title": "Hands-on_Ex05_Building_Ternary_PlotWR",
+    "section": "",
+    "text": "A ternary plot is a special type of graph used to visualise compositional data made up of 3 parts that together sum to a constant.This constant is usually 1 or 100%. Some examples include population groups (young, economically active, elderly), soil composition(sand, clay, silt) and budget allocation( savings, expenses, investments). Each corner of the triangle represents 100% of 1 component and 0% of the other 2 components."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Ternary_PlotWR.html#ternary-plot-with-colour-by-planning-area",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Ternary_PlotWR.html#ternary-plot-with-colour-by-planning-area",
+    "title": "Hands-on_Ex05_Building_Ternary_PlotWR",
+    "section": "Ternary plot with colour by planning area",
+    "text": "Ternary plot with colour by planning area\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(ggtern)\n\nggtern(\n  data = agpop_mutated,\n  aes(\n    x = YOUNG,\n    y = ACTIVE,\n    z = OLD,\n    color = PA\n  )\n) +\n\n  geom_point(size = 2, alpha = 0.8) +\n\n  labs(\n    title = \"Population Structure by Planning Area (2018)\",\n    x = \"Young\",\n    y = \"Economically Active\",\n    z = \"Old\"\n  ) +\n\n  theme_bw() +\n\n  theme(\n    plot.title = element_text(\n      hjust = 0.5,\n      size = 16,\n      face = \"bold\"\n    ),\n\n    legend.position = \"bottom\",\n\n    legend.title = element_text(size = 10),\n    legend.text = element_text(size = 7),\n\n    tern.axis.title.T = element_text(size = 12),\n    tern.axis.title.L = element_text(size = 12),\n    tern.axis.title.R = element_text(size = 12),\n\n    tern.axis.text.T = element_text(size = 8),\n    tern.axis.text.L = element_text(size = 8),\n    tern.axis.text.R = element_text(size = 8),\n\n    plot.margin = margin(\n      t = 20,\n      r = 40,\n      b = 20,\n      l = 40\n    )\n  )"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Ternary_PlotWR.html#bubble-ternary-plot-point-size-by-total-population",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Ternary_PlotWR.html#bubble-ternary-plot-point-size-by-total-population",
+    "title": "Hands-on_Ex05_Building_Ternary_PlotWR",
+    "section": "Bubble Ternary Plot, point size by total population",
+    "text": "Bubble Ternary Plot, point size by total population\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggtern(data = agpop_mutated,\n       aes(x = YOUNG,\n           y = ACTIVE,\n           z = OLD,\n           size = TOTAL)) +\n  \n  geom_point(alpha = 0.7, color = \"steelblue\") +\n  \n  labs(\n    title = \"Population Composition with Population Size\",\n    size = \"Total Population\"\n  ) +\n  \n  theme_bw()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Ternary_PlotWR.html#interactive-plotly-ternary-plot-with-hover-labels",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Ternary_PlotWR.html#interactive-plotly-ternary-plot-with-hover-labels",
+    "title": "Hands-on_Ex05_Building_Ternary_PlotWR",
+    "section": "Interactive Plotly Ternary Plot with Hover Labels",
+    "text": "Interactive Plotly Ternary Plot with Hover Labels\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nlibrary(plotly)\n\nplot_ly(\n  data = agpop_mutated,\n\n  a = ~YOUNG,\n  b = ~ACTIVE,\n  c = ~OLD,\n\n  type = \"scatterternary\",\n  mode = \"markers\",\n\n  text = ~paste(\n    \"Planning Area:\", PA,\n    \"&lt;br&gt;Young:\", YOUNG,\n    \"&lt;br&gt;Active:\", ACTIVE,\n    \"&lt;br&gt;Old:\", OLD,\n    \"&lt;br&gt;Total:\", TOTAL\n  ),\n\n  hoverinfo = \"text\",\n\n  marker = list(\n    size = 8,\n    color = \"darkred\"\n  )\n\n) %&gt;%\n\n  layout(\n    title = \"Interactive Population Ternary Plot\",\n\n    margin = list(\n      t = 100,\n      l = 50,\n      r = 50,\n      b = 50\n    ),\n\n    ternary = list(\n      aaxis = list(title = \"Young\"),\n      baxis = list(title = \"Active\"),\n      caxis = list(title = \"Old\")\n    )\n  )"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Correlation_Matrix.html",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Correlation_Matrix.html",
+    "title": "Hands-on_Ex05_Building_Correlation_Matrix",
+    "section": "",
+    "text": "A correlation matrix is a table that displays the correlation coefficients between multiple variables pairwise. It helps analysts quickly understand how variables move relative to one another. For example, if a dataset contains many different variables, a correlation matrix shows the relationship between every possible pair of variables."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Correlation_Matrix.html#the-code-2",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Correlation_Matrix.html#the-code-2",
+    "title": "Hands-on_Ex05_Building_Correlation_Matrix",
+    "section": "The code",
+    "text": "The code\n\npairs(wine[,2:12], upper.panel = NULL)\n\n:::\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\npairs(wine[,2:12], lower.panel = NULL)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Correlation_Matrix.html#working-with-layout",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Building_Correlation_Matrix.html#working-with-layout",
+    "title": "Hands-on_Ex05_Building_Correlation_Matrix",
+    "section": "Working with layout",
+    "text": "Working with layout\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"ellipse\", \n         type=\"lower\")\n\n\n\n\nTo further customise the layout of the corrgram:\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"ellipse\", \n         type=\"lower\",\n         diag = FALSE,\n         tl.col = \"black\")\n\n\n\n\nOther alternatives to customise the layout:\n\nAdd correlation coefficients + rotate labels\n\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncorrplot(\n  wine.cor,\n  method = \"ellipse\",\n  type = \"lower\",\n\n  addCoef.col = \"black\",\n  number.cex = 0.6,\n\n  tl.col = \"darkblue\",\n  tl.srt = 45,\n\n  diag = FALSE\n)\n\n\n\n\n\nCluster similar variables\n\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncorrplot(\n  wine.cor,\n  method = \"color\",\n\n  order = \"hclust\",\n\n  addrect = 3,\n\n  tl.col = \"black\",\n  tl.cex = 0.8,\n\n  diag = FALSE\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html",
+    "title": "Hands-on_Ex05_Heatmap_for_multivariate_data",
+    "section": "",
+    "text": "Heatmaps are data visualisation techniques that represent values using colours. Instead of displaying numbers directly, colours are used to show the magnitude or intensity of values within matrix or table.\nTypically: 1. darker or stronger colours represent larger values 2. lighter or weaker colours represent smaller values\nHeatmaps consist of rows, columns and cells. Heatmaps are useful for detecting patterns, identifying correlations, comparing multiple variables simultaneously or detecting clusters or groups. There are different types of heatmaps such as Correlation heatmaps, geographic heatmaps, activity heatmaps, matrix heatmaps."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#plot-cluster-heatmap",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#plot-cluster-heatmap",
+    "title": "Hands-on_Ex05_Heatmap_for_multivariate_data",
+    "section": "Plot cluster heatmap",
+    "text": "Plot cluster heatmap\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwh_heatmap &lt;- heatmap(wh_matrix)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#normalise-the-matrix-column-wise",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#normalise-the-matrix-column-wise",
+    "title": "Hands-on_Ex05_Heatmap_for_multivariate_data",
+    "section": "normalise the matrix column-wise",
+    "text": "normalise the matrix column-wise\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwh_heatmap &lt;- heatmap(wh_matrix,\n                      scale=\"column\",\n                      cexRow = 0.6, \n                      cexCol = 0.8,\n                      margins = c(10, 4))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#scaling-method",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#scaling-method",
+    "title": "Hands-on_Ex05_Heatmap_for_multivariate_data",
+    "section": "Scaling method",
+    "text": "Scaling method\nScaling method is commonly used when variables are assumed to follow or approximately follow a normal distribution. The transformation is performed by subtracting the mean and then dividing by the standard deviation.\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nheatmaply(wh_matrix[, -c(1, 2, 4, 5)])"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#normalising-method",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#normalising-method",
+    "title": "Hands-on_Ex05_Heatmap_for_multivariate_data",
+    "section": "Normalising method",
+    "text": "Normalising method\nNormalisation is a data transformation technique used to rescale values into a common range, typically 0 to 1. It is especially useful when variables come from different measurement scales, may not follow normal distribution or contain different ranges of values. Unlike scaling, normalisation does not standardise based on mean and standard deviation. Instead, it rescales values relative to the minimum and maximum values observed in the dataset. It preserves distribution shape.\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nheatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#percentising-method",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#percentising-method",
+    "title": "Hands-on_Ex05_Heatmap_for_multivariate_data",
+    "section": "Percentising method",
+    "text": "Percentising method\nPercentising is a data transformation technique that converts values into their empirical percentiles. Instead of focusing on the raw numerical value, or the distance from the mean, percentising focuses on the relative position of a value within the dataset. Percentising is useful because variables become directly comparable, extreme scales are removed and interpretation becomes intuitive. Unlike scaling, no normal distribution assumption is needed. Unlike normalisation, it is less sensitive to extreme outliers.\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nheatmaply(percentize(wh_matrix[, -c(1, 2, 4, 5)]))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#manual-approach",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#manual-approach",
+    "title": "Hands-on_Ex05_Heatmap_for_multivariate_data",
+    "section": "Manual Approach",
+    "text": "Manual Approach\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nheatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),\n          dist_method = \"euclidean\",\n          hclust_method = \"ward.D\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#statistical-approach",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#statistical-approach",
+    "title": "Hands-on_Ex05_Heatmap_for_multivariate_data",
+    "section": "Statistical approach",
+    "text": "Statistical approach\n\nThe plotThe code\n\n\n\n\n  dist_methods hclust_methods     optim\n1      unknown         ward.D 0.6137851\n2      unknown        ward.D2 0.6289186\n3      unknown         single 0.4774362\n4      unknown       complete 0.6434009\n5      unknown        average 0.6701688\n6      unknown       mcquitty 0.5020102\n7      unknown         median 0.5901833\n8      unknown       centroid 0.6338734\n\n\n\n\n\n\n\n\n\n\n\n\nwh_d &lt;- dist(normalize(wh_matrix[, -c(1, 2, 4, 5)]), method = \"euclidean\")\ndend_expend(wh_d)[[3]]\n\nwh_clust &lt;- hclust(wh_d, method = \"average\")\nnum_k &lt;- find_k(wh_clust)\nplot(num_k)\n\n\n\n\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nheatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),\n          dist_method = \"euclidean\",\n          hclust_method = \"average\",\n          k_row = 3)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#hierarchical-clustering-olo-manually",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_Heatmap_for_multivariate_data.html#hierarchical-clustering-olo-manually",
+    "title": "Hands-on_Ex05_Heatmap_for_multivariate_data",
+    "section": "Hierarchical clustering + OLO manually",
+    "text": "Hierarchical clustering + OLO manually\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nlibrary(seriation)\n\nwh_norm &lt;- normalize(wh_matrix[, -c(1, 2, 4, 5)])\n\nrow_dist &lt;- dist(wh_norm)\n\nrow_order &lt;- seriate(row_dist, method = \"OLO\")\n\nheatmaply(\n  wh_norm,\n  Rowv = as.dendrogram(hclust(row_dist)),\n  row_dend_left = TRUE\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_visual_multivariate.html",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_visual_multivariate.html",
+    "title": "Hands-on_Ex05_visual_multivariate",
+    "section": "",
+    "text": "pacman::p_load(GGally, parallelPlot, tidyverse)\n\npackage 'ggstats' successfully unpacked and MD5 sums checked\npackage 'GGally' successfully unpacked and MD5 sums checked\n\nThe downloaded binary packages are in\n    C:\\Users\\Persis Evangeline\\AppData\\Local\\Temp\\RtmpmCeNFt\\downloaded_packages\n\n\npackage 'parallelPlot' successfully unpacked and MD5 sums checked\n\nThe downloaded binary packages are in\n    C:\\Users\\Persis Evangeline\\AppData\\Local\\Temp\\RtmpmCeNFt\\downloaded_packages"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_visual_multivariate.html#basic-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_visual_multivariate.html#basic-plot",
+    "title": "Hands-on_Ex05_visual_multivariate",
+    "section": "basic plot",
+    "text": "basic plot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nwh &lt;- wh %&gt;%\n  select(\"Happiness score\", c(7:12))\nparallelPlot(wh,\n             width = 320,\n             height = 250)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_visual_multivariate.html#rotate-axis-label",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_visual_multivariate.html#rotate-axis-label",
+    "title": "Hands-on_Ex05_visual_multivariate",
+    "section": "rotate axis label",
+    "text": "rotate axis label\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nparallelPlot(wh,\n             rotateTitle = TRUE)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_visual_multivariate.html#changing-colour",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_visual_multivariate.html#changing-colour",
+    "title": "Hands-on_Ex05_visual_multivariate",
+    "section": "changing colour",
+    "text": "changing colour\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nparallelPlot(wh,\n             continuousCS = \"YlOrRd\",\n             rotateTitle = TRUE)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_visual_multivariate.html#parallel-coordinates-plot-with-histogram",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_visual_multivariate.html#parallel-coordinates-plot-with-histogram",
+    "title": "Hands-on_Ex05_visual_multivariate",
+    "section": "parallel coordinates plot with histogram",
+    "text": "parallel coordinates plot with histogram\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nhistoVisibility &lt;- rep(TRUE, ncol(wh))\nparallelPlot(wh,\n             rotateTitle = TRUE,\n             histoVisibility = histoVisibility)"
   }
 ]

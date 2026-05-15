@@ -1,0 +1,463 @@
+---
+title: "Hands-on_Ex05_Building_Ternary_PlotWR"
+format: html
+author: "Persis Evangeline"
+date: "May 15, 2026"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+A ternary plot is a special type of graph used to visualise compositional data made up of 3 parts that together sum to a constant.This constant is usually 1 or 100%. Some examples include population groups (young, economically active, elderly), soil composition(sand, clay, silt) and budget allocation( savings, expenses, investments). Each corner of the triangle represents 100% of 1 component and 0% of the other 2 components.   
+
+# Getting Started
+
+```{r}
+pacman::p_load(plotly, ggtern, tidyverse)
+
+```
+# Importing Dataset
+
+```{r}
+pop_data <- read.csv("respopagsex2000to2018_tidy.csv")
+
+```
+
+# Preparing data
+
+Utilising mutate() function  
+
+```{r}
+# Deriving the young, economy active and old measures
+
+agpop_mutated <- pop_data %>% 
+  mutate(`Year` = as.character(Year))%>%
+  spread(AG, Population) %>%
+  mutate(YOUNG = rowSums(.[4:8])) %>%
+  mutate(ACTIVE = rowSums(.[9:16])) %>%
+  mutate(OLD = rowSums(.[17:21])) %>%
+  mutate(TOTAL = rowSums(.[22:24])) %>%
+  filter(Year == 2018) %>%
+  filter(TOTAL >0)
+```
+
+# Plotting Ternary diagram with R
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+#Building the static ternary plot
+ggtern(data=agpop_mutated,aes(x=YOUNG,y=ACTIVE, z=OLD)) +
+  geom_point()
+
+```
+## The code
+```{r}
+#| eval: false
+#Building the static ternary plot
+ggtern(data=agpop_mutated,aes(x=YOUNG,y=ACTIVE, z=OLD)) +
+  geom_point()
+
+```
+:::
+
+
+# Building the static ternary plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+ggtern(data=agpop_mutated, aes(x=YOUNG,y=ACTIVE, z=OLD)) +
+  geom_point() +
+  labs(title="Population structure, 2015") +
+  theme_rgbw()
+
+```
+## The code
+```{r}
+#| eval: false
+ggtern(data=agpop_mutated, aes(x=YOUNG,y=ACTIVE, z=OLD)) +
+  geom_point() +
+  labs(title="Population structure, 2015") +
+  theme_rgbw()
+
+```
+:::
+
+# Plotting an interactive ternary diagram
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+# reusable function for creating annotation object
+label <- function(txt) {
+  list(
+    text = txt, 
+    x = 0.1, y = 1,
+    ax = 0, ay = 0,
+    xref = "paper", yref = "paper", 
+    align = "center",
+    font = list(family = "serif", size = 15, color = "white"),
+    bgcolor = "#b3b3b3", bordercolor = "black", borderwidth = 2
+  )
+}
+
+# reusable function for axis formatting
+axis <- function(txt) {
+  list(
+    title = txt, tickformat = ".0%", tickfont = list(size = 10)
+  )
+}
+
+ternaryAxes <- list(
+  aaxis = axis("Young"), 
+  baxis = axis("Active"), 
+  caxis = axis("Old")
+)
+
+# Initiating a plotly visualization 
+plot_ly(
+  agpop_mutated, 
+  a = ~YOUNG, 
+  b = ~ACTIVE, 
+  c = ~OLD, 
+  color = I("black"), 
+  type = "scatterternary"
+) %>%
+  layout(
+    annotations = label("Ternary Markers"), 
+    ternary = ternaryAxes
+  ) 
+
+```
+## The code
+```{r}
+#| eval: false
+# reusable function for creating annotation object
+label <- function(txt) {
+  list(
+    text = txt, 
+    x = 0.1, y = 1,
+    ax = 0, ay = 0,
+    xref = "paper", yref = "paper", 
+    align = "center",
+    font = list(family = "serif", size = 15, color = "white"),
+    bgcolor = "#b3b3b3", bordercolor = "black", borderwidth = 2
+  )
+}
+
+# reusable function for axis formatting
+axis <- function(txt) {
+  list(
+    title = txt, tickformat = ".0%", tickfont = list(size = 10)
+  )
+}
+
+ternaryAxes <- list(
+  aaxis = axis("Young"), 
+  baxis = axis("Active"), 
+  caxis = axis("Old")
+)
+
+# Initiating a plotly visualization 
+plot_ly(
+  agpop_mutated, 
+  a = ~YOUNG, 
+  b = ~ACTIVE, 
+  c = ~OLD, 
+  color = I("black"), 
+  type = "scatterternary"
+) %>%
+  layout(
+    annotations = label("Ternary Markers"), 
+    ternary = ternaryAxes
+  )
+
+```
+:::
+
+# Alternatives
+
+## Ternary plot with colour by planning area
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 8
+
+library(ggtern)
+
+ggtern(
+  data = agpop_mutated,
+  aes(
+    x = YOUNG,
+    y = ACTIVE,
+    z = OLD,
+    color = PA
+  )
+) +
+
+  geom_point(size = 2, alpha = 0.8) +
+
+  labs(
+    title = "Population Structure by Planning Area (2018)",
+    x = "Young",
+    y = "Economically Active",
+    z = "Old"
+  ) +
+
+  theme_bw() +
+
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      size = 16,
+      face = "bold"
+    ),
+
+    legend.position = "bottom",
+
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 7),
+
+    tern.axis.title.T = element_text(size = 12),
+    tern.axis.title.L = element_text(size = 12),
+    tern.axis.title.R = element_text(size = 12),
+
+    tern.axis.text.T = element_text(size = 8),
+    tern.axis.text.L = element_text(size = 8),
+    tern.axis.text.R = element_text(size = 8),
+
+    plot.margin = margin(
+      t = 20,
+      r = 40,
+      b = 20,
+      l = 40
+    )
+  )
+```
+## The code
+```{r}
+#| eval: false
+#| fig-width: 10
+#| fig-height: 8
+
+library(ggtern)
+
+ggtern(
+  data = agpop_mutated,
+  aes(
+    x = YOUNG,
+    y = ACTIVE,
+    z = OLD,
+    color = PA
+  )
+) +
+
+  geom_point(size = 2, alpha = 0.8) +
+
+  labs(
+    title = "Population Structure by Planning Area (2018)",
+    x = "Young",
+    y = "Economically Active",
+    z = "Old"
+  ) +
+
+  theme_bw() +
+
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      size = 16,
+      face = "bold"
+    ),
+
+    legend.position = "bottom",
+
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 7),
+
+    tern.axis.title.T = element_text(size = 12),
+    tern.axis.title.L = element_text(size = 12),
+    tern.axis.title.R = element_text(size = 12),
+
+    tern.axis.text.T = element_text(size = 8),
+    tern.axis.text.L = element_text(size = 8),
+    tern.axis.text.R = element_text(size = 8),
+
+    plot.margin = margin(
+      t = 20,
+      r = 40,
+      b = 20,
+      l = 40
+    )
+  )
+
+```
+:::
+
+## Bubble Ternary Plot, point size by total population
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+ggtern(data = agpop_mutated,
+       aes(x = YOUNG,
+           y = ACTIVE,
+           z = OLD,
+           size = TOTAL)) +
+  
+  geom_point(alpha = 0.7, color = "steelblue") +
+  
+  labs(
+    title = "Population Composition with Population Size",
+    size = "Total Population"
+  ) +
+  
+  theme_bw()
+
+```
+## The code
+```{r}
+#| eval: false
+ggtern(data = agpop_mutated,
+       aes(x = YOUNG,
+           y = ACTIVE,
+           z = OLD,
+           size = TOTAL)) +
+  
+  geom_point(alpha = 0.7, color = "steelblue") +
+  
+  labs(
+    title = "Population Composition with Population Size",
+    size = "Total Population"
+  ) +
+  
+  theme_bw()
+
+```
+:::
+
+## Interactive Plotly Ternary Plot with Hover Labels
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+library(plotly)
+
+plot_ly(
+  data = agpop_mutated,
+
+  a = ~YOUNG,
+  b = ~ACTIVE,
+  c = ~OLD,
+
+  type = "scatterternary",
+  mode = "markers",
+
+  text = ~paste(
+    "Planning Area:", PA,
+    "<br>Young:", YOUNG,
+    "<br>Active:", ACTIVE,
+    "<br>Old:", OLD,
+    "<br>Total:", TOTAL
+  ),
+
+  hoverinfo = "text",
+
+  marker = list(
+    size = 8,
+    color = "darkred"
+  )
+
+) %>%
+
+  layout(
+    title = "Interactive Population Ternary Plot",
+
+    margin = list(
+      t = 100,
+      l = 50,
+      r = 50,
+      b = 50
+    ),
+
+    ternary = list(
+      aaxis = list(title = "Young"),
+      baxis = list(title = "Active"),
+      caxis = list(title = "Old")
+    )
+  )
+
+```
+## The code
+```{r}
+#| eval: false
+library(plotly)
+
+plot_ly(
+  data = agpop_mutated,
+
+  a = ~YOUNG,
+  b = ~ACTIVE,
+  c = ~OLD,
+
+  type = "scatterternary",
+  mode = "markers",
+
+  text = ~paste(
+    "Planning Area:", PA,
+    "<br>Young:", YOUNG,
+    "<br>Active:", ACTIVE,
+    "<br>Old:", OLD,
+    "<br>Total:", TOTAL
+  ),
+
+  hoverinfo = "text",
+
+  marker = list(
+    size = 8,
+    color = "darkred"
+  )
+
+) %>%
+
+  layout(
+    title = "Interactive Population Ternary Plot",
+
+    margin = list(
+      t = 100,
+      l = 50,
+      r = 50,
+      b = 50
+    ),
+
+    ternary = list(
+      aaxis = list(title = "Young"),
+      baxis = list(title = "Active"),
+      caxis = list(title = "Old")
+    )
+  )
+
+```
+:::

@@ -1,0 +1,516 @@
+---
+title: "Hands-on_Ex05_Building_Correlation_Matrix"
+format: html
+author: "Persis Evangeline"
+date: "May 15, 2026"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+A correlation matrix is a table that displays the correlation coefficients between multiple variables pairwise. It helps analysts quickly understand how variables move relative to one another. For example, if a dataset contains many different variables, a correlation matrix shows the relationship between every possible pair of variables. 
+
+# Installing and launching R packages
+
+```{r}
+pacman::p_load(corrplot, ggstatsplot, tidyverse)
+```
+
+# Importing dataset
+
+```{r}
+wine <- read_csv("wine_quality.csv")
+```
+
+# Building correlation matrix, pairs method
+
+The code below creates a scatterplot matrix, aka pairs plot. It automatically compares every variable against every other variable in the dataset. Each small box is a scatterplot between 2 variables.     
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+pairs(wine[,1:11])
+
+```
+## The code
+```{r}
+#| eval: false
+pairs(wine[,1:11])
+
+```
+:::
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+pairs(wine[,2:12])
+```
+## The code
+```{r}
+#| eval: false
+pairs(wine[,2:12])
+```
+:::
+
+The difference in the 2 codes above is which columns are selected from the dataset.
+
+# Removing redundant half
+
+There is no need to show the entire correlation matrix as it is symmetric.So we can choose to show either the lower half or the upper half.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+pairs(wine[,2:12], upper.panel = NULL)
+```
+## The code
+```{r}
+#| eval: false
+pairs(wine[,2:12], upper.panel = NULL)
+```
+:::
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+pairs(wine[,2:12], lower.panel = NULL)
+```
+## The code
+```{r}
+#| eval: false
+pairs(wine[,2:12], lower.panel = NULL)
+```
+:::
+
+
+# Including with correlation coefficients
+
+A correlation coefficient measures the direction and strength of the relationship between 2 variables. 
+The range of the coefficient is: -1<=r<=1
++1, is a perfect positive relationship
+-1, perfect negative relationship
+0, no linear relationship
+
+The significance of correlation coefficients are important. They help identify strong relationships, detect redundant variables, detect multicollinearity and understand real-world relationships.
+
+Common guideline:
+
+| Correlation | Interpretation |
+| ----------- | -------------- |
+| 0.00–0.19   | Very weak      |
+| 0.20–0.39   | Weak           |
+| 0.40–0.59   | Moderate       |
+| 0.60–0.79   | Strong         |
+| 0.80–1.00   | Very strong    |
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+panel.cor <- function(x, y, digits=2, prefix="", cex.cor, ...) {
+usr <- par("usr")
+on.exit(par(usr))
+par(usr = c(0, 1, 0, 1))
+r <- abs(cor(x, y, use="complete.obs"))
+txt <- format(c(r, 0.123456789), digits=digits)[1]
+txt <- paste(prefix, txt, sep="")
+if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
+text(0.5, 0.5, txt, cex = cex.cor * (1 + r) / 2)
+}
+
+pairs(wine[,2:12], 
+      upper.panel = panel.cor)
+```
+## The code
+```{r}
+#| eval: false
+panel.cor <- function(x, y, digits=2, prefix="", cex.cor, ...) {
+usr <- par("usr")
+on.exit(par(usr))
+par(usr = c(0, 1, 0, 1))
+r <- abs(cor(x, y, use="complete.obs"))
+txt <- format(c(r, 0.123456789), digits=digits)[1]
+txt <- paste(prefix, txt, sep="")
+if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
+text(0.5, 0.5, txt, cex = cex.cor * (1 + r) / 2)
+}
+
+pairs(wine[,2:12], 
+      upper.panel = panel.cor)
+```
+:::
+
+# Visualising Correlation Matrix, ggcormat()
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggstatsplot::ggcorrmat(
+  data = wine, 
+  cor.vars = 1:11)
+
+ggstatsplot::ggcorrmat(
+  data = wine, 
+  cor.vars = 1:11,
+  ggcorrplot.args = list(outline.color = "black", 
+                         hc.order = TRUE,
+                         tl.cex = 10),
+  title    = "Correlogram for wine dataset",
+  subtitle = "Four pairs are no significant at p < 0.05"
+)
+
+ggplot.component = list(
+    theme(text=element_text(size=5),
+      axis.text.x = element_text(size = 8),
+      axis.text.y = element_text(size = 8)))
+ggplot.component = list(
+    theme(text=element_text(size=5),
+      axis.text.x = element_text(size = 8),
+      axis.text.y = element_text(size = 8)))
+```
+## The code
+```{r}
+#| eval: false
+ggstatsplot::ggcorrmat(
+  data = wine, 
+  cor.vars = 1:11)
+
+ggstatsplot::ggcorrmat(
+  data = wine, 
+  cor.vars = 1:11,
+  ggcorrplot.args = list(outline.color = "black", 
+                         hc.order = TRUE,
+                         tl.cex = 10),
+  title    = "Correlogram for wine dataset",
+  subtitle = "Four pairs are no significant at p < 0.05"
+)
+ggplot.component = list(
+    theme(text=element_text(size=5),
+      axis.text.x = element_text(size = 8),
+      axis.text.y = element_text(size = 8)))
+```
+:::
+
+# Building multiple plots
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+grouped_ggcorrmat(
+  data = wine,
+  cor.vars = 1:11,
+  grouping.var = type,
+  type = "robust",
+  p.adjust.method = "holm",
+  plotgrid.args = list(ncol = 2),
+  ggcorrplot.args = list(outline.color = "black", 
+                         hc.order = TRUE,
+                         tl.cex = 10),
+  annotation.args = list(
+    tag_levels = "a",
+    title = "Correlogram for wine dataset",
+    subtitle = "The measures are: alcohol, sulphates, fixed acidity, citric acid, chlorides, residual sugar, density, free sulfur dioxide and volatile acidity",
+    caption = "Dataset: UCI Machine Learning Repository"
+  )
+)
+
+```
+## The code
+```{r}
+#| eval: false
+grouped_ggcorrmat(
+  data = wine,
+  cor.vars = 1:11,
+  grouping.var = type,
+  type = "robust",
+  p.adjust.method = "holm",
+  plotgrid.args = list(ncol = 2),
+  ggcorrplot.args = list(outline.color = "black", 
+                         hc.order = TRUE,
+                         tl.cex = 10),
+  annotation.args = list(
+    tag_levels = "a",
+    title = "Correlogram for wine dataset",
+    subtitle = "The measures are: alcohol, sulphates, fixed acidity, citric acid, chlorides, residual sugar, density, free sulfur dioxide and volatile acidity",
+    caption = "Dataset: UCI Machine Learning Repository"
+  )
+)
+
+```
+:::
+
+# Visualising correlation matrix using corrplot package
+
+```{r}
+wine.cor <- cor(wine[, 1:11])
+```
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+corrplot(wine.cor)
+
+```
+## The code
+```{r}
+#| eval: false
+corrplot(wine.cor)
+
+```
+:::
+
+## Working with layout
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+corrplot(wine.cor, 
+         method = "ellipse", 
+         type="lower")
+
+```
+## The code
+```{r}
+#| eval: false
+corrplot(wine.cor, 
+         method = "ellipse", 
+         type="lower")
+
+```
+:::
+
+To further customise the layout of the corrgram:
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+corrplot(wine.cor, 
+         method = "ellipse", 
+         type="lower",
+         diag = FALSE,
+         tl.col = "black")
+```
+## The code
+```{r}
+#| eval: false
+corrplot(wine.cor, 
+         method = "ellipse", 
+         type="lower",
+         diag = FALSE,
+         tl.col = "black")
+
+```
+:::
+
+
+Other alternatives to customise the layout: 
+
+1. Add correlation coefficients + rotate labels
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+corrplot(
+  wine.cor,
+  method = "ellipse",
+  type = "lower",
+
+  addCoef.col = "black",
+  number.cex = 0.6,
+
+  tl.col = "darkblue",
+  tl.srt = 45,
+
+  diag = FALSE
+)
+```
+## The code
+```{r}
+#| eval: false
+corrplot(
+  wine.cor,
+  method = "ellipse",
+  type = "lower",
+
+  addCoef.col = "black",
+  number.cex = 0.6,
+
+  tl.col = "darkblue",
+  tl.srt = 45,
+
+  diag = FALSE
+)
+
+```
+:::
+
+2. Cluster similar variables
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+corrplot(
+  wine.cor,
+  method = "color",
+
+  order = "hclust",
+
+  addrect = 3,
+
+  tl.col = "black",
+  tl.cex = 0.8,
+
+  diag = FALSE
+)
+```
+## The code
+```{r}
+#| eval: false
+corrplot(
+  wine.cor,
+  method = "color",
+
+  order = "hclust",
+
+  addrect = 3,
+
+  tl.col = "black",
+  tl.cex = 0.8,
+
+  diag = FALSE
+)
+
+```
+:::
+
+# Combining corrgram with the significance test
+The purpose of the significance test in correlation analysis is to determine whether an observed correlation is likely to represent a real relationship in the population or if it occurred due to random chance in the sample data.
+
+A correlation coefficient alone only tells us:
+1. Strength of the relationship
+2. Direction of the relationship
+
+Significance testing is important as it helps us assess whether the observed relationship is credible. Based on the p value, we can interpret and decide if the observed relationship is credible.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+wine.sig = cor.mtest(wine.cor, conf.level= .95)
+corrplot(wine.cor,
+         method = "number",
+         type = "lower",
+         diag = FALSE,
+         tl.col = "black",
+         tl.srt = 45,
+         p.mat = wine.sig$p,
+         sig.level = .05)
+```
+## The code
+```{r}
+#| eval: false
+wine.sig = cor.mtest(wine.cor, conf.level= .95)
+corrplot(wine.cor,
+         method = "number",
+         type = "lower",
+         diag = FALSE,
+         tl.col = "black",
+         tl.srt = 45,
+         p.mat = wine.sig$p,
+         sig.level = .05)
+
+```
+:::
+
+In the visualisation above, blue values indicate positive correlations. Red values indicate negative correlations. Larger absolute values indicate stronger relationships. 
+
+# Reorder corrgram
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+corrplot.mixed(wine.cor, 
+               lower = "ellipse", 
+               upper = "number",
+               tl.pos = "lt",
+               diag = "l",
+               order="AOE",
+               tl.col = "black")
+```
+## The code
+```{r}
+#| eval: false
+corrplot.mixed(wine.cor, 
+               lower = "ellipse", 
+               upper = "number",
+               tl.pos = "lt",
+               diag = "l",
+               order="AOE",
+               tl.col = "black")
+
+```
+:::
+
+# Reordering a correlation matrix using hclust
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+corrplot(wine.cor, 
+         method = "ellipse", 
+         tl.pos = "lt",
+         tl.col = "black",
+         order="hclust",
+         hclust.method = "ward.D",
+         addrect = 3)
+```
+## The code
+```{r}
+#| eval: false
+corrplot(wine.cor, 
+         method = "ellipse", 
+         tl.pos = "lt",
+         tl.col = "black",
+         order="hclust",
+         hclust.method = "ward.D",
+         addrect = 3)
+```
+:::
+
+This visualisation shows a reordered correlation matrix using hierarchical clustering (hclust). 
+Instead of displaying variables in their original oder, the variables are rearranged so that, 1. highly related variables are grouped together 2. making patterns and clusters easier to identify visually
+There are 3 clusters identified. Interpretation: blue ellipses means positive correlation, red ellipses means negative correlation, thinner ellipses means stronger correlation, circular shapes means weak/no correlation. Reordering the matrix improves interpretability by placing related variables closer together. Some inferences are are the strong negative relationship between alchohol and density or the strong positive relationship between free sulfur dioxide and total sulfur dioxide. 
+
+

@@ -18,17 +18,17 @@ pacman::p_load(ggiraph, plotly,
 ```
 
 # Importing Data
+
 ```{r}
 exam_data <- read_csv("Exam_data.csv")
 
 ```
 
+# Plot an interactive statistical graph
 
-# Plot an interactive statistical graph 
 ## using ggiraph package
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -69,13 +69,11 @@ girafe(
   height_svg = 6*0.618
 )
 ```
-
 :::
 
 # Displaying more than 1 info on tooltip
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -124,15 +122,13 @@ girafe(
   height_svg = 8*0.618
 )
 ```
-
 :::
 
 # Customising tooltip style
 
 ## Style 1
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -185,13 +181,11 @@ girafe(
       css = tooltip_css)) #<<
 )                                        
 ```
-
 :::
 
 ## Style 2
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -257,14 +251,11 @@ girafe(
       css = tooltip_css)) #<<
 )                                        
 ```
-
 :::
-
 
 ## Style 3
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -334,13 +325,11 @@ girafe(
       css = tooltip_css)) #<<
 )                                        
 ```
-
 :::
 
 # Displaying statistics on tooltip
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -400,13 +389,11 @@ girafe(ggobj = gg_point,
        width_svg = 8,
        height_svg = 8*0.618)                                        
 ```
-
 :::
 
 ## Displaying median instead of mean
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -480,15 +467,13 @@ girafe(
   height_svg = 8 * 0.618
 )                                      
 ```
-
 :::
 
 ## Displaying standard deviation instead of mean
 
 ## Displaying standard deviation
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -586,12 +571,11 @@ girafe(
   height_svg = 8 * 0.618
 )
 ```
-
 :::
 
 # Hover effect
-::: {.panel-tabset}
 
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -614,6 +598,7 @@ girafe(
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 p <- ggplot(data=exam_data, 
@@ -635,8 +620,8 @@ girafe(
 :::
 
 # Styling hover effect
-::: {.panel-tabset}
 
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -661,7 +646,9 @@ girafe(
   )                                        
 )                                        
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 
@@ -687,8 +674,8 @@ girafe(
 :::
 
 # Combining tooltip and hover effect
-::: {.panel-tabset}
 
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -714,7 +701,9 @@ girafe(
 )                                        
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 p <- ggplot(data=exam_data, 
@@ -738,11 +727,10 @@ girafe(
 )                                        
 ```
 :::
-
 
 # Click effect with onclick
-::: {.panel-tabset}
 
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -768,6 +756,7 @@ girafe(
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 exam_data$onclick <- sprintf("window.open(\"%s%s\")",
@@ -789,12 +778,10 @@ girafe(
   height_svg = 6*0.618)                                        
 ```
 :::
-
 
 # Coordinated multiple views with ggiraph
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -832,7 +819,9 @@ girafe(code = print(p1 + p2),
        ) 
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 p1 <- ggplot(data=exam_data, 
@@ -871,8 +860,7 @@ girafe(code = print(p1 + p2),
 
 # Interactive data visualisation - plotly method
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -882,7 +870,9 @@ plot_ly(data = exam_data,
              y = ~ENGLISH)
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 plot_ly(data = exam_data, 
@@ -894,7 +884,7 @@ plot_ly(data = exam_data,
 
 ## adding a visual element
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -905,7 +895,9 @@ plot_ly(data = exam_data,
         color = ~RACE)
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 plot_ly(data = exam_data, 
@@ -918,7 +910,7 @@ plot_ly(data = exam_data,
 
 ## Creating an interactive scatterplot, ggplotly method
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -932,7 +924,9 @@ p <- ggplot(data=exam_data,
 ggplotly(p)
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 p <- ggplot(data=exam_data, 
@@ -947,7 +941,8 @@ ggplotly(p)
 :::
 
 ## Coordinated linked plot, using plotly
-::: {.panel-tabset}
+
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -972,6 +967,7 @@ subplot(ggplotly(p1),
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 d <- highlight_key(exam_data)
@@ -995,7 +991,7 @@ subplot(ggplotly(p1),
 
 # Interactive data visualisation - crosstalk method
 
-::: {.panel-tabset}
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -1006,6 +1002,7 @@ DT::datatable(exam_data, class= "compact")
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 DT::datatable(exam_data, class= "compact")
@@ -1014,7 +1011,8 @@ DT::datatable(exam_data, class= "compact")
 :::
 
 ## Linked Brushing
-::: {.panel-tabset}
+
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -1037,6 +1035,7 @@ crosstalk::bscols(gg,
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 d <- highlight_key(exam_data) 
@@ -1059,7 +1058,8 @@ crosstalk::bscols(gg,
 # Alternatives
 
 ## Interactive boxplot
-::: {.panel-tabset}
+
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -1075,6 +1075,7 @@ plot_ly(
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 
@@ -1089,7 +1090,8 @@ plot_ly(
 :::
 
 ## Interactive scatterplot with tooltip
-::: {.panel-tabset}
+
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -1112,6 +1114,7 @@ plot_ly(
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 
@@ -1134,7 +1137,8 @@ plot_ly(
 :::
 
 ## Interactive violin plot
-::: {.panel-tabset}
+
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -1152,6 +1156,7 @@ plot_ly(
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 
@@ -1168,7 +1173,8 @@ plot_ly(
 :::
 
 ## Interactive histogram
-::: {.panel-tabset}
+
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -1187,6 +1193,7 @@ plot_ly(
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 
@@ -1205,7 +1212,8 @@ plot_ly(
 :::
 
 ## Interactive density heatmap
-::: {.panel-tabset}
+
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -1220,6 +1228,7 @@ plot_ly(
 ```
 
 ## The code
+
 ```{r}
 #| eval: false
 plot_ly(
@@ -1231,4 +1240,3 @@ plot_ly(
 )       
 ```
 :::
-

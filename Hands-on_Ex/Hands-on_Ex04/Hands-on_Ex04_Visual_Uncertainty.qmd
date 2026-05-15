@@ -43,10 +43,8 @@ my_sum <- exam %>%
 
 # Displaying table
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -61,16 +59,12 @@ knitr::kable(head(my_sum), format = 'html')
 
 knitr::kable(head(my_sum), format = 'html')
 ```
-
 :::
-
 
 # Plotting standard error bars of point estimates
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -119,15 +113,12 @@ ggplot(my_sum) +
   ggtitle("Standard error of mean maths score by rac")
 
 ```
-
 :::
 
 # Plotting confidence interval of point estimates
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -178,15 +169,12 @@ ggplot(my_sum) +
        title = "95% confidence interval of mean maths score by race")
 
 ```
-
 :::
 
 # Visualising the uncertainty of point estimates with interactive error bars
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -289,17 +277,14 @@ bscols(widths = c(4,8),
                      digits=2))
 
 ```
-
 :::
 
 # Visualising Uncertainty: ggdist package
 
 ## stat_pointinterval()
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -328,15 +313,12 @@ exam %>%
     subtitle = "Mean Point + Multiple-interval plot")
 
 ```
-
 :::
 
 ## adding in arguments to above code
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -366,15 +348,12 @@ exam %>%
     title = "Visualising confidence intervals of median math score",
     subtitle = "Median Point + Multiple-interval plot")
 ```
-
 :::
 
 ## using stat_grradientinterval()
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -408,16 +387,12 @@ exam %>%
     title = "Visualising confidence intervals of mean math score",
     subtitle = "Gradient + interval plot")
 ```
-
 :::
-
 
 # Visualising Uncertainty with hypothetical outcome plots (HOPs)
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -465,18 +440,16 @@ ggplot(data = exam,
   theme_bw() + 
   transition_states(.draw, 1, 3)
 ```
-
 :::
 
 # Alternatives
 
 ## Violin plot with boxplot overlay
-Unlike error bars which only show interval estimates, violin plots reveal: skewness, multimodal distributions, clustering, spread uncertainty. 
 
-::: {.panel-tabset}
+Unlike error bars which only show interval estimates, violin plots reveal: skewness, multimodal distributions, clustering, spread uncertainty.
 
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -526,16 +499,12 @@ ggplot(exam,
 
   theme_minimal()
 ```
-
 :::
-
 
 ## Bootstrapped mean confidence intervals
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -581,16 +550,12 @@ ggplot(exam,
 
   theme_minimal()
 ```
-
 :::
 
-In the plot above, it appears blank as the points/error bars are probably very small or hidden due to grouping/ aesthetic issues. 
-Another improved code will be to split geom from pointrange into point and errorbar. This makes the interval and mean point much more visible.
+In the plot above, it appears blank as the points/error bars are probably very small or hidden due to grouping/ aesthetic issues. Another improved code will be to split geom from pointrange into point and errorbar. This makes the interval and mean point much more visible.
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -646,16 +611,14 @@ ggplot(exam,
   ) +
   theme_minimal()
 ```
-
 :::
 
 ## Half eye plot (ggdist)
-The code below creates a half-density + interval plot. It simultaneously shows full distribution, median, credible confidence intervals and uncertainty spread. Compared to traditional error bars, half-eye plots show the full uncertainty distribution, reveal skewness, show density concentration and communicate uncertainty more naturally. 
 
-::: {.panel-tabset}
+The code below creates a half-density + interval plot. It simultaneously shows full distribution, median, credible confidence intervals and uncertainty spread. Compared to traditional error bars, half-eye plots show the full uncertainty distribution, reveal skewness, show density concentration and communicate uncertainty more naturally.
 
+::: panel-tabset
 ## The plot
-
 
 ```{r}
 #| echo: false
@@ -705,10 +668,6 @@ exam %>%
 
   theme_minimal()
 ```
-
 :::
 
-The differences between the 3 alternatives would be:
-1. Violin + boxplot is best for detecting clustering/skewness and its main focus is distribution shape + spread. 
-2. Bootstrapped CI is best for non-normal data and its main focus is robust interval estimation. 
-3. Half-eye plot is best for Bayesian style uncertainty visualisation and its main focus is density + uncertainty together. 
+The differences between the 3 alternatives would be: 1. Violin + boxplot is best for detecting clustering/skewness and its main focus is distribution shape + spread. 2. Bootstrapped CI is best for non-normal data and its main focus is robust interval estimation. 3. Half-eye plot is best for Bayesian style uncertainty visualisation and its main focus is density + uncertainty together.
