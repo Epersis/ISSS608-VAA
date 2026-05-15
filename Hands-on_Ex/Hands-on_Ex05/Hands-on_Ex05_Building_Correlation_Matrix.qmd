@@ -159,9 +159,7 @@ pairs(wine[,2:12],
 
 ```{r}
 #| echo: false
-ggstatsplot::ggcorrmat(
-  data = wine, 
-  cor.vars = 1:11)
+
 
 ggstatsplot::ggcorrmat(
   data = wine, 
@@ -177,17 +175,10 @@ ggplot.component = list(
     theme(text=element_text(size=5),
       axis.text.x = element_text(size = 8),
       axis.text.y = element_text(size = 8)))
-ggplot.component = list(
-    theme(text=element_text(size=5),
-      axis.text.x = element_text(size = 8),
-      axis.text.y = element_text(size = 8)))
 ```
 ## The code
 ```{r}
 #| eval: false
-ggstatsplot::ggcorrmat(
-  data = wine, 
-  cor.vars = 1:11)
 
 ggstatsplot::ggcorrmat(
   data = wine, 
@@ -510,7 +501,7 @@ corrplot(wine.cor,
 :::
 
 This visualisation shows a reordered correlation matrix using hierarchical clustering (hclust). 
-Instead of displaying variables in their original oder, the variables are rearranged so that, 1. highly related variables are grouped together 2. making patterns and clusters easier to identify visually
+Instead of displaying variables in their original oder, the variables are rearranged so that, 1. highly related variables are grouped together 2. making patterns and clusters easier to identify visually.
 There are 3 clusters identified. Interpretation: blue ellipses means positive correlation, red ellipses means negative correlation, thinner ellipses means stronger correlation, circular shapes means weak/no correlation. Reordering the matrix improves interpretability by placing related variables closer together. Some inferences are are the strong negative relationship between alchohol and density or the strong positive relationship between free sulfur dioxide and total sulfur dioxide. 
 
 
