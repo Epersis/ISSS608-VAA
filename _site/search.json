@@ -690,7 +690,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_treemap.html",
     "title": "Hands-on_Ex05_treemap",
     "section": "",
-    "text": "This is about treemaps. Both treemaps and heatmaps use colour to represent data, but they are designed for very different purposes. A heatmap displays values in a matrix/grid format using colours. It is best for multivariate analysis and pattern detection. Treemap displays hierarchical data using nested rectangles. Rectangle size represents quantity. Rectangle colour often represents another variable. It is best for comparing relative sizes within categories."
+    "text": "This is about treemaps. Both treemaps and heatmaps use colour to represent data, but they are designed for very different purposes. A heatmap displays values in a matrix/grid format using colours. It is best for multivariate analysis and pattern detection. Treemap displays hierarchical data using nested rectangles. Rectangle size represents quantity, the size of rectangle varies. Rectangle colour often represents another variable. It is best for comparing relative sizes within categories."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_treemap.html#without-pipe",
