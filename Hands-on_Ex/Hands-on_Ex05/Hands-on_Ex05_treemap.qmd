@@ -461,3 +461,173 @@ d3tree(tm,rootname = "Singapore" )
 
 ```
 :::
+
+
+# Alternatives
+
+## Treemap by property type
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(
+  data = realis2018_summarised,
+  aes(
+    area = `Total Unit Sold`,
+    fill = `Property Type`,
+    label = `Property Type`
+  )
+) +
+  geom_treemap() +
+  geom_treemap_text(
+    colour = "white",
+    place = "centre",
+    size = 12
+  ) +
+  labs(
+    title = "Total Units Sold by Property Type"
+  )
+
+```
+## The code
+```{r}
+#| eval: false
+ggplot(
+  data = realis2018_summarised,
+  aes(
+    area = `Total Unit Sold`,
+    fill = `Property Type`,
+    label = `Property Type`
+  )
+) +
+  geom_treemap() +
+  geom_treemap_text(
+    colour = "white",
+    place = "centre",
+    size = 12
+  ) +
+  labs(
+    title = "Total Units Sold by Property Type"
+  )
+
+```
+:::
+
+## Treemap by planning region with labels
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(
+  data = realis2018_selected,
+  aes(
+    area = `Total Unit Sold`,
+    fill = `Planning Region`,
+    label = `Planning Region`
+  )
+) +
+  geom_treemap() +
+  geom_treemap_text(
+    colour = "white",
+    place = "centre",
+    grow = TRUE
+  ) +
+  labs(
+    title = "Resale Condominium Units Sold by Planning Region"
+  )
+
+```
+## The code
+```{r}
+#| eval: false
+ggplot(
+  data = realis2018_selected,
+  aes(
+    area = `Total Unit Sold`,
+    fill = `Planning Region`,
+    label = `Planning Region`
+  )
+) +
+  geom_treemap() +
+  geom_treemap_text(
+    colour = "white",
+    place = "centre",
+    grow = TRUE
+  ) +
+  labs(
+    title = "Resale Condominium Units Sold by Planning Region"
+  )
+```
+:::
+
+
+## Treemap with planning region and planning area hierarchy
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(
+  data = realis2018_selected,
+  aes(
+    area = `Total Unit Sold`,
+    fill = `Median Unit Price ($ psm)`,
+    subgroup = `Planning Region`,
+    subgroup2 = `Planning Area`,
+    label = `Planning Area`
+  )
+) +
+  geom_treemap() +
+  geom_treemap_subgroup_border(colour = "white", size = 3) +
+  geom_treemap_subgroup2_border(colour = "gray70", size = 1) +
+  geom_treemap_text(
+    colour = "black",
+    place = "centre",
+    size = 8
+  ) +
+  scale_fill_gradient(
+    low = "lightyellow",
+    high = "darkred"
+  ) +
+  labs(
+    title = "Resale Condominium Units Sold by Region and Planning Area",
+    fill = "Median Unit Price ($ psm)"
+  )
+
+```
+## The code
+```{r}
+#| eval: false
+ggplot(
+  data = realis2018_selected,
+  aes(
+    area = `Total Unit Sold`,
+    fill = `Median Unit Price ($ psm)`,
+    subgroup = `Planning Region`,
+    subgroup2 = `Planning Area`,
+    label = `Planning Area`
+  )
+) +
+  geom_treemap() +
+  geom_treemap_subgroup_border(colour = "white", size = 3) +
+  geom_treemap_subgroup2_border(colour = "gray70", size = 1) +
+  geom_treemap_text(
+    colour = "black",
+    place = "centre",
+    size = 8
+  ) +
+  scale_fill_gradient(
+    low = "lightyellow",
+    high = "darkred"
+  ) +
+  labs(
+    title = "Resale Condominium Units Sold by Region and Planning Area",
+    fill = "Median Unit Price ($ psm)"
+  )
+```
+:::

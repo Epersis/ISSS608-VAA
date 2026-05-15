@@ -775,5 +775,26 @@
     "title": "Hands-on_Ex05_treemap",
     "section": "relevant packages",
     "text": "relevant packages\n\nlibrary(devtools)\n\n\nlibrary(d3treeR)\n\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ntm &lt;- treemap(realis2018_summarised,\n        index=c(\"Planning Region\", \"Planning Area\"),\n        vSize=\"Total Unit Sold\",\n        vColor=\"Median Unit Price ($ psm)\",\n        type=\"value\",\n        title=\"Private Residential Property Sold, 2017\",\n        title.legend = \"Median Unit Price (S$ per sq. m)\"\n        )\n\n\n\n\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nd3tree(tm,rootname = \"Singapore\" )"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_treemap.html#treemap-by-property-type",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_treemap.html#treemap-by-property-type",
+    "title": "Hands-on_Ex05_treemap",
+    "section": "Treemap by property type",
+    "text": "Treemap by property type\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(\n  data = realis2018_summarised,\n  aes(\n    area = `Total Unit Sold`,\n    fill = `Property Type`,\n    label = `Property Type`\n  )\n) +\n  geom_treemap() +\n  geom_treemap_text(\n    colour = \"white\",\n    place = \"centre\",\n    size = 12\n  ) +\n  labs(\n    title = \"Total Units Sold by Property Type\"\n  )"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_treemap.html#treemap-by-planning-region-with-labels",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_treemap.html#treemap-by-planning-region-with-labels",
+    "title": "Hands-on_Ex05_treemap",
+    "section": "Treemap by planning region with labels",
+    "text": "Treemap by planning region with labels\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(\n  data = realis2018_selected,\n  aes(\n    area = `Total Unit Sold`,\n    fill = `Planning Region`,\n    label = `Planning Region`\n  )\n) +\n  geom_treemap() +\n  geom_treemap_text(\n    colour = \"white\",\n    place = \"centre\",\n    grow = TRUE\n  ) +\n  labs(\n    title = \"Resale Condominium Units Sold by Planning Region\"\n  )"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_treemap.html#treemap-with-planning-region-and-planning-area-hierarchy",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_treemap.html#treemap-with-planning-region-and-planning-area-hierarchy",
+    "title": "Hands-on_Ex05_treemap",
+    "section": "Treemap with planning region and planning area hierarchy",
+    "text": "Treemap with planning region and planning area hierarchy\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(\n  data = realis2018_selected,\n  aes(\n    area = `Total Unit Sold`,\n    fill = `Median Unit Price ($ psm)`,\n    subgroup = `Planning Region`,\n    subgroup2 = `Planning Area`,\n    label = `Planning Area`\n  )\n) +\n  geom_treemap() +\n  geom_treemap_subgroup_border(colour = \"white\", size = 3) +\n  geom_treemap_subgroup2_border(colour = \"gray70\", size = 1) +\n  geom_treemap_text(\n    colour = \"black\",\n    place = \"centre\",\n    size = 8\n  ) +\n  scale_fill_gradient(\n    low = \"lightyellow\",\n    high = \"darkred\"\n  ) +\n  labs(\n    title = \"Resale Condominium Units Sold by Region and Planning Area\",\n    fill = \"Median Unit Price ($ psm)\"\n  )"
   }
 ]
