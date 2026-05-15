@@ -1,0 +1,463 @@
+---
+title: "Hands-on_Ex05_treemap"
+format: html
+author: "Persis Evangeline"
+date: "May 15, 2026"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+# install packages
+
+```{r}
+
+pacman::p_load(treemap, treemapify, tidyverse) 
+
+```
+
+# Import data
+
+```{r}
+realis2018 <- read_csv("realis2018.csv")
+
+
+```
+
+# Data wrangling
+
+## without pipe
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+realis2018_grouped <- group_by(realis2018, `Project Name`,
+                               `Planning Region`, `Planning Area`, 
+                               `Property Type`, `Type of Sale`)
+realis2018_summarised <- summarise(realis2018_grouped, 
+                          `Total Unit Sold` = sum(`No. of Units`, na.rm = TRUE),
+                          `Total Area` = sum(`Area (sqm)`, na.rm = TRUE),
+                          `Median Unit Price ($ psm)` = median(`Unit Price ($ psm)`, na.rm = TRUE), 
+                          `Median Transacted Price` = median(`Transacted Price ($)`, na.rm = TRUE))
+
+```
+## The code
+```{r}
+#| eval: false
+realis2018_grouped <- group_by(realis2018, `Project Name`,
+                               `Planning Region`, `Planning Area`, 
+                               `Property Type`, `Type of Sale`)
+realis2018_summarised <- summarise(realis2018_grouped, 
+                          `Total Unit Sold` = sum(`No. of Units`, na.rm = TRUE),
+                          `Total Area` = sum(`Area (sqm)`, na.rm = TRUE),
+                          `Median Unit Price ($ psm)` = median(`Unit Price ($ psm)`, na.rm = TRUE), 
+                          `Median Transacted Price` = median(`Transacted Price ($)`, na.rm = TRUE))
+
+```
+:::
+
+## with pipe
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+realis2018_summarised <- realis2018 %>% 
+  group_by(`Project Name`,`Planning Region`, 
+           `Planning Area`, `Property Type`, 
+           `Type of Sale`) %>%
+  summarise(`Total Unit Sold` = sum(`No. of Units`, na.rm = TRUE), 
+            `Total Area` = sum(`Area (sqm)`, na.rm = TRUE),
+            `Median Unit Price ($ psm)` = median(`Unit Price ($ psm)`, na.rm = TRUE),
+            `Median Transacted Price` = median(`Transacted Price ($)`, na.rm = TRUE))
+
+```
+## The code
+```{r}
+#| eval: false
+realis2018_summarised <- realis2018 %>% 
+  group_by(`Project Name`,`Planning Region`, 
+           `Planning Area`, `Property Type`, 
+           `Type of Sale`) %>%
+  summarise(`Total Unit Sold` = sum(`No. of Units`, na.rm = TRUE), 
+            `Total Area` = sum(`Area (sqm)`, na.rm = TRUE),
+            `Median Unit Price ($ psm)` = median(`Unit Price ($ psm)`, na.rm = TRUE),
+            `Median Transacted Price` = median(`Transacted Price ($)`, na.rm = TRUE))
+
+```
+:::
+
+
+# Designing treemap with treemap package
+
+## static treemap
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+realis2018_selected <- realis2018_summarised %>%
+  filter(`Property Type` == "Condominium", `Type of Sale` == "Resale")
+
+
+treemap(realis2018_selected,
+        index=c("Planning Region", "Planning Area", "Project Name"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        title="Resale Condominium by Planning Region and Area, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+
+```
+## The code
+```{r}
+#| eval: false
+realis2018_selected <- realis2018_summarised %>%
+  filter(`Property Type` == "Condominium", `Type of Sale` == "Resale")
+
+
+treemap(realis2018_selected,
+        index=c("Planning Region", "Planning Area", "Project Name"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        title="Resale Condominium by Planning Region and Area, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+
+```
+:::
+
+
+## Working with vcolour and type arguments
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+treemap(realis2018_selected,
+        index=c("Planning Region", "Planning Area", "Project Name"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        type = "value",
+        title="Resale Condominium by Planning Region and Area, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+
+```
+## The code
+```{r}
+#| eval: false
+treemap(realis2018_selected,
+        index=c("Planning Region", "Planning Area", "Project Name"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        type = "value",
+        title="Resale Condominium by Planning Region and Area, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+
+```
+:::
+
+## value type treemap
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+treemap(realis2018_selected,
+        index=c("Planning Region", "Planning Area", "Project Name"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        type="value",
+        palette="RdYlBu", 
+        title="Resale Condominium by Planning Region and Area, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+
+```
+## The code
+```{r}
+#| eval: false
+treemap(realis2018_selected,
+        index=c("Planning Region", "Planning Area", "Project Name"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        type="value",
+        palette="RdYlBu", 
+        title="Resale Condominium by Planning Region and Area, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+
+```
+:::
+
+
+## manual type treemap
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+treemap(realis2018_selected,
+        index=c("Planning Region", "Planning Area", "Project Name"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        type="manual",
+        palette="Blues", 
+        title="Resale Condominium by Planning Region and Area, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+
+```
+## The code
+```{r}
+#| eval: false
+treemap(realis2018_selected,
+        index=c("Planning Region", "Planning Area", "Project Name"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        type="manual",
+        palette="Blues", 
+        title="Resale Condominium by Planning Region and Area, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+
+```
+:::
+
+
+## working with algorithm argument
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+treemap(realis2018_selected,
+        index=c("Planning Region", "Planning Area", "Project Name"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        type="manual",
+        palette="Blues", 
+        algorithm = "squarified",
+        title="Resale Condominium by Planning Region and Area, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+
+```
+## The code
+```{r}
+#| eval: false
+treemap(realis2018_selected,
+        index=c("Planning Region", "Planning Area", "Project Name"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        type="manual",
+        palette="Blues", 
+        algorithm = "squarified",
+        title="Resale Condominium by Planning Region and Area, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+```
+:::
+
+## sortID
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+treemap(realis2018_selected,
+        index=c("Planning Region", "Planning Area", "Project Name"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        type="manual",
+        palette="Blues", 
+        algorithm = "pivotSize",
+        sortID = "Median Transacted Price",
+        title="Resale Condominium by Planning Region and Area, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+
+```
+## The code
+```{r}
+#| eval: false
+treemap(realis2018_selected,
+        index=c("Planning Region", "Planning Area", "Project Name"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        type="manual",
+        palette="Blues", 
+        algorithm = "pivotSize",
+        sortID = "Median Transacted Price",
+        title="Resale Condominium by Planning Region and Area, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+```
+:::
+
+# Treemap
+
+## basic treemap
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=realis2018_selected, 
+       aes(area = `Total Unit Sold`,
+           fill = `Median Unit Price ($ psm)`),
+       layout = "scol",
+       start = "bottomleft") + 
+  geom_treemap() +
+  scale_fill_gradient(low = "light blue", high = "blue")
+
+```
+## The code
+```{r}
+#| eval: false
+ggplot(data=realis2018_selected, 
+       aes(area = `Total Unit Sold`,
+           fill = `Median Unit Price ($ psm)`),
+       layout = "scol",
+       start = "bottomleft") + 
+  geom_treemap() +
+  scale_fill_gradient(low = "light blue", high = "blue")
+```
+:::
+
+## defining hierarchy
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=realis2018_selected, 
+       aes(area = `Total Unit Sold`,
+           fill = `Median Unit Price ($ psm)`,
+           subgroup = `Planning Region`),
+       start = "topleft") + 
+  geom_treemap()
+
+```
+## The code
+```{r}
+#| eval: false
+ggplot(data=realis2018_selected, 
+       aes(area = `Total Unit Sold`,
+           fill = `Median Unit Price ($ psm)`,
+           subgroup = `Planning Region`),
+       start = "topleft") + 
+  geom_treemap()
+```
+:::
+
+
+## group by planning area
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(data=realis2018_selected, 
+       aes(area = `Total Unit Sold`,
+           fill = `Median Unit Price ($ psm)`,
+           subgroup = `Planning Region`,
+           subgroup2 = `Planning Area`)) + 
+  geom_treemap() +
+  geom_treemap_subgroup2_border(colour = "gray40",
+                                size = 2) +
+  geom_treemap_subgroup_border(colour = "gray20")
+
+```
+## The code
+```{r}
+#| eval: false
+ggplot(data=realis2018_selected, 
+       aes(area = `Total Unit Sold`,
+           fill = `Median Unit Price ($ psm)`,
+           subgroup = `Planning Region`,
+           subgroup2 = `Planning Area`)) + 
+  geom_treemap() +
+  geom_treemap_subgroup2_border(colour = "gray40",
+                                size = 2) +
+  geom_treemap_subgroup_border(colour = "gray20")
+```
+:::
+
+
+# Designing Interactive treemap
+
+## relevant packages
+
+```{r}
+library(devtools)
+```
+
+```{r}
+library(d3treeR)
+
+```
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+tm <- treemap(realis2018_summarised,
+        index=c("Planning Region", "Planning Area"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        type="value",
+        title="Private Residential Property Sold, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+
+```
+## The code
+```{r}
+#| eval: false
+tm <- treemap(realis2018_summarised,
+        index=c("Planning Region", "Planning Area"),
+        vSize="Total Unit Sold",
+        vColor="Median Unit Price ($ psm)",
+        type="value",
+        title="Private Residential Property Sold, 2017",
+        title.legend = "Median Unit Price (S$ per sq. m)"
+        )
+
+```
+:::
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+d3tree(tm,rootname = "Singapore" )
+
+```
+## The code
+```{r}
+#| eval: false
+d3tree(tm,rootname = "Singapore" )
+
+```
+:::
