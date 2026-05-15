@@ -12,6 +12,7 @@ execute:
 ---
 
 # Getting started
+
 ```{r}
 pacman::p_load(ggdist, ggridges, ggthemes, 
                colorspace, tidyverse)
@@ -28,9 +29,7 @@ exam <- read.csv("Exam_data.csv")
 
 Ridgeline plot or joyplot shows the distribution of a numeric variable across multiple categories or groups. It is useful when you want to compare distributions side by side. For example, population by continent over time, income distribution by country, exam scores by class, temperature distribution by month.
 
-
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 There are multiple ways to plot ridgeline plot with R. This section, we are using ggridges package.
@@ -77,7 +76,6 @@ ggplot(exam,
   scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
   theme_ridges()
 ```
-
 :::
 
 ## Varying fill colors along the x axis
@@ -86,8 +84,7 @@ Basically, a gradient effect along the axis.
 
 ### using geom_density_ridges_gradient
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -131,13 +128,11 @@ ggplot(exam,
   theme_ridges()
 
 ```
-
 :::
 
 ### using geom_ridgeline_gradient()
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -214,7 +209,6 @@ ggplot(exam,
   theme_ridges()
 
 ```
-
 :::
 
 # Mapping probabilities directly onto color
@@ -223,8 +217,7 @@ The code below creates a ridgeline density plot of English scores by class, and 
 
 The plot below helps to answer: For each class, are English scores mostly concentrated around the middle, or are there many unusually low or high scores?
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -257,15 +250,13 @@ ggplot(exam,
   theme_ridges()
 
 ```
-
 :::
 
 # Ridgeline plots with quantile lines
 
-We are using geom_density_ridges_gradient(). The code creates a ridgeline density plot of English scores by class and colours the distributions according to quartiles. The plot has 2 purposes: TO show the shape of the distribution and also display how the data is divided into equal probability regions. The distribution is divided into 4 quartiles. We can identify quickly in this plot, the spread of scores, concentration around the median, skewness, whether scores are evenly distributed and the differences between classes.  
+We are using geom_density_ridges_gradient(). The code creates a ridgeline density plot of English scores by class and colours the distributions according to quartiles. The plot has 2 purposes: TO show the shape of the distribution and also display how the data is divided into equal probability regions. The distribution is divided into 4 quartiles. We can identify quickly in this plot, the spread of scores, concentration around the median, skewness, whether scores are evenly distributed and the differences between classes.
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -305,18 +296,11 @@ ggplot(exam,
 
 
 ```
-
 :::
 
+Alternatively, instead of using numbers to define the 1st, 2nd,3rd and 4th quantile, we can also specify quantiles by cut off points. First quartile (0–25%). Second quartile (25–50%). Third quartile (50–75%). Fourth quartile (75–100%).
 
-Alternatively, instead of using numbers to define the 1st, 2nd,3rd and 4th quantile, we can also specify quantiles by cut off points.
-First quartile (0–25%).
-Second quartile (25–50%).
-Third quartile (50–75%).
-Fourth quartile (75–100%).
-
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -364,19 +348,17 @@ ggplot(exam,
   theme_ridges()
 
 ```
-
 :::
 
 # Visualising distribution with raincloud plot
 
-A raincloud plot is a data visualisation technique used to display the distribution of a numeric variable in a more detailed and informative way than traditional plots such as boxplot. It combines several visual elements such as helf-density plot, boxplot and jittered/raw data points into a single chart. 
+A raincloud plot is a data visualisation technique used to display the distribution of a numeric variable in a more detailed and informative way than traditional plots such as boxplot. It combines several visual elements such as helf-density plot, boxplot and jittered/raw data points into a single chart.
 
-Raincloud plots are important as they combine the strengths of multiple visualisations into one figure. Raincloud plots show the full distribution, display individual observations, combine summary and detail.They are better than boxplots alone. 
+Raincloud plots are important as they combine the strengths of multiple visualisations into one figure. Raincloud plots show the full distribution, display individual observations, combine summary and detail.They are better than boxplots alone.
 
 ## Plotting a half eye graph
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -408,13 +390,11 @@ ggplot(exam,
 
 
 ```
-
 :::
 
 ## Adding the boxplot with geom_boxplot()
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -450,13 +430,11 @@ ggplot(exam,
 
 
 ```
-
 :::
 
 ## Adding the dot plots with stat_dots()
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -500,13 +478,11 @@ ggplot(exam,
 
 
 ```
-
 :::
 
 ## Use coord_flip() to flip the raincloud chart
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## The plot
 
 ```{r}
@@ -554,5 +530,4 @@ ggplot(exam,
 
 
 ```
-
 :::
