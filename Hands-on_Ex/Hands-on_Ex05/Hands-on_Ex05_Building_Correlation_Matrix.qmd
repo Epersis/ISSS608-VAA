@@ -11,7 +11,7 @@ execute:
   freeze: true
 ---
 
-A correlation matrix is a table that displays the correlation coefficients between multiple variables pairwise. It helps analysts quickly understand how variables move relative to one another. For example, if a dataset contains many different variables, a correlation matrix shows the relationship between every possible pair of variables. 
+A correlation matrix is a table that displays the correlation coefficients between multiple variables pairwise. It helps analysts quickly understand how variables move relative to one another. For example, if a dataset contains many different variables, a correlation matrix shows the relationship between every possible pair of variables.
 
 # Installing and launching R packages
 
@@ -27,7 +27,7 @@ wine <- read_csv("wine_quality.csv")
 
 # Building correlation matrix, pairs method
 
-The code below creates a scatterplot matrix, aka pairs plot. It automatically compares every variable against every other variable in the dataset. Each small box is a scatterplot between 2 variables.     
+The code below creates a scatterplot matrix, aka pairs plot. It automatically compares every variable against every other variable in the dataset. Each small box is a scatterplot between 2 variables.
 
 ::: panel-tabset
 ## The plot
@@ -37,7 +37,9 @@ The code below creates a scatterplot matrix, aka pairs plot. It automatically co
 pairs(wine[,1:11])
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 pairs(wine[,1:11])
@@ -52,7 +54,9 @@ pairs(wine[,1:11])
 #| echo: false
 pairs(wine[,2:12])
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 pairs(wine[,2:12])
@@ -72,7 +76,9 @@ There is no need to show the entire correlation matrix as it is symmetric.So we 
 #| echo: false
 pairs(wine[,2:12], upper.panel = NULL)
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 pairs(wine[,2:12], upper.panel = NULL)
@@ -86,28 +92,25 @@ pairs(wine[,2:12], upper.panel = NULL)
 #| echo: false
 pairs(wine[,2:12], lower.panel = NULL)
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 pairs(wine[,2:12], lower.panel = NULL)
 ```
 :::
 
-
 # Including with correlation coefficients
 
-A correlation coefficient measures the direction and strength of the relationship between 2 variables. 
-The range of the coefficient is: -1<=r<=1
-+1, is a perfect positive relationship
--1, perfect negative relationship
-0, no linear relationship
+A correlation coefficient measures the direction and strength of the relationship between 2 variables. The range of the coefficient is: -1\<=r\<=1 +1, is a perfect positive relationship -1, perfect negative relationship 0, no linear relationship
 
 The significance of correlation coefficients are important. They help identify strong relationships, detect redundant variables, detect multicollinearity and understand real-world relationships.
 
 Common guideline:
 
 | Correlation | Interpretation |
-| ----------- | -------------- |
+|-------------|----------------|
 | 0.00–0.19   | Very weak      |
 | 0.20–0.39   | Weak           |
 | 0.40–0.59   | Moderate       |
@@ -133,7 +136,9 @@ text(0.5, 0.5, txt, cex = cex.cor * (1 + r) / 2)
 pairs(wine[,2:12], 
       upper.panel = panel.cor)
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 panel.cor <- function(x, y, digits=2, prefix="", cex.cor, ...) {
@@ -176,7 +181,9 @@ ggplot.component = list(
       axis.text.x = element_text(size = 8),
       axis.text.y = element_text(size = 8)))
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 
@@ -222,7 +229,9 @@ grouped_ggcorrmat(
 )
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 grouped_ggcorrmat(
@@ -252,7 +261,6 @@ grouped_ggcorrmat(
 wine.cor <- cor(wine[, 1:11])
 ```
 
-
 ::: panel-tabset
 ## The plot
 
@@ -261,7 +269,9 @@ wine.cor <- cor(wine[, 1:11])
 corrplot(wine.cor)
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 corrplot(wine.cor)
@@ -281,7 +291,9 @@ corrplot(wine.cor,
          type="lower")
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 corrplot(wine.cor, 
@@ -304,7 +316,9 @@ corrplot(wine.cor,
          diag = FALSE,
          tl.col = "black")
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 corrplot(wine.cor, 
@@ -316,10 +330,9 @@ corrplot(wine.cor,
 ```
 :::
 
+Other alternatives to customise the layout:
 
-Other alternatives to customise the layout: 
-
-1. Add correlation coefficients + rotate labels
+1.  Add correlation coefficients + rotate labels
 
 ::: panel-tabset
 ## The plot
@@ -340,7 +353,9 @@ corrplot(
   diag = FALSE
 )
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 corrplot(
@@ -360,7 +375,7 @@ corrplot(
 ```
 :::
 
-2. Cluster similar variables
+2.  Cluster similar variables
 
 ::: panel-tabset
 ## The plot
@@ -381,7 +396,9 @@ corrplot(
   diag = FALSE
 )
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 corrplot(
@@ -402,11 +419,10 @@ corrplot(
 :::
 
 # Combining corrgram with the significance test
+
 The purpose of the significance test in correlation analysis is to determine whether an observed correlation is likely to represent a real relationship in the population or if it occurred due to random chance in the sample data.
 
-A correlation coefficient alone only tells us:
-1. Strength of the relationship
-2. Direction of the relationship
+A correlation coefficient alone only tells us: 1. Strength of the relationship 2. Direction of the relationship
 
 Significance testing is important as it helps us assess whether the observed relationship is credible. Based on the p value, we can interpret and decide if the observed relationship is credible.
 
@@ -425,7 +441,9 @@ corrplot(wine.cor,
          p.mat = wine.sig$p,
          sig.level = .05)
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 wine.sig = cor.mtest(wine.cor, conf.level= .95)
@@ -441,7 +459,7 @@ corrplot(wine.cor,
 ```
 :::
 
-In the visualisation above, blue values indicate positive correlations. Red values indicate negative correlations. Larger absolute values indicate stronger relationships. 
+In the visualisation above, blue values indicate positive correlations. Red values indicate negative correlations. Larger absolute values indicate stronger relationships.
 
 # Reorder corrgram
 
@@ -458,7 +476,9 @@ corrplot.mixed(wine.cor,
                order="AOE",
                tl.col = "black")
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 corrplot.mixed(wine.cor, 
@@ -487,7 +507,9 @@ corrplot(wine.cor,
          hclust.method = "ward.D",
          addrect = 3)
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 corrplot(wine.cor, 
@@ -500,8 +522,4 @@ corrplot(wine.cor,
 ```
 :::
 
-This visualisation shows a reordered correlation matrix using hierarchical clustering (hclust). 
-Instead of displaying variables in their original oder, the variables are rearranged so that, 1. highly related variables are grouped together 2. making patterns and clusters easier to identify visually.
-There are 3 clusters identified. Interpretation: blue ellipses means positive correlation, red ellipses means negative correlation, thinner ellipses means stronger correlation, circular shapes means weak/no correlation. Reordering the matrix improves interpretability by placing related variables closer together. Some inferences are are the strong negative relationship between alchohol and density or the strong positive relationship between free sulfur dioxide and total sulfur dioxide. 
-
-
+This visualisation shows a reordered correlation matrix using hierarchical clustering (hclust). Instead of displaying variables in their original oder, the variables are rearranged so that, 1. highly related variables are grouped together 2. making patterns and clusters easier to identify visually. There are 3 clusters identified. Interpretation: blue ellipses means positive correlation, red ellipses means negative correlation, thinner ellipses means stronger correlation, circular shapes means weak/no correlation. Reordering the matrix improves interpretability by placing related variables closer together. Some inferences are are the strong negative relationship between alchohol and density or the strong positive relationship between free sulfur dioxide and total sulfur dioxide.

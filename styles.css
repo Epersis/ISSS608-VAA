@@ -1,1 +1,106 @@
-/* css styles */
+/* Whole website background and text */
+body {
+  background-color: #f3e8ff !important;
+  color: #2d004d !important;
+}
+
+/* Main content area */
+main, .content, .quarto-title-block {
+  background-color: #f3e8ff !important;
+  color: #2d004d !important;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #7b2cbf !important;
+}
+
+/* Navbar title and links */
+/*.navbar-brand,
+.navbar-nav .nav-link,
+.navbar a {
+  color: #f8f0ff !important;
+  
+}*/
+
+/* Navbar title and links */
+.navbar-brand,
+.navbar-brand:hover,
+.navbar-nav .nav-link,
+.navbar-nav .nav-link:hover,
+.navbar a {
+  color: #f8f0ff !important;   /* near-white lavender */
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  background-color: #e0b3ff !important;
+}
+
+.dropdown-item {
+  color: #2d004d !important;
+}
+
+.dropdown-item:hover {
+  background-color: #9d4edd !important;
+  color: white !important;
+}
+
+/* Headings and normal text */
+h1, h2, h3, h4, h5, h6,
+p, li, span {
+  color: #2d004d !important;
+}
+
+/* Links */
+a {
+  color: #5a189a !important;
+}
+
+/* Code chunks and inline code */
+pre, code, .sourceCode {
+  background-color: #ead7ff !important;
+  color: #2d004d !important;
+}
+
+/* Code chunk text */
+pre code {
+  color: #2d004d !important;
+}
+
+/* TOC */
+#TOC {
+  background-color: #ead7ff !important;
+  color: #2d004d !important;
+  border-left: 4px solid #7b2cbf;
+}
+
+#TOC a {
+  color: #5a189a !important;
+}
+
+/* Tables */
+table {
+  color: #2d004d !important;
+}
+
+/* Panels / tabsets */
+.nav-tabs .nav-link {
+  color: #5a189a !important;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #d8b4fe !important;
+  color: #2d004d !important;
+  border-color: #7b2cbf !important;
+}
+
+/* FORCE navbar text to light lavender */
+.navbar * {
+  color: #f8f0ff !important;
+}
+
+/* Hover effect */
+.navbar *:hover {
+  color: #ffffff !important;
+}

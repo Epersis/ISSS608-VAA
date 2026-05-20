@@ -11,9 +11,9 @@ execute:
   freeze: true
 ---
 
-A parallel coordinates plot is used to visualised many numerical variables at the same time. Instead of just 1 x-axis and 1 y-axis, it creates many vertical axes, one for each variable. In the world happiness dataset used in this example, the axes could be GDP, Corruption, Freedom etc and each country becomes one line that passes through all the axes. 
+A parallel coordinates plot is used to visualised many numerical variables at the same time. Instead of just 1 x-axis and 1 y-axis, it creates many vertical axes, one for each variable. In the world happiness dataset used in this example, the axes could be GDP, Corruption, Freedom etc and each country becomes one line that passes through all the axes.
 
-Parallel coordinates plots help you compare multivariate patterns. Eg. which variables move together, whether clusters/groups exist, how differently countries behave from each other. 
+Parallel coordinates plots help you compare multivariate patterns. Eg. which variables move together, whether clusters/groups exist, how differently countries behave from each other.
 
 # Installing and launching R packages
 
@@ -41,7 +41,9 @@ ggparcoord(data = wh,
            columns = c(7:12))
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 ggparcoord(data = wh, 
@@ -50,11 +52,9 @@ ggparcoord(data = wh,
 ```
 :::
 
-
 # Plotting parallel coordinates with boxplot
 
 The boxplot= TRUE means that a boxplot is drawn on each vertical axis. This helps summarise the distribution of each variable and makes the plot easier to interpret. The boxplots help by showing the centre of the data, spread/variability, skewness and possible outliers for each variable.
-
 
 ::: panel-tabset
 ## The plot
@@ -70,7 +70,9 @@ ggparcoord(data = wh,
            title = "Parallel Coordinates Plot of World Happines Variables")
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 ggparcoord(data = wh, 
@@ -101,7 +103,9 @@ ggparcoord(data = wh,
   facet_wrap(~ Region)
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 ggparcoord(data = wh, 
@@ -134,7 +138,9 @@ ggparcoord(data = wh,
   theme(axis.text.x = element_text(angle = 30))
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 ggparcoord(data = wh, 
@@ -168,7 +174,9 @@ ggparcoord(data = wh,
   theme(axis.text.x = element_text(angle = 30, hjust=1))
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 ggparcoord(data = wh, 
@@ -182,7 +190,6 @@ ggparcoord(data = wh,
   theme(axis.text.x = element_text(angle = 30, hjust=1))
 ```
 :::
-
 
 # Plotting interactive parallel coordinates plot:parallelPlot methods
 
@@ -200,7 +207,9 @@ parallelPlot(wh,
              height = 250)
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 wh <- wh %>%
@@ -223,7 +232,9 @@ parallelPlot(wh,
              rotateTitle = TRUE)
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 parallelPlot(wh,
@@ -231,7 +242,6 @@ parallelPlot(wh,
 
 ```
 :::
-
 
 ## changing colour
 
@@ -244,7 +254,9 @@ parallelPlot(wh,
              continuousCS = "YlOrRd",
              rotateTitle = TRUE)
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 parallelPlot(wh,
@@ -266,7 +278,9 @@ parallelPlot(wh,
              rotateTitle = TRUE,
              histoVisibility = histoVisibility)
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 histoVisibility <- rep(TRUE, ncol(wh))
@@ -276,7 +290,3 @@ parallelPlot(wh,
 
 ```
 :::
-
-
-
-

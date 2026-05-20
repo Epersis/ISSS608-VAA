@@ -11,8 +11,7 @@ execute:
   freeze: true
 ---
 
-This is about treemaps. Both treemaps and heatmaps use colour to represent data, but they are designed for very different purposes. A heatmap displays values in a matrix/grid format using colours. It is best for multivariate analysis and pattern detection. Treemap displays hierarchical data using nested rectangles. Rectangle size represents quantity, the size of rectangle varies. Rectangle colour often represents another variable. It is best for comparing relative sizes within categories.     
-
+This is about treemaps. Both treemaps and heatmaps use colour to represent data, but they are designed for very different purposes. A heatmap displays values in a matrix/grid format using colours. It is best for multivariate analysis and pattern detection. Treemap displays hierarchical data using nested rectangles. Rectangle size represents quantity, the size of rectangle varies. Rectangle colour often represents another variable. It is best for comparing relative sizes within categories.
 
 # install packages
 
@@ -49,7 +48,9 @@ realis2018_summarised <- summarise(realis2018_grouped,
                           `Median Transacted Price` = median(`Transacted Price ($)`, na.rm = TRUE))
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 realis2018_grouped <- group_by(realis2018, `Project Name`,
@@ -81,7 +82,9 @@ realis2018_summarised <- realis2018 %>%
             `Median Transacted Price` = median(`Transacted Price ($)`, na.rm = TRUE))
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 realis2018_summarised <- realis2018 %>% 
@@ -95,7 +98,6 @@ realis2018_summarised <- realis2018 %>%
 
 ```
 :::
-
 
 # Designing treemap with treemap package
 
@@ -119,7 +121,9 @@ treemap(realis2018_selected,
         )
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 realis2018_selected <- realis2018_summarised %>%
@@ -136,7 +140,6 @@ treemap(realis2018_selected,
 
 ```
 :::
-
 
 ## Working with vcolour and type arguments
 
@@ -155,7 +158,9 @@ treemap(realis2018_selected,
         )
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 treemap(realis2018_selected,
@@ -188,7 +193,9 @@ treemap(realis2018_selected,
         )
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 treemap(realis2018_selected,
@@ -203,7 +210,6 @@ treemap(realis2018_selected,
 
 ```
 :::
-
 
 ## manual type treemap
 
@@ -223,7 +229,9 @@ treemap(realis2018_selected,
         )
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 treemap(realis2018_selected,
@@ -238,7 +246,6 @@ treemap(realis2018_selected,
 
 ```
 :::
-
 
 ## working with algorithm argument
 
@@ -259,7 +266,9 @@ treemap(realis2018_selected,
         )
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 treemap(realis2018_selected,
@@ -295,7 +304,9 @@ treemap(realis2018_selected,
         )
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 treemap(realis2018_selected,
@@ -330,7 +341,9 @@ ggplot(data=realis2018_selected,
   scale_fill_gradient(low = "light blue", high = "blue")
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 ggplot(data=realis2018_selected, 
@@ -358,7 +371,9 @@ ggplot(data=realis2018_selected,
   geom_treemap()
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 ggplot(data=realis2018_selected, 
@@ -369,7 +384,6 @@ ggplot(data=realis2018_selected,
   geom_treemap()
 ```
 :::
-
 
 ## group by planning area
 
@@ -389,7 +403,9 @@ ggplot(data=realis2018_selected,
   geom_treemap_subgroup_border(colour = "gray20")
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 ggplot(data=realis2018_selected, 
@@ -403,7 +419,6 @@ ggplot(data=realis2018_selected,
   geom_treemap_subgroup_border(colour = "gray20")
 ```
 :::
-
 
 # Designing Interactive treemap
 
@@ -433,7 +448,9 @@ tm <- treemap(realis2018_summarised,
         )
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 tm <- treemap(realis2018_summarised,
@@ -448,7 +465,6 @@ tm <- treemap(realis2018_summarised,
 ```
 :::
 
-
 ::: panel-tabset
 ## The plot
 
@@ -457,14 +473,15 @@ tm <- treemap(realis2018_summarised,
 d3tree(tm,rootname = "Singapore" )
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 d3tree(tm,rootname = "Singapore" )
 
 ```
 :::
-
 
 # Alternatives
 
@@ -494,7 +511,9 @@ ggplot(
   )
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 ggplot(
@@ -544,7 +563,9 @@ ggplot(
   )
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 ggplot(
@@ -566,7 +587,6 @@ ggplot(
   )
 ```
 :::
-
 
 ## Treemap with planning region and planning area hierarchy
 
@@ -603,7 +623,9 @@ ggplot(
   )
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 ggplot(

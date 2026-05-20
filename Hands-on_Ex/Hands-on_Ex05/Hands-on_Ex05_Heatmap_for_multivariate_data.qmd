@@ -13,14 +13,12 @@ execute:
 
 Heatmaps are data visualisation techniques that represent values using colours. Instead of displaying numbers directly, colours are used to show the magnitude or intensity of values within matrix or table.
 
-Typically:
-1. darker or stronger colours represent larger values
-2. lighter or weaker colours represent smaller values
+Typically: 1. darker or stronger colours represent larger values 2. lighter or weaker colours represent smaller values
 
-Heatmaps consist of rows, columns and cells. Heatmaps are useful for detecting patterns, identifying correlations, comparing multiple variables simultaneously or detecting clusters or groups. 
-There are different types of heatmaps such as Correlation heatmaps, geographic heatmaps, activity heatmaps, matrix heatmaps.
+Heatmaps consist of rows, columns and cells. Heatmaps are useful for detecting patterns, identifying correlations, comparing multiple variables simultaneously or detecting clusters or groups. There are different types of heatmaps such as Correlation heatmaps, geographic heatmaps, activity heatmaps, matrix heatmaps.
 
 # Installing and launching packages
+
 ```{r}
 pacman::p_load(seriation, dendextend, heatmaply, tidyverse)
 
@@ -31,7 +29,6 @@ pacman::p_load(seriation, dendextend, heatmaply, tidyverse)
 ```{r}
 wh <- read_csv("WHData-2018.csv")
 ```
-
 
 # Preparing the data
 
@@ -46,7 +43,6 @@ wh1 <- dplyr::select(wh, c(3, 7:12))
 wh_matrix <- data.matrix(wh)
 ```
 
-
 # Static heatmaps
 
 ::: panel-tabset
@@ -58,7 +54,9 @@ wh_heatmap <- heatmap(wh_matrix,
                       Rowv=NA, Colv=NA)
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 wh_heatmap <- heatmap(wh_matrix,
@@ -77,7 +75,9 @@ wh_heatmap <- heatmap(wh_matrix,
 wh_heatmap <- heatmap(wh_matrix)
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 wh_heatmap <- heatmap(wh_matrix)
@@ -99,7 +99,9 @@ wh_heatmap <- heatmap(wh_matrix,
                       margins = c(10, 4))
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 wh_heatmap <- heatmap(wh_matrix,
@@ -121,7 +123,9 @@ wh_heatmap <- heatmap(wh_matrix,
 heatmaply(mtcars)
 
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 heatmaply(mtcars)
@@ -136,20 +140,22 @@ heatmaply(mtcars)
 #| echo: false
 heatmaply(wh_matrix[, -c(1, 2, 4, 5)])
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 heatmaply(wh_matrix[, -c(1, 2, 4, 5)])
 ```
 :::
 
-
 # Data transformation
-When analysing multivariate datasets, different variables often use different measurement scales and units. When the ranges of values differ greatly, variables with larger numerical values may dominate the analysis, especially in clustering, distance calculations, heatmaps, machine learning models. Transformation is important as it helps place variables with different ranges on a more comparable scale. There are three commonly used transformation methods, which are scale, normalise and percentile.  
+
+When analysing multivariate datasets, different variables often use different measurement scales and units. When the ranges of values differ greatly, variables with larger numerical values may dominate the analysis, especially in clustering, distance calculations, heatmaps, machine learning models. Transformation is important as it helps place variables with different ranges on a more comparable scale. There are three commonly used transformation methods, which are scale, normalise and percentile.
 
 ## Scaling method
 
-Scaling method is commonly used when variables are assumed to follow or approximately follow a normal distribution. The transformation is performed by subtracting the mean and then dividing by the standard deviation. 
+Scaling method is commonly used when variables are assumed to follow or approximately follow a normal distribution. The transformation is performed by subtracting the mean and then dividing by the standard deviation.
 
 ::: panel-tabset
 ## The plot
@@ -158,7 +164,9 @@ Scaling method is commonly used when variables are assumed to follow or approxim
 #| echo: false
 heatmaply(wh_matrix[, -c(1, 2, 4, 5)])
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 heatmaply(wh_matrix[, -c(1, 2, 4, 5)])
@@ -166,7 +174,8 @@ heatmaply(wh_matrix[, -c(1, 2, 4, 5)])
 :::
 
 ## Normalising method
-Normalisation is a data transformation technique used to rescale values into a common range, typically 0 to 1. It is especially useful when variables come from different measurement scales, may not follow normal distribution or contain different ranges of values. Unlike scaling, normalisation does not standardise based on mean and standard deviation. Instead, it rescales values relative to the minimum and maximum values observed in the dataset. It preserves distribution shape. 
+
+Normalisation is a data transformation technique used to rescale values into a common range, typically 0 to 1. It is especially useful when variables come from different measurement scales, may not follow normal distribution or contain different ranges of values. Unlike scaling, normalisation does not standardise based on mean and standard deviation. Instead, it rescales values relative to the minimum and maximum values observed in the dataset. It preserves distribution shape.
 
 ::: panel-tabset
 ## The plot
@@ -175,7 +184,9 @@ Normalisation is a data transformation technique used to rescale values into a c
 #| echo: false
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]))
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]))
@@ -184,7 +195,7 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]))
 
 ## Percentising method
 
-Percentising is a data transformation technique that converts values into their empirical percentiles. Instead of focusing on the raw numerical value, or the distance from the mean, percentising focuses on the relative position of a value within the dataset. Percentising is useful because variables become directly comparable, extreme scales are removed and interpretation becomes intuitive. Unlike scaling, no normal distribution assumption is needed. Unlike normalisation, it is less sensitive to extreme outliers.         
+Percentising is a data transformation technique that converts values into their empirical percentiles. Instead of focusing on the raw numerical value, or the distance from the mean, percentising focuses on the relative position of a value within the dataset. Percentising is useful because variables become directly comparable, extreme scales are removed and interpretation becomes intuitive. Unlike scaling, no normal distribution assumption is needed. Unlike normalisation, it is less sensitive to extreme outliers.
 
 ::: panel-tabset
 ## The plot
@@ -193,17 +204,18 @@ Percentising is a data transformation technique that converts values into their 
 #| echo: false
 heatmaply(percentize(wh_matrix[, -c(1, 2, 4, 5)]))
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 heatmaply(percentize(wh_matrix[, -c(1, 2, 4, 5)]))
 ```
 :::
 
-
 # Clustering algorithm
 
-In heatmaps, clustering algorithms are used to automatically group together similar variables, similar observations or both. With clustering, similar items are placed close together and create visually meaningful groupings. Main purpose is to identify similarity and structure in complex data.  
+In heatmaps, clustering algorithms are used to automatically group together similar variables, similar observations or both. With clustering, similar items are placed close together and create visually meaningful groupings. Main purpose is to identify similarity and structure in complex data.
 
 ## Manual Approach
 
@@ -216,7 +228,9 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           dist_method = "euclidean",
           hclust_method = "ward.D")
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
@@ -239,7 +253,9 @@ wh_clust <- hclust(wh_d, method = "average")
 num_k <- find_k(wh_clust)
 plot(num_k)
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 wh_d <- dist(normalize(wh_matrix[, -c(1, 2, 4, 5)]), method = "euclidean")
@@ -261,7 +277,9 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           hclust_method = "average",
           k_row = 3)
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
@@ -272,10 +290,10 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
 :::
 
 # Seriation
-Seriation means finding the "best" order to arrange rows and columns so similar items appear next to each other and patterns become visually clearer. Hierarchical clustering groups similar items together, but it does not fully determine the exact left-to-right or top-to-bottom order of the leaves in the dendogram. 
-Seriation tries to reorder rows/columns while respecting the clustering structure, so nearby items are as similar as possible. The goal is to create smooth colour transitions, visibile blocks and cleaner patterns  in the heatmap.
 
-Here, we use Optimal Leaf Ordering(OLO). OLO is a seriation algorithm. It starts with the hierarchical clustering tree, rotates branches left/right and searches for the ordering that minimises differences between adjacent items. 
+Seriation means finding the "best" order to arrange rows and columns so similar items appear next to each other and patterns become visually clearer. Hierarchical clustering groups similar items together, but it does not fully determine the exact left-to-right or top-to-bottom order of the leaves in the dendogram. Seriation tries to reorder rows/columns while respecting the clustering structure, so nearby items are as similar as possible. The goal is to create smooth colour transitions, visibile blocks and cleaner patterns in the heatmap.
+
+Here, we use Optimal Leaf Ordering(OLO). OLO is a seriation algorithm. It starts with the hierarchical clustering tree, rotates branches left/right and searches for the ordering that minimises differences between adjacent items.
 
 ::: panel-tabset
 ## The plot
@@ -285,7 +303,9 @@ Here, we use Optimal Leaf Ordering(OLO). OLO is a seriation algorithm. It starts
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "OLO")
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
@@ -301,7 +321,9 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "GW")
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
@@ -317,7 +339,9 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "mean")
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
@@ -333,7 +357,9 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "none")
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
@@ -352,7 +378,9 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "none",
           colors = Blues)
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
@@ -360,7 +388,6 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           colors = Blues)
 ```
 :::
-
 
 ::: panel-tabset
 ## The plot
@@ -380,7 +407,9 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           ylab = "World Countries"
           )
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
@@ -421,7 +450,9 @@ heatmaply(
   row_dend_left = TRUE
 )
 ```
+
 ## The code
+
 ```{r}
 #| eval: false
 library(seriation)
@@ -439,4 +470,3 @@ heatmaply(
 )
 ```
 :::
-

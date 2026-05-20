@@ -42,6 +42,7 @@ ggplot(data=exam_data,
 ```
 
 # Plotting histogram using ggplot2.
+
 ```{r}
 ggplot(data=exam_data, aes(x = MATHS)) +
   geom_histogram(bins=10, 
@@ -51,7 +52,8 @@ ggplot(data=exam_data, aes(x = MATHS)) +
   ggtitle("Distribution of Maths scores")
 ```
 
-# Another alternative is to use dotplot. 
+# Another alternative is to use dotplot.
+
 In a dot plot, each dot represents one observation and the dots are stacked. However, the y scale is misleading.
 
 ```{r}
@@ -60,7 +62,8 @@ ggplot(data=exam_data,
   geom_dotplot(dotsize = 0.5)
 ```
 
-So, we remove the y axis. 
+So, we remove the y axis.
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x = MATHS)) +
@@ -72,15 +75,16 @@ ggplot(data=exam_data,
 
 # Looking at histograms again:
 
-default histogram: 
+default histogram:
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_histogram()       
 ```
 
-We can modify a geometric object by changing aes.
-the fill() is what differentiates the color.
+We can modify a geometric object by changing aes. the fill() is what differentiates the color.
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, 
@@ -97,14 +101,16 @@ ggplot(data=exam_data,
                  fill="light blue")  
 ```
 
-
 When using continuous data, an alternative to histogram would be geom-density().
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_density()           
 ```
+
 To plot more than one line:
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x = MATHS, 
@@ -119,8 +125,8 @@ ggplot(data=exam_data,
            colour = CLASS)) +
   geom_density()
 ```
-# Boxplot:
 
+# Boxplot:
 
 ```{r}
 ggplot(data=exam_data, 
@@ -129,8 +135,8 @@ ggplot(data=exam_data,
   geom_boxplot()            
 ```
 
-Notches in boxplots help to visually determine if the medians of distributions differ. If the notches do not overlap, then the medians
-are different. 
+Notches in boxplots help to visually determine if the medians of distributions differ. If the notches do not overlap, then the medians are different.
+
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, 
@@ -138,12 +144,7 @@ ggplot(data=exam_data,
   geom_boxplot(notch=TRUE)
 ```
 
-In the above plot,
-1. The notches for female and male overlap. This suggests that there is no
-statistically significant difference in median Maths scores between genders.
-2. Next, by comparing the median lines inside the boxes, we can see that both medians are around the same (mid 70s). This means that central tendency is very similar for both groups. 
-3. Look at IQR 
-4. Look at whiskers & outliers. 
+In the above plot, 1. The notches for female and male overlap. This suggests that there is no statistically significant difference in median Maths scores between genders. 2. Next, by comparing the median lines inside the boxes, we can see that both medians are around the same (mid 70s). This means that central tendency is very similar for both groups. 3. Look at IQR 4. Look at whiskers & outliers.
 
 # geom_violin is used for creating violin plot.
 
@@ -154,14 +155,16 @@ ggplot(data=exam_data,
   geom_violin()
 
 ```
-1. Width = density. The wider, the more students there are at that 
-particular score range. So, for both male and female, the widest is around 75-85. So, most students score around the mid to high 70s to 80s. 
-2. Overall shape/distribution pattern. Both violins have very similar shapes. There is a slight bulge around the higher scores(80+). The distribution of Math scores is very similar for both genders. 
-3. Both males and females have thin lower tails. Males have a slightly longer lower tail. There may be more low-score extremes among males.
-4. Look at upper range.
+
+1.  Width = density. The wider, the more students there are at that particular score range. So, for both male and female, the widest is around 75-85. So, most students score around the mid to high 70s to 80s.
+2.  Overall shape/distribution pattern. Both violins have very similar shapes. There is a slight bulge around the higher scores(80+). The distribution of Math scores is very similar for both genders.
+3.  Both males and females have thin lower tails. Males have a slightly longer lower tail. There may be more low-score extremes among males.
+4.  Look at upper range.
 
 # Scatterplot:
+
 geom_point is used to create scatterplot.
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, 
@@ -169,8 +172,8 @@ ggplot(data=exam_data,
   geom_point()            
 ```
 
-
 Combining different geom objects:
+
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, 
@@ -183,6 +186,7 @@ ggplot(data=exam_data,
 # Working with stat():
 
 Incomplete boxplot without indicating mean:
+
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, x= GENDER)) +
@@ -190,6 +194,7 @@ ggplot(data=exam_data,
 ```
 
 stat_summary adds mean values.
+
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, x= GENDER)) +
@@ -201,6 +206,7 @@ ggplot(data=exam_data,
 ```
 
 an alternative code to showing the mean values.
+
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, x= GENDER)) +
@@ -211,8 +217,7 @@ ggplot(data=exam_data,
              size=4)          
 ```
 
-To visualise a line on scatterplot to see trend:
-geom_smooth() is used to plot a best fit curve on scatterplot.
+To visualise a line on scatterplot to see trend: geom_smooth() is used to plot a best fit curve on scatterplot.
 
 ```{r}
 ggplot(data=exam_data, 
@@ -231,7 +236,9 @@ ggplot(data=exam_data,
 ```
 
 # Trellis plot:
-1. Using facet_wrap()
+
+1.  Using facet_wrap()
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS)) +
@@ -239,7 +246,8 @@ ggplot(data=exam_data,
     facet_wrap(~ CLASS)
 ```
 
-2. Using facet_grid()
+2.  Using facet_grid()
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS)) +
@@ -250,13 +258,15 @@ ggplot(data=exam_data,
 # Using coordinate
 
 Default form of bar chart:
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
   geom_bar()
 ```
 
-1. Flip horizontal bar chart into vertical bar chart
+1.  Flip horizontal bar chart into vertical bar chart
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
@@ -264,7 +274,8 @@ ggplot(data=exam_data,
   coord_flip()
 ```
 
-2. Changing range of the X and Y axis
+2.  Changing range of the X and Y axis
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x= MATHS, y=ENGLISH)) +
@@ -283,6 +294,7 @@ ggplot(data=exam_data,
 ```
 
 # Working with theme:
+
 ```{r}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
@@ -308,34 +320,39 @@ ggplot(data=exam_data,
 ```
 
 # Alternatives
-1. Frequency plot for categorical data
+
+1.  Frequency plot for categorical data
+
 ```{r}
 ggplot(data=exam_data, aes(x=RACE)) +
   geom_bar(stat="count")
 ```
 
-2. Proportion/Percentage bar chart
+2.  Proportion/Percentage bar chart
+
 ```{r}
 ggplot(data=exam_data, aes(x=RACE)) +
   geom_bar(aes(y = after_stat(prop))) +
   ylab("Proportion")
 ```
 
-3. Scatterplot for color grouping + trend line
+3.  Scatterplot for color grouping + trend line
+
 ```{r}
 ggplot(data=exam_data, aes(x=MATHS, y=ENGLISH, colour=GENDER)) +
   geom_point() +
   geom_smooth(method="lm", se=FALSE)
 ```
 
-4. Boxplot + jitter
+4.  Boxplot + jitter
+
 ```{r}
 ggplot(data=exam_data, aes(x=GENDER, y=MATHS)) +
   geom_boxplot() +
   geom_jitter(width=0.2, alpha=0.5)
 ```
 
-5. Histogram + density overlay
+5.  Histogram + density overlay
 
 ```{r}
 ggplot(data=exam_data, aes(x=MATHS)) +
@@ -343,21 +360,24 @@ ggplot(data=exam_data, aes(x=MATHS)) +
   geom_density(color="blue")
 ```
 
-6. Facet with multiples variables
+6.  Facet with multiples variables
+
 ```{r}
 ggplot(data=exam_data, aes(x=MATHS)) +
   geom_histogram(bins=20) +
   facet_grid(GENDER ~ CLASS)
 ```
 
-7. Flip coordinates for readability 
+7.  Flip coordinates for readability
+
 ```{r}
 ggplot(data=exam_data, aes(x=RACE)) +
   geom_bar() +
   coord_flip()
 ```
 
-8. Highlight subset of data
+8.  Highlight subset of data
+
 ```{r}
 ggplot(data=exam_data, aes(x=MATHS, y=ENGLISH)) +
   geom_point(color="grey") +
