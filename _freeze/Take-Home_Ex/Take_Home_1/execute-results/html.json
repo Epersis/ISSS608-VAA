@@ -1,0 +1,15 @@
+{
+  "hash": "3841b78c5391cf4e3a82f28daa09ae58",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Take Home Exercise 1\"\nformat: html\nauthor: \"Persis Evangeline\"\ndate: \"May 20, 2026\"\ndate-modified: \"last-modified\"\nexecute: \n  eval: true\n  echo: true\n  warning: false\n  freeze: true\n---\n\n# About the dataset\n\nThe dataset being used is the Mendeley Data, a detailed dataset of motor insurance policies with coverage-specific financial information. It is a real-world motor vehicle insurance portfolio dataset from a Spanish non-life insurance company. It is particularly valuable as it is an open insurance dataset with real commercial policy and claims data. This data is in spreadsheet format and contains anonymised microdata on automobile insurance policies and covers the main operations of the non-life portfolio from 2022 up till 2024. The database has 354140 records.\n\n# Objective and problem statement\n\nThere are several limitations arising from traditional methods used to analyse the insurance industry. Old traditional methods mainly included dashboards as there was lack of advanced analytical capabilities.\n\nThe main objective is to gain deeper insights into data distributions and identifying key factors influencing the profitability and volatility of the insurance portfolio. Usually, the root causes of poor profitability and high volatility are unknown. The aim is to investigate trends in underlying loss drivers and refine segmentation and unerwriting strategy.\n\n# Key tasks\n\n1. Apply suitable univariate visual analytics techniques to explore the distributions and characteristics of numerical and categorical variables.\n\n2. Apply suitable bivariate visual analytics techniques to investigate and statistically validate factors influencing the profitability and volatility of the insurance portfolio.\n\n\n# Getting started\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(tidyverse)\n```\n:::\n\n\n# Data Wrangling\n\n# Univariate visual analytics\n\n# Bivariate visual analytics\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

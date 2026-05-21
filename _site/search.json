@@ -796,5 +796,12 @@
     "title": "Hands-on_Ex05_treemap",
     "section": "Treemap with planning region and planning area hierarchy",
     "text": "Treemap with planning region and planning area hierarchy\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(\n  data = realis2018_selected,\n  aes(\n    area = `Total Unit Sold`,\n    fill = `Median Unit Price ($ psm)`,\n    subgroup = `Planning Region`,\n    subgroup2 = `Planning Area`,\n    label = `Planning Area`\n  )\n) +\n  geom_treemap() +\n  geom_treemap_subgroup_border(colour = \"white\", size = 3) +\n  geom_treemap_subgroup2_border(colour = \"gray70\", size = 1) +\n  geom_treemap_text(\n    colour = \"black\",\n    place = \"centre\",\n    size = 8\n  ) +\n  scale_fill_gradient(\n    low = \"lightyellow\",\n    high = \"darkred\"\n  ) +\n  labs(\n    title = \"Resale Condominium Units Sold by Region and Planning Area\",\n    fill = \"Median Unit Price ($ psm)\"\n  )"
+  },
+  {
+    "objectID": "Take-Home_Ex/Take_Home_1.html",
+    "href": "Take-Home_Ex/Take_Home_1.html",
+    "title": "Take Home Exercise 1",
+    "section": "",
+    "text": "About the dataset\nThe dataset being used is the Mendeley Data, a detailed dataset of motor insurance policies with coverage-specific financial information. It is a real-world motor vehicle insurance portfolio dataset from a Spanish non-life insurance company. It is particularly valuable as it is an open insurance dataset with real commercial policy and claims data. This data is in spreadsheet format and contains anonymised microdata on automobile insurance policies and covers the main operations of the non-life portfolio from 2022 up till 2024. The database 354140 records.\n\n\nGetting started\n\n\nData Wrangling\n\n\nUnivariate visual analytics\n\n\nBivariate visual analytics"
   }
 ]

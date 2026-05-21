@@ -11,3 +11,34 @@ execute:
   freeze: true
 ---
 
+# About the dataset
+
+The dataset being used is the Mendeley Data, a detailed dataset of motor insurance policies with coverage-specific financial information. It is a real-world motor vehicle insurance portfolio dataset from a Spanish non-life insurance company. It is particularly valuable as it is an open insurance dataset with real commercial policy and claims data. This data is in spreadsheet format and contains anonymised microdata on automobile insurance policies and covers the main operations of the non-life portfolio from 2022 up till 2024. The database has 354140 records.
+
+# Objective and problem statement
+
+There are several limitations arising from traditional methods used to analyse the insurance industry. Old traditional methods mainly included dashboards as there was lack of advanced analytical capabilities.
+
+The main objective is to gain deeper insights into data distributions and identifying key factors influencing the profitability and volatility of the insurance portfolio. Usually, the root causes of poor profitability and high volatility are unknown. The aim is to investigate trends in underlying loss drivers and refine segmentation and unerwriting strategy.
+
+# Key tasks
+
+1. Apply suitable univariate visual analytics techniques to explore the distributions and characteristics of numerical and categorical variables.
+
+2. Apply suitable bivariate visual analytics techniques to investigate and statistically validate factors influencing the profitability and volatility of the insurance portfolio.
+
+Carry out the analysis using tidyverse packages, ggplot2 and its extensions. 
+
+
+# Getting started
+
+
+```{r}
+pacman::p_load(tidyverse)
+```
+
+# Data Wrangling
+
+# Univariate visual analytics
+
+# Bivariate visual analytics
