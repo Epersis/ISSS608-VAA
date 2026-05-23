@@ -408,7 +408,6 @@ dataset <- read.csv("Dataset_Engineered.csv")
 
 # Univariate visual analytics
 
-## Categorical variables
 
 
 ::: panel-tabset
@@ -887,7 +886,7 @@ After filtering out records where claims have been made, half of the claims made
 
 
 
-## Numerical variables
+# Bivariate visual analytics
 
 ::: panel-tabset
 ## The plot
@@ -2003,10 +2002,6 @@ There is generally an increasing trend from 2022 to 2024, where the total occupa
 
 
 
-
-# Bivariate visual analytics
-
-
 ::: panel-tabset
 ## The plot
 
@@ -2163,6 +2158,353 @@ ggplot(dataset,
   theme_minimal()
 ```
 :::
+
+The median for Young drivers is higher than the middle aged and senior aged drivers. The young age drivers group has much wider Interquartile Range. As there are large range of values ranging downwards and much fewer positive extremes, this shows that the large losses are much more extreme than large profits. Since the boxes themselves are above 0 for all age groups, this shows that mostly, insurers are profitable.
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(dataset %>% filter(claim_severity != "No claim"),
+       aes(x = claim_severity,
+           y = total_incurred)) +
+  geom_boxplot(outlier.alpha = 0.2) +
+  labs(
+    title = "Total Incurred by Claim Severity",
+    x = "Claim Severity",
+    y = "Total Incurred"
+  ) +
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(dataset %>% filter(claim_severity != "No claim"),
+       aes(x = claim_severity,
+           y = total_incurred)) +
+  geom_boxplot(outlier.alpha = 0.2) +
+  labs(
+    title = "Total Incurred by Claim Severity",
+    x = "Claim Severity",
+    y = "Total Incurred"
+  ) +
+  theme_minimal()
+```
+:::
+
+The plot shows the "No claim", "Medium", and "Low" have near 0 in total incurred. High claim severity shows much larger number of positive extremes in the value of "Total Incurred".
+
+Zoomed in:
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(
+  dataset %>%
+    filter(claim_severity != "No claim"),
+
+  aes(x = claim_severity,
+      y = total_incurred)
+) +
+
+  geom_boxplot(
+    outlier.shape = NA,
+    fill = "mediumpurple",
+    alpha = 0.6
+  ) +
+
+  coord_cartesian(ylim = c(0, 25000)) +
+
+  labs(
+    title = "Total Incurred by Claim Severity",
+    x = "Claim Severity",
+    y = "Total Incurred"
+  ) +
+
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(
+  dataset %>%
+    filter(claim_severity != "No claim"),
+
+  aes(x = claim_severity,
+      y = total_incurred)
+) +
+
+  geom_boxplot(
+    outlier.shape = NA,
+    fill = "mediumpurple",
+    alpha = 0.6
+  ) +
+
+  coord_cartesian(ylim = c(0, 25000)) +
+
+  labs(
+    title = "Total Incurred by Claim Severity",
+    x = "Claim Severity",
+    y = "Total Incurred"
+  ) +
+
+  theme_minimal()
+```
+:::
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+library(ggdist)
+ggplot(dataset,
+       aes(x = driver_risk_group,
+           y = claim_frequency)) +
+  stat_halfeye(
+    adjust = 0.5,
+    justification = -0.2,
+    .width = 0,
+    point_colour = NA
+  ) +
+  geom_boxplot(width = 0.15,
+               outlier.shape = NA) +
+  coord_flip() +
+  labs(
+    title = "Claim Frequency by Driver Risk Group",
+    x = "Driver Risk Group",
+    y = "Claim Frequency"
+  ) +
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+library(ggdist)
+ggplot(dataset,
+       aes(x = driver_risk_group,
+           y = claim_frequency)) +
+  stat_halfeye(
+    adjust = 0.5,
+    justification = -0.2,
+    .width = 0,
+    point_colour = NA
+  ) +
+  geom_boxplot(width = 0.15,
+               outlier.shape = NA) +
+  coord_flip() +
+  labs(
+    title = "Claim Frequency by Driver Risk Group",
+    x = "Driver Risk Group",
+    y = "Claim Frequency"
+  ) +
+  theme_minimal()
+```
+:::
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(dataset,
+       aes(x = total_premium,
+           y = loss_ratio)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "lm",
+              se = TRUE,
+              linewidth = 0.7) +
+  labs(
+    title = "Relationship Between Total Premium and Loss Ratio",
+    x = "Total Premium",
+    y = "Loss Ratio"
+  ) +
+  theme_minimal()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(dataset,
+       aes(x = total_premium,
+           y = loss_ratio)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "lm",
+              se = TRUE,
+              linewidth = 0.7) +
+  labs(
+    title = "Relationship Between Total Premium and Loss Ratio",
+    x = "Total Premium",
+    y = "Loss Ratio"
+  ) +
+  theme_minimal()
+```
+:::
+
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(dataset,
+       aes(x = driver_age,
+           y = total_incurred)) +
+  geom_point(alpha = 0.2) +
+  geom_smooth(method = "loess",
+              se = TRUE) +
+  labs(
+    title = "Total Incurred Claims by Driver Age",
+    x = "Driver Age",
+    y = "Total Incurred"
+  ) +
+  theme_minimal()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(dataset,
+       aes(x = driver_age,
+           y = total_incurred)) +
+  geom_point(alpha = 0.2) +
+  geom_smooth(method = "loess",
+              se = TRUE) +
+  labs(
+    title = "Total Incurred Claims by Driver Age",
+    x = "Driver Age",
+    y = "Total Incurred"
+  ) +
+  theme_minimal()
+```
+:::
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+library(ggridges)
+
+ggplot(dataset,
+       aes(x = profitability,
+           y = policy_type,
+           fill = policy_type)) +
+  geom_density_ridges(alpha = 0.7,
+                      show.legend = FALSE) +
+  labs(
+    title = "Distribution of Profitability by Policy Type",
+    x = "Profitability",
+    y = "Policy Type"
+  ) +
+  theme_ridges()
+```
+
+## The code
+
+```{r}
+#| eval: false
+library(ggridges)
+
+ggplot(dataset,
+       aes(x = profitability,
+           y = policy_type,
+           fill = policy_type)) +
+  geom_density_ridges(alpha = 0.7,
+                      show.legend = FALSE) +
+  labs(
+    title = "Distribution of Profitability by Policy Type",
+    x = "Profitability",
+    y = "Policy Type"
+  ) +
+  theme_ridges()
+```
+:::
+
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+area_counts <- dataset %>%
+  count(municipality_type, circulation_area)
+
+ggplot(area_counts,
+       aes(x = circulation_area,
+           y = municipality_type,
+           fill = n)) +
+
+  geom_tile() +
+
+  geom_text(aes(label = n),
+            color = "white",
+            size = 4) +
+
+  labs(
+    title = "Heatmap of Circulation Area by Municipality Type",
+    x = "Circulation Area",
+    y = "Municipality Type",
+    fill = "Count"
+  ) +
+
+  theme_minimal()
+```
+
+## The code
+
+```{r}
+#| eval: false
+library(dplyr)
+library(ggplot2)
+
+area_counts <- dataset %>%
+  count(municipality_type, circulation_area)
+
+ggplot(area_counts,
+       aes(x = circulation_area,
+           y = municipality_type,
+           fill = n)) +
+
+  geom_tile() +
+
+  geom_text(aes(label = n),
+            color = "white",
+            size = 4) +
+
+  labs(
+    title = "Heatmap of Circulation Area by Municipality Type",
+    x = "Circulation Area",
+    y = "Municipality Type",
+    fill = "Count"
+  ) +
+
+  theme_minimal()
+```
+:::
+
 
 
 
