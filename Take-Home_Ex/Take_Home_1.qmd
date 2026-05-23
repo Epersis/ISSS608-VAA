@@ -158,7 +158,8 @@ Inspecting dataset structure:
 ```{r}
 glimpse(dataset)
 ```
-We can see all the variable names and their respective variable types. 
+
+We can see all the variable names and their respective variable types.
 
 Check for missing values:
 
@@ -166,7 +167,7 @@ Check for missing values:
 sum(is.na(dataset))
 ```
 
-There are total of 1804 records with missing values. Out of 35414, 1804 records have missing values. Since it is only a small proportion, remove rows with missing values.
+There are total of 1804 records with missing values. Out of 354140, 1804 records have missing values. Since it is only a small proportion, remove rows with missing values.
 
 Calculate percentage of missing rows:
 
@@ -175,7 +176,6 @@ print(sum(is.na(dataset))/nrow(dataset) * 100)
 
 
 ```
-
 
 Since there is only about 0.5% of missing values, these records with missing values can be removed. It has insignificant effect on the analysis.
 
@@ -189,8 +189,6 @@ dataset <- dataset %>%
 
 ```
 
-
-
 Check for duplicate records:
 
 ```{r}
@@ -198,13 +196,11 @@ sum(duplicated(dataset))
 
 ```
 
-
-There are no duplicated records. 
+There are no duplicated records.
 
 Doing basic descriptive summary:
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ```{r}
 #| echo: false
 #| results: asis
@@ -254,32 +250,31 @@ walk(names(dataset), function(var_name) {
   cat("\n\n")
 })
 ```
-
 :::
 
-Before moving on to feature engineering, it is important to understand key concepts and terminologies of insurance policies. 
+Before moving on to feature engineering, it is important to understand key concepts and terminologies of insurance policies.
 
-1. Insurer and Insured. Insurer: company that provides insurance coverage. Insured: person or entity protected by the insurance policy.
+1.  Insurer and Insured. Insurer: company that provides insurance coverage. Insured: person or entity protected by the insurance policy.
 
-2. Policy: legal contract between insurer and policyholder. It states conditions, claim limits, what is covered and excluded.
+2.  Policy: legal contract between insurer and policyholder. It states conditions, claim limits, what is covered and excluded.
 
-3. Coverage: The types of risks the insurer agrees to pay for. For instance in motor insurance, there would be risks of theft, accident damage and medical expenses.   
+3.  Coverage: The types of risks the insurer agrees to pay for. For instance in motor insurance, there would be risks of theft, accident damage and medical expenses.
 
-4. Claim: A request for compensation after a loss event. For instance, in the event of a car accident, the insurer investigates whether the event is covered, the claim is genuine and if policy conditions were followed. 
+4.  Claim: A request for compensation after a loss event. For instance, in the event of a car accident, the insurer investigates whether the event is covered, the claim is genuine and if policy conditions were followed.
 
-5. Deductible/Excess: The amount the customer must pay before insurance starts paying. Its purpose is to reduce small claims, discourage careless behaviour and lowers premiums. For example, repair cost= SGD 5000, deductible= SGD 1000, insurer pays = repair cost - deductible
+5.  Deductible/Excess: The amount the customer must pay before insurance starts paying. Its purpose is to reduce small claims, discourage careless behaviour and lowers premiums. For example, repair cost= SGD 5000, deductible= SGD 1000, insurer pays = repair cost - deductible
 
-6. Sum insured/ coverage limit: maximum amount insurer will pay.
+6.  Sum insured/ coverage limit: maximum amount insurer will pay.
 
-7. Risk pooling: majority group of people fund the minority who will make claims. Eg. 1 million people are insured, but only 1% make major claims. 
+7.  Risk pooling: majority group of people fund the minority who will make claims. Eg. 1 million people are insured, but only 1% make major claims.
 
-8. Underwriting:  Underwriting is the process of evaluating risk. The insurer decides whether to insure someone, how much premium to charge and what conditions to apply. 
+8.  Underwriting: Underwriting is the process of evaluating risk. The insurer decides whether to insure someone, how much premium to charge and what conditions to apply.
 
-9. Premium: Price that is paid for insurance.
+9.  Premium: Price that is paid for insurance.
 
 Feature Engineering:
 
-1. Profitability= total_premium - total_claims
+1.  Profitability= total_premium - total_claims
 
 ```{r}
 dataset <- dataset %>%
@@ -290,8 +285,7 @@ dataset <- dataset %>%
 
 ```
 
-2. Loss ratio = Claims incurred/Premium_earned = total_incurred/total_premium
-If Loss ratio < 1, means profitable. If Loss ratio > 1, means loss-making
+2.  Loss ratio = Claims incurred/Premium_earned = total_incurred/total_premium If Loss ratio \< 1, means profitable. If Loss ratio \> 1, means loss-making
 
 ```{r}
 dataset <- dataset %>%
@@ -301,7 +295,7 @@ dataset <- dataset %>%
   )
 ```
 
-3. Claim flag. If the total_incurred >0, means claim has been made. Else, no claim.
+3.  Claim flag. If the total_incurred \>0, means claim has been made. Else, no claim.
 
 ```{r}
 dataset <- dataset %>%
@@ -311,7 +305,7 @@ dataset <- dataset %>%
   )
 ```
 
-4. Claim severity. Insurance losses are usually grouped by severity. 
+4.  Claim severity. Insurance losses are usually grouped by severity.
 
 ```{r}
 dataset <- dataset %>%
@@ -327,7 +321,7 @@ dataset <- dataset %>%
 
 ```
 
-5. Claims per exposure. A policy exposed for 12 months should not be compared directly with a 1 month policy. This measures average claim cost per unit exposure, cost intensity and severity adjusted exposure risk. This is a financial metric.  A higher value would mean higher insurer losses per exposure. Lower value would mean low insurer losses per exposure.
+5.  Claims per exposure. A policy exposed for 12 months should not be compared directly with a 1 month policy. This measures average claim cost per unit exposure, cost intensity and severity adjusted exposure risk. This is a financial metric. A higher value would mean higher insurer losses per exposure. Lower value would mean low insurer losses per exposure.
 
 Claims per exposure= Total Incurred/ Exposure
 
@@ -339,8 +333,7 @@ dataset <- dataset %>%
   )
 ```
 
-6. Driver risk group
-Taking age into consideration
+6.  Driver risk group Taking age into consideration
 
 ```{r}
 dataset <- dataset %>%
@@ -354,8 +347,7 @@ dataset <- dataset %>%
   )
 ```
 
-7. Driving experience
-The driving experience can be derived by finding the difference between the driver age and the age at which the driving licence was obtained.  
+7.  Driving experience The driving experience can be derived by finding the difference between the driver age and the age at which the driving licence was obtained.
 
 ```{r}
 dataset <- dataset %>%
@@ -365,8 +357,8 @@ dataset <- dataset %>%
   )
 ```
 
-8. Vehicle age group
-Vehicles which are much older perform and behave differently from newer vehicles. 
+8.  Vehicle age group Vehicles which are much older perform and behave differently from newer vehicles.
+
 ```{r}
 dataset <- dataset %>%
   mutate(
@@ -380,8 +372,7 @@ dataset <- dataset %>%
 
 ```
 
-9. Claim Frequency
-Claim frequency measures how often claims occur and NOT how expensive they are. This is a frequency metric. A higher value would mean claims occur more frequently.
+9.  Claim Frequency Claim frequency measures how often claims occur and NOT how expensive they are. This is a frequency metric. A higher value would mean claims occur more frequently.
 
 ```{r}
 dataset <- dataset %>%
@@ -397,15 +388,14 @@ Saving this updated dataset into a new file:
 write_csv(dataset, "Dataset_Engineered.csv") 
 ```
 
-
 ```{r}
 dataset <- read.csv("Dataset_Engineered.csv")
 
 ```
 
-
 # Univariate visual analytics
 
+## Categorical variables
 
 ```{r}
 ggplot(data = dataset,
@@ -421,8 +411,7 @@ ggplot(data = dataset,
   ggtitle("Distribution of Claim Flag")
 ```
 
-There is a much higher number of transactions that have made no claim as compared to those which have made claims. 
-
+There is a much higher number of transactions that have made no claim as compared to those which have made claims.
 
 ```{r}
 policy_counts <- dataset |>
@@ -455,7 +444,7 @@ ggplot(policy_counts,
 
 ```
 
-CC Policy takes up majority of the transactions. TP makes up a small minority of the transactions.   
+CC Policy takes up majority of the transactions. TP makes up a small minority of the transactions.
 
 ```{r}
 #| fig-height: 14
@@ -491,8 +480,7 @@ ggplot(brand_counts,
 
 ```
 
-This shows the distribution and ranking of vehicle brands. Firstly, there is strong concentration among certain dominant brands. The top brands dominating the portfolio is "RENAULT", "CITROEN", "PEUGEOT", "VOLKSWAGEN", "FORD", "SEAT" and "OPEL". After these major brands, there is a sharp decline in frequency. This portfolio has a long-tail distribution where a few vehicle brands account for majority of policies while numerous other brands appear infrequently. 
-There is portfolio concentration risk. If these dominant brands experience higher claim rates, are expensive to repair, become targets for theft then insurer exposure becomes concentrated. The concentration of policies among a limited number of vehicle brands may increase portfolio exposure to brand-specific behaviours and underwriting risks. Renault, Citroen and Peugeot are 3 major French automotive brands. The dominance of these 3 French brands likely reflect regional automobile market preferences in Spain, where European vehicle manufacturers hold substantial market share.
+This shows the distribution and ranking of vehicle brands. Firstly, there is strong concentration among certain dominant brands. The top brands dominating the portfolio is "RENAULT", "CITROEN", "PEUGEOT", "VOLKSWAGEN", "FORD", "SEAT" and "OPEL". After these major brands, there is a sharp decline in frequency. This portfolio has a long-tail distribution where a few vehicle brands account for majority of policies while numerous other brands appear infrequently. There is portfolio concentration risk. If these dominant brands experience higher claim rates, are expensive to repair, become targets for theft then insurer exposure becomes concentrated. The concentration of policies among a limited number of vehicle brands may increase portfolio exposure to brand-specific behaviours and underwriting risks. Renault, Citroen and Peugeot are 3 major French automotive brands. The dominance of these 3 French brands likely reflect regional automobile market preferences in Spain, where European vehicle manufacturers hold substantial market share.
 
 ```{r}
 dataset %>%
@@ -559,10 +547,112 @@ ggplot(risk_counts,
 
 ```
 
-The red line in the Pareto Chart represents the cumulative percentage distribution. It shows the running cumulative proportion of the portfolio contributed by each driver risk group. Based on the chart, we can infer that the portfolio is heavily concentrated in midddle-aged drivers. The senior drivers form a much smaller segment and young drivers are very minimally represented.     
+The red line in the Pareto Chart represents the cumulative percentage distribution. It shows the running cumulative proportion of the portfolio contributed by each driver risk group. Based on the chart, we can infer that the portfolio is heavily concentrated in midddle-aged drivers. The senior drivers form a much smaller segment and young drivers are very minimally represented.
+
+```{r}
+library(tidyverse)
+library(scales)
+
+claim_severity_counts <- dataset %>%
+  
+  # Remove records with no claims
+  filter(claim_severity != "No Claim") %>%
+  
+  # Count each severity category
+  count(claim_severity) %>%
+  
+  # Calculate proportions
+  mutate(
+    proportion = n / sum(n),
+    
+    # Arrange severity levels in order
+    claim_severity = factor(
+      claim_severity,
+      levels = c("Low", "Medium", "High")
+    )
+  )
+
+ggplot(claim_severity_counts,
+       aes(x = claim_severity,
+           y = proportion,
+           fill = claim_severity)) +
+  
+  # Create bars
+  geom_col(width = 0.7) +
+  
+  # Add percentage labels
+  geom_text(
+    aes(
+      label = percent(proportion, accuracy = 0.1)
+    ),
+    vjust = -0.5,
+    size = 5
+  ) +
+  
+  # Convert y-axis to percentages
+  scale_y_continuous(
+    labels = percent_format(),
+    expand = expansion(mult = c(0, 0.1))
+  ) +
+  
+  labs(
+    title = "Proportion of Claim Severity Among Claim Records",
+    x = "Claim Severity",
+    y = "Proportion"
+  ) +
+  
+  theme_minimal() +
+  
+  theme(
+    legend.position = "none",
+    plot.title = element_text(
+      face = "bold",
+      size = 14
+    )
+  )
+
+```
+
+After filtering out records where claims have been made, half of the claims made are of low severity. The next largest proportion are of medium severity. The high severity make up the smallest proportion of all claims. This pattern is common in insurance portfolios.
+
+## Numerical variables
+
+```{r}
+yearly_claims <- dataset %>%
+  group_by(year) %>%
+  summarise(
+    total_claims_year = sum(total_claims)
+  )
+
+ggplot(yearly_claims,
+       aes(x = year,
+           y = total_claims_year)) +
+  
+  geom_line(
+    colour = "purple",
+    linewidth = 1.5
+  ) +
+  
+  geom_point(
+    colour = "purple",
+    size = 4
+  ) +
+  
+  labs(
+    title = "Trend of Total Claims Over Time",
+    x = "Year",
+    y = "Total Claims"
+  ) +
+  
+  theme_minimal()
+
+```
+
+There is an increasing trend from 2022 to 2024, reaching a total of 40000 total claims in 2024.
+
+# To do: under univariate numerical analysis, do analysis of total claims of each type and see trend over years --\> to see which claim has significant change and which doesnt over the years etc
 
 # Bivariate visual analytics
-
 
 ```{r}
 ggplot(dataset,
@@ -572,6 +662,7 @@ ggplot(dataset,
   geom_boxplot()
 
 ```
+
 In the plot above, we can see how loss ratio varies across policy type. From this plot, we can tell that most boxplots are compressed near 0, while there are many extreme points extending upward.The actual box and whiskers become tiny and flattened near 0, making them nearly visible. This indicates that most policies have low loss ratios and a small number of policies generate very high losses. The distribution of loss ratio is highly right-skewed across all policy types, indicating that most policies are profitable or low-loss, while a small number of policies incur extremely high claim costs. The dots above the whiskers are outliers. COMP_E has the most extreme outlier, with CC and TPG having extreme outliers too. A key limitation of the current plot is that extreme outliers compress the rest of the distribution.
 
 A zoomed in version of the plot:
@@ -587,4 +678,4 @@ ggplot(dataset,
 
 ```
 
-Differences in median is not extremely large. TP appears to have slightly higher median loss ratio.                  
+Differences in median is not extremely large. TP appears to have slightly higher median loss ratio.
