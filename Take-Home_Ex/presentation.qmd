@@ -59,3 +59,21 @@ execute:
 
 [View full analysis in report](Take_Home_1.html#percentage-distribution-of-each-vehicle-age-group)
 
+
+## Bivariate: Trend of all claims by claim type
+
+![](allclaim.png){width=75%}
+
+
+[View full analysis in report](Take_Home_1.html#trend-of-total-claims-over-time)
+
+
+## Bivariate: Distribution of loss ratio by policy type
+
+![](lossratiopolicy.png){width=75%}
+
+
+[View full analysis in report](Take_Home_1.html#distribution-of-loss-ratio-by-policy-type)
+
+
+
