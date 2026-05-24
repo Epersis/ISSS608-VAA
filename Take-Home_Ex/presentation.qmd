@@ -1,6 +1,10 @@
 ---
 title: "Take Home Exercise 1 Executive Summary"
-format: revealjs
+format: 
+  revealjs:
+    incremental: true
+    smaller: true
+    scrollable: true   
 author: "Persis Evangeline"
 date: "May 20, 2026"
 date-modified: "last-modified"
@@ -10,3 +14,25 @@ execute:
   warning: false
   freeze: true
 ---
+
+
+## Contents
+- Feature engineering
+- Univariate analysis
+- Bivariate analysis
+
+## Feature engineering (new variables)
+
+- Profitability = total_premium - total_incurred
+- Loss ratio = total_incurred/total_premium
+- Claim flag. If total_incurred \>0, means claim has been made.
+- Claim severity
+- Claims per exposure = total_incurred / total_exposure
+- Driver risk group.Taking age into consideration
+- driving_experience = driver_age - age_driving_licence
+- Vehicle age group. Grouping based on age of vehicle.
+- claim_frequency = total_claims / total_exposure
+
+## Univariate
+
+- 
