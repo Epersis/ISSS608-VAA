@@ -1055,5 +1055,47 @@
     "title": "Take Home Exercise 1",
     "section": "Claim frequency distribution by circulation area",
     "text": "Claim frequency distribution by circulation area\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(ggplot2)\n\nggplot(dataset,\n       aes(x = circulation_area,\n           y = claim_frequency,\n           fill = circulation_area)) +\n\n  geom_violin(\n    alpha = 0.6,\n    trim = TRUE\n  ) +\n\n  geom_boxplot(\n    width = 0.12,\n    outlier.shape = NA,\n    alpha = 0.5\n  ) +\n\n  coord_cartesian(ylim = c(0, 2)) +\n\n  labs(\n    title = \"Claim Frequency Distribution by Circulation Area\",\n    x = \"Circulation Area\",\n    y = \"Claim Frequency\"\n  ) +\n\n  theme_minimal()\n\n\n\n\nThis plot shows a violin plot with a boxplot embedded into it. For a violin plot, the width of the violin represents where observations are more concentrated. Most observations are concentrated near 0, meaning most policyholders have very low claim frequency. This is typical and common insurance pattern. As the claim frequency is highly concentrated near 0 for both rural and urban circulation areas, it suggests that people make few claims despite the driving environment. The urban circulation plot appears slightly more spread out while the rural circulation is more concentrated at very low frequencies. The difference in urban driving environments could play a role in this. However, there could be other differentiating factors which are much stronger in explaining claim frequency."
+  },
+  {
+    "objectID": "Take-Home_Ex/presentation.html#univariate",
+    "href": "Take-Home_Ex/presentation.html#univariate",
+    "title": "Take Home Exercise 1 Executive Summary",
+    "section": "Univariate",
+    "text": "Univariate"
+  },
+  {
+    "objectID": "Take-Home_Ex/presentation.html",
+    "href": "Take-Home_Ex/presentation.html",
+    "title": "Take Home Exercise 1 Executive Summary",
+    "section": "",
+    "text": "Feature engineering\nUnivariate analysis\nBivariate analysis"
+  },
+  {
+    "objectID": "Take-Home_Ex/presentation.html#univariate-policy-type-counts",
+    "href": "Take-Home_Ex/presentation.html#univariate-policy-type-counts",
+    "title": "Take Home Exercise 1 Executive Summary",
+    "section": "Univariate: Policy type counts",
+    "text": "Univariate: Policy type counts\n\nView full analysis in report"
+  },
+  {
+    "objectID": "Take-Home_Ex/presentation.html#univariate-vehicle-brand-counts",
+    "href": "Take-Home_Ex/presentation.html#univariate-vehicle-brand-counts",
+    "title": "Take Home Exercise 1 Executive Summary",
+    "section": "Univariate: Vehicle brand counts",
+    "text": "Univariate: Vehicle brand counts\n\n\n\nView full analysis in report"
+  },
+  {
+    "objectID": "Take-Home_Ex/presentation.html#univariate-vehicle-brand-counts-1",
+    "href": "Take-Home_Ex/presentation.html#univariate-vehicle-brand-counts-1",
+    "title": "Take Home Exercise 1 Executive Summary",
+    "section": "Univariate: Vehicle brand counts",
+    "text": "Univariate: Vehicle brand counts\n\n\n\nView full analysis in report"
+  },
+  {
+    "objectID": "Take-Home_Ex/presentation.html#univariate-vehicle-age-percentage-distribution",
+    "href": "Take-Home_Ex/presentation.html#univariate-vehicle-age-percentage-distribution",
+    "title": "Take Home Exercise 1 Executive Summary",
+    "section": "Univariate: Vehicle age percentage distribution",
+    "text": "Univariate: Vehicle age percentage distribution\n\nView full analysis in report"
   }
 ]

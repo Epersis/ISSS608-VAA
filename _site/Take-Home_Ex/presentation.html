@@ -49,6 +49,7 @@
     }
     .reveal .slide:not(.center) {
       height: 100%;
+      overflow-y: auto;
     }
     .reveal .slide.scrollable {
       overflow-y: auto;
@@ -165,8 +166,22 @@ Persis Evangeline
 <li class="fragment">claim_frequency = total_claims / total_exposure</li>
 </ul>
 </section>
-<section id="section" class="slide level2">
-<h2></h2>
+<section id="univariate-policy-type-counts" class="slide level2">
+<h2>Univariate: Policy type counts</h2>
+
+<img data-src="policytype.png" style="width:75.0%" class="r-stretch"><p><a href="Take_Home_1.html#counts-of-each-policy-type">View full analysis in report</a></p>
+</section>
+<section id="univariate-vehicle-brand-counts" class="slide level2">
+<h2>Univariate: Vehicle brand counts</h2>
+<div style="height:400px; overflow:hidden;">
+<p><img data-src="vehiclebrands.png" style="width:75.0%"></p>
+</div>
+<p><a href="Take_Home_1.html#counts-of-vehicle-brands">View full analysis in report</a></p>
+</section>
+<section id="univariate-vehicle-age-percentage-distribution" class="slide level2">
+<h2>Univariate: Vehicle age percentage distribution</h2>
+
+<img data-src="vehicleage.png" style="width:75.0%" class="r-stretch"><p><a href="Take_Home_1.html#percentage-distribution-of-each-vehicle-age-group">View full analysis in report</a></p>
 
 
 </section>
@@ -206,7 +221,7 @@ Persis Evangeline
 'autoAnimateUnmatched': true,
 'jumpToSlide': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
-'smaller': false,
+'smaller': true,
  
         // Display controls in the bottom right corner
         controls: false,
