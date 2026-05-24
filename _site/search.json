@@ -837,7 +837,7 @@
     "href": "Take-Home_Ex/presentation.html#contents",
     "title": "Take Home Exercise 1 Executive Summary",
     "section": "Contents",
-    "text": "Contents\n\nFeature engineering\nUnivariate analysis\nBivariate analysis"
+    "text": "Contents\n\nFeature engineering\nUnivariate analysis\nBivariate analysis\nInsights & conclusion"
   },
   {
     "objectID": "Take-Home_Ex/presentation.html#going-to-sleep",
@@ -907,7 +907,7 @@
     "href": "Take-Home_Ex/Take_Home_1.html#pareto-analysis-of-driver-risk-groups",
     "title": "Take Home Exercise 1",
     "section": "Pareto analysis of driver risk groups",
-    "text": "Pareto analysis of driver risk groups\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(dplyr)\n\nrisk_counts &lt;- dataset |&gt;\n  count(driver_risk_group) |&gt;\n  arrange(desc(n)) |&gt;\n  mutate(\n    cum_pct = cumsum(n) / sum(n)\n  )\n\nggplot(risk_counts,\n       aes(x = reorder(driver_risk_group, -n),\n           y = n)) +\n  \n  geom_col(fill = \"mediumpurple\") +\n  \n  geom_line(\n    aes(y = cum_pct * max(n),\n        group = 1),\n    colour = \"red\"\n  ) +\n  \n  geom_point(\n    aes(y = cum_pct * max(n)),\n    colour = \"red\"\n  ) +\n  \n  scale_y_continuous(\n    sec.axis = sec_axis(\n      ~ . / max(risk_counts$n),\n      labels = scales::percent\n    )\n  ) +\n  \n  coord_flip() +\n  \n  labs(\n    title = \"Pareto Analysis of Driver Risk Groups\",\n    x = \"Risk Group\",\n    y = \"Count\"\n  ) +\n  \n  theme_minimal()\n\n\n\n\nThe red line in the Pareto Chart represents the cumulative percentage distribution. It shows the running cumulative proportion of the portfolio contributed by each driver risk group. Based on the chart, we can infer that the portfolio is heavily concentrated in midddle-aged drivers. The senior drivers form a much smaller segment and young drivers are very minimally represented."
+    "text": "Pareto analysis of driver risk groups\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(dplyr)\n\nrisk_counts &lt;- dataset |&gt;\n  count(driver_risk_group) |&gt;\n  arrange(desc(n)) |&gt;\n  mutate(\n    cum_pct = cumsum(n) / sum(n)\n  )\n\nggplot(risk_counts,\n       aes(x = reorder(driver_risk_group, -n),\n           y = n)) +\n  \n  geom_col(fill = \"mediumpurple\") +\n  \n  geom_line(\n    aes(y = cum_pct * max(n),\n        group = 1),\n    colour = \"red\"\n  ) +\n  \n  geom_point(\n    aes(y = cum_pct * max(n)),\n    colour = \"red\"\n  ) +\n  \n  scale_y_continuous(\n    sec.axis = sec_axis(\n      ~ . / max(risk_counts$n),\n      labels = scales::percent\n    )\n  ) +\n  \n  coord_flip() +\n  \n  labs(\n    title = \"Pareto Analysis of Driver Risk Groups\",\n    x = \"Risk Group\",\n    y = \"Count\"\n  ) +\n  \n  theme_minimal()\n\n\n\n\nThe red line in the Pareto Chart represents the cumulative percentage distribution. It shows the running cumulative proportion of the portfolio contributed by each driver risk group. Based on the chart, we can infer that the portfolio is heavily concentrated in middle-aged drivers. The senior drivers form a much smaller segment and young drivers are very minimally represented."
   },
   {
     "objectID": "Take-Home_Ex/Take_Home_1.html#proportion-of-claim-severity-among-claim-records",
@@ -921,7 +921,7 @@
     "href": "Take-Home_Ex/Take_Home_1.html#trend-of-total-claims-over-time",
     "title": "Take Home Exercise 1",
     "section": "Trend of total claims over time",
-    "text": "Trend of total claims over time\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(dplyr)\nlibrary(ggplot2)\n\nyearly_claims &lt;- dataset %&gt;%\n  group_by(year) %&gt;%\n  summarise(\n    total_claims_year = sum(total_claims)\n  )\n\nlabel_points &lt;- yearly_claims %&gt;%\n  slice(c(1, n()))\n\nggplot(yearly_claims,\n       aes(x = year,\n           y = total_claims_year)) +\n  \n  geom_line(\n    colour = \"purple\",\n    linewidth = 1.5\n  ) +\n  \n  geom_point(\n    colour = \"purple\",\n    size = 4\n  ) +\n  \n  geom_text(\n    data = label_points,\n    aes(label = total_claims_year),\n    vjust = -1,\n    colour = \"black\",\n    fontface = \"bold\",\n    size = 4\n  ) +\n  \n   scale_y_continuous(\n    expand = expansion(mult = c(0.05, 0.12))\n  ) +\n  \n  labs(\n    title = \"Trend of Total Claims Over Time\",\n    x = \"Year\",\n    y = \"Total Claims\"\n  ) +\n  \n  theme_minimal()\n\n\n\n\nThere is an increasing trend from 2022 to 2024, reaching a total of 40000 total claims in 2024."
+    "text": "Trend of total claims over time\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(dplyr)\nlibrary(ggplot2)\n\nyearly_claims &lt;- dataset %&gt;%\n  group_by(year) %&gt;%\n  summarise(\n    total_claims_year = sum(total_claims)\n  )\n\nlabel_points &lt;- yearly_claims %&gt;%\n  slice(c(1, n()))\n\nggplot(yearly_claims,\n       aes(x = year,\n           y = total_claims_year)) +\n  \n  geom_line(\n    colour = \"purple\",\n    linewidth = 1.5\n  ) +\n  \n  geom_point(\n    colour = \"purple\",\n    size = 4\n  ) +\n  \n  geom_text(\n    data = label_points,\n    aes(label = total_claims_year),\n    vjust = -1,\n    colour = \"black\",\n    fontface = \"bold\",\n    size = 4\n  ) +\n  \n   scale_y_continuous(\n    expand = expansion(mult = c(0.05, 0.12))\n  ) +\n  \n  labs(\n    title = \"Trend of Total Claims Over Time\",\n    x = \"Year\",\n    y = \"Total Claims\"\n  ) +\n  \n  theme_minimal()\n\n\n\n\nThere is an increasing trend from 2022 to 2024, reaching a total of 38937 total claims in 2024."
   },
   {
     "objectID": "Take-Home_Ex/Take_Home_1.html#trend-of-total-liability-claims-over-time",
@@ -956,7 +956,7 @@
     "href": "Take-Home_Ex/Take_Home_1.html#trend-of-total-theft-claims-over-time",
     "title": "Take Home Exercise 1",
     "section": "Trend of total theft claims over time",
-    "text": "Trend of total theft claims over time\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(dplyr)\nlibrary(ggplot2)\n\nyearly_claims &lt;- dataset %&gt;%\n  group_by(year) %&gt;%\n  summarise(\n    total_claims_year = sum(theft_claims)\n  )\n\nlabel_points &lt;- yearly_claims %&gt;%\n  slice(c(1, n()))\n\nggplot(yearly_claims,\n       aes(x = year,\n           y = total_claims_year)) +\n  \n  geom_line(\n    colour = \"purple\",\n    linewidth = 1.5\n  ) +\n  \n  geom_point(\n    colour = \"purple\",\n    size = 4\n  ) +\n  \n  geom_text(\n    data = label_points,\n    aes(label = total_claims_year),\n    vjust = -1,\n    colour = \"black\",\n    fontface = \"bold\",\n    size = 4\n  ) +\n  \n   scale_y_continuous(\n    expand = expansion(mult = c(0.05, 0.12))\n  ) +\n  \n  labs(\n    title = \"Trend of Total theft Claims Over Time\",\n    x = \"Year\",\n    y = \"Total Claims\"\n  ) +\n  \n  theme_minimal()\n\n\n\n\nThere is an increasing trend, with the total property claims increasing from 2022 to 2024."
+    "text": "Trend of total theft claims over time\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(dplyr)\nlibrary(ggplot2)\n\nyearly_claims &lt;- dataset %&gt;%\n  group_by(year) %&gt;%\n  summarise(\n    total_claims_year = sum(theft_claims)\n  )\n\nlabel_points &lt;- yearly_claims %&gt;%\n  slice(c(1, n()))\n\nggplot(yearly_claims,\n       aes(x = year,\n           y = total_claims_year)) +\n  \n  geom_line(\n    colour = \"purple\",\n    linewidth = 1.5\n  ) +\n  \n  geom_point(\n    colour = \"purple\",\n    size = 4\n  ) +\n  \n  geom_text(\n    data = label_points,\n    aes(label = total_claims_year),\n    vjust = -1,\n    colour = \"black\",\n    fontface = \"bold\",\n    size = 4\n  ) +\n  \n   scale_y_continuous(\n    expand = expansion(mult = c(0.05, 0.12))\n  ) +\n  \n  labs(\n    title = \"Trend of Total theft Claims Over Time\",\n    x = \"Year\",\n    y = \"Total Claims\"\n  ) +\n  \n  theme_minimal()\n\n\n\n\nThere is an increasing trend, with the total theft claims increasing from 2022 to 2024."
   },
   {
     "objectID": "Take-Home_Ex/Take_Home_1.html#trend-of-total-fire-claims-over-time",
@@ -984,21 +984,21 @@
     "href": "Take-Home_Ex/Take_Home_1.html#trend-of-total-occupants-claims-over-time",
     "title": "Take Home Exercise 1",
     "section": "Trend of total occupants claims over time",
-    "text": "Trend of total occupants claims over time\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(dplyr)\nlibrary(ggplot2)\n\nyearly_claims &lt;- dataset %&gt;%\n  group_by(year) %&gt;%\n  summarise(\n    total_claims_year = sum(occupants_claims)\n  )\n\nlabel_points &lt;- yearly_claims %&gt;%\n  slice(c(1, n()))\n\nggplot(yearly_claims,\n       aes(x = year,\n           y = total_claims_year)) +\n  \n  geom_line(\n    colour = \"purple\",\n    linewidth = 1.5\n  ) +\n  \n  geom_point(\n    colour = \"purple\",\n    size = 4\n  ) +\n  \n  geom_text(\n    data = label_points,\n    aes(label = total_claims_year),\n    vjust = -1,\n    colour = \"black\",\n    fontface = \"bold\",\n    size = 4\n  ) +\n  \n   scale_y_continuous(\n    expand = expansion(mult = c(0.05, 0.12))\n  ) +\n  \n  labs(\n    title = \"Trend of Total occupants Claims Over Time\",\n    x = \"Year\",\n    y = \"Total Claims\"\n  ) +\n  \n  theme_minimal()\n\n\n\n\nThere is generally an increasing trend from 2022 to 2024, where the total occupants claim increased from 13 to 18. There was a very minimal decline in 2023, where the total occupants claim decreased to 12."
+    "text": "Trend of total occupants claims over time\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(dplyr)\nlibrary(ggplot2)\n\nyearly_claims &lt;- dataset %&gt;%\n  group_by(year) %&gt;%\n  summarise(\n    total_claims_year = sum(occupants_claims)\n  )\n\nlabel_points &lt;- yearly_claims %&gt;%\n  slice(c(1, n()))\n\nggplot(yearly_claims,\n       aes(x = year,\n           y = total_claims_year)) +\n  \n  geom_line(\n    colour = \"purple\",\n    linewidth = 1.5\n  ) +\n  \n  geom_point(\n    colour = \"purple\",\n    size = 4\n  ) +\n  \n  geom_text(\n    data = label_points,\n    aes(label = total_claims_year),\n    vjust = -1,\n    colour = \"black\",\n    fontface = \"bold\",\n    size = 4\n  ) +\n  \n   scale_y_continuous(\n    expand = expansion(mult = c(0.05, 0.12))\n  ) +\n  \n  labs(\n    title = \"Trend of Total occupants Claims Over Time\",\n    x = \"Year\",\n    y = \"Total Claims\"\n  ) +\n  \n  theme_minimal()\n\n\n\n\nThere is generally an increasing trend from 2022 to 2024, where the total occupants claim increased from 13 to 18. There was a very minimal decline in 2023, where the total occupants claim decreased from 13 to 12."
   },
   {
     "objectID": "Take-Home_Ex/Take_Home_1.html#trend-of-all-claims-by-claim-type",
     "href": "Take-Home_Ex/Take_Home_1.html#trend-of-all-claims-by-claim-type",
     "title": "Take Home Exercise 1",
     "section": "Trend of all claims by Claim type",
-    "text": "Trend of all claims by Claim type\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(ggplot2)\n\nclaims_long &lt;- dataset %&gt;%\n  select(\n    year,\n    liability_claims,\n    liability_property_claims,\n    liability_injury_claims,\n    property_claims,\n    theft_claims,\n    fire_claims,\n    glass_claims,\n    legal_protection_claims,\n    occupants_claims\n  ) %&gt;%\n  pivot_longer(\n    cols = -year,\n    names_to = \"claim_type\",\n    values_to = \"claims\"\n  ) %&gt;%\n  group_by(year, claim_type) %&gt;%\n  summarise(\n    total_claims_year = sum(claims, na.rm = TRUE),\n    .groups = \"drop\"\n  )\n\nggplot(claims_long,\n       aes(x = year,\n           y = total_claims_year,\n           group = claim_type)) +\n  \n  geom_line(\n    colour = \"purple\",\n    linewidth = 1\n  ) +\n  \n  geom_point(\n    colour = \"purple\",\n    size = 2.5\n  ) +\n  \n  facet_wrap(\n    ~ claim_type,\n    scales = \"free_y\"\n  ) +\n  \n  labs(\n    title = \"Trend of Claims Over Time by Claim Type\",\n    x = \"Year\",\n    y = \"Total Claims\"\n  ) +\n  \n  theme_minimal()"
+    "text": "Trend of all claims by Claim type\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(ggplot2)\n\nclaims_long &lt;- dataset %&gt;%\n  select(\n    year,\n    liability_claims,\n    liability_property_claims,\n    liability_injury_claims,\n    property_claims,\n    theft_claims,\n    fire_claims,\n    glass_claims,\n    legal_protection_claims,\n    occupants_claims\n  ) %&gt;%\n  pivot_longer(\n    cols = -year,\n    names_to = \"claim_type\",\n    values_to = \"claims\"\n  ) %&gt;%\n  group_by(year, claim_type) %&gt;%\n  summarise(\n    total_claims_year = sum(claims, na.rm = TRUE),\n    .groups = \"drop\"\n  )\n\nggplot(claims_long,\n       aes(x = year,\n           y = total_claims_year,\n           group = claim_type)) +\n  \n  geom_line(\n    colour = \"purple\",\n    linewidth = 1\n  ) +\n  \n  geom_point(\n    colour = \"purple\",\n    size = 2.5\n  ) +\n  \n  facet_wrap(\n    ~ claim_type,\n    scales = \"free_y\"\n  ) +\n  \n  labs(\n    title = \"Trend of Claims Over Time by Claim Type\",\n    x = \"Year\",\n    y = \"Total Claims\"\n  ) +\n  \n  theme_minimal()\n\n\n\n\nThis is a concise view of the trends for all the different claim types from 2022 to 2024."
   },
   {
     "objectID": "Take-Home_Ex/Take_Home_1.html#distribution-of-loss-ratio-by-policy-type",
     "href": "Take-Home_Ex/Take_Home_1.html#distribution-of-loss-ratio-by-policy-type",
     "title": "Take Home Exercise 1",
     "section": "Distribution of loss ratio by policy type",
-    "text": "Distribution of loss ratio by policy type\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(dataset,\n       aes(x = policy_type,\n           y = loss_ratio)) +\n\n  geom_boxplot()\n\n\n\n\nIn the plot above, we can see how loss ratio varies across policy type. From this plot, we can tell that most boxplots are compressed near 0, while there are many extreme points extending upward.The actual box and whiskers become tiny and flattened near 0, making them nearly visible. This indicates that most policies have low loss ratios and a small number of policies generate very high losses. The distribution of loss ratio is highly right-skewed across all policy types, indicating that most policies are profitable or low-loss, while a small number of policies incur extremely high claim costs. The dots above the whiskers are outliers. COMP_E has the most extreme outlier, with CC and TPG having extreme outliers too. A key limitation of the current plot is that extreme outliers compress the rest of the distribution.\nA zoomed in version of the plot:\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(dataset,\n       aes(x = policy_type,\n           y = loss_ratio)) +\n\n  geom_boxplot() +\n\n  scale_y_log10()\n\n\n\n\nDifferences in median is not extremely large. TP appears to have slightly higher median loss ratio."
+    "text": "Distribution of loss ratio by policy type\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(dataset,\n       aes(x = policy_type,\n           y = loss_ratio)) +\n\n  geom_boxplot()\n\n\n\n\nIn the plot above, we can see how loss ratio varies across policy type. From this plot, we can tell that most boxplots are compressed near 0, while there are many extreme points extending upward.The actual box and whiskers become tiny and flattened near 0, making them nearly invisible. This indicates that most policies have low loss ratios and a small number of policies generate very high losses. The distribution of loss ratio is highly right-skewed across all policy types, indicating that most policies are profitable or low-loss, while a small number of policies incur extremely high claim costs. The dots above the whiskers are outliers. COMP_E has the most extreme outlier, with CC and TPG having extreme outliers too. A key limitation of the current plot is that extreme outliers compress the rest of the distribution.\nA zoomed in version of the plot:\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(dataset,\n       aes(x = policy_type,\n           y = loss_ratio)) +\n\n  geom_boxplot() +\n\n  scale_y_log10()\n\n\n\n\nDifferences in median is not extremely large. TP appears to have slightly higher median loss ratio."
   },
   {
     "objectID": "Take-Home_Ex/Take_Home_1.html#profitability-by-driver-risk-group",
@@ -1033,7 +1033,7 @@
     "href": "Take-Home_Ex/Take_Home_1.html#scatterplot-of-driver-age-vs-total-incurred-claims",
     "title": "Take Home Exercise 1",
     "section": "Scatterplot of driver age vs Total incurred claims",
-    "text": "Scatterplot of driver age vs Total incurred claims\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(dataset,\n       aes(x = driver_age,\n           y = total_incurred)) +\n  geom_point(alpha = 0.2) +\n  geom_smooth(method = \"loess\",\n              se = TRUE) +\n  labs(\n    title = \"Total Incurred Claims by Driver Age\",\n    x = \"Driver Age\",\n    y = \"Total Incurred\"\n  ) +\n  theme_minimal()\n\n\n\n\nThis scatter plot shows the relationship between driver age and total incurred claims. As points are compressed toward the bottom, most drivers have little to no total incurred claims regardless of age. There are several extreme outliers which represent rare but extremely costly claims. This shows that the insurance losses are driven by small number of severe cases. A small minority of customers can contribute to a large proportion of total payouts by insurer. Generally, the large extreme cases which lead to high incurred values are from drivers aged 35 to 80 years old. Very young (below 20 years old) and very old(above 80 years old) drivers show much less observations. The LOESS trend line suggests that there is no strong linear relationship between driver age and total incurred claims."
+    "text": "Scatterplot of driver age vs Total incurred claims\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(dataset,\n       aes(x = driver_age,\n           y = total_incurred)) +\n  geom_point(alpha = 0.2) +\n  geom_smooth(method = \"loess\",\n              se = TRUE) +\n  labs(\n    title = \"Total Incurred Claims by Driver Age\",\n    x = \"Driver Age\",\n    y = \"Total Incurred\"\n  ) +\n  theme_minimal()\n\n\n\n\nThis scatter plot shows the relationship between driver age and total incurred claims. As points are compressed toward the bottom, most drivers have little to no total incurred claims regardless of age. There are several extreme outliers which represent rare but extremely costly claims. This shows that the insurance losses are driven by small number of severe cases. A small minority of customers can contribute to a large proportion of total payouts by insurer. Generally, the large extreme cases which lead to high incurred values are from drivers aged 35 to 80 years old. Very young (below 20 years old) and very old(above 80 years old) drivers show much less observations. The LOESS trend line suggests that there is no strong linear relationship between driver age and total incurred claims.\nZoomed in version:\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(dataset,\n       aes(x = driver_age,\n           y = total_incurred)) +\n  \n  geom_point(alpha = 0.2) +\n  \n  geom_smooth(method = \"loess\",\n              se = TRUE) +\n  \n  coord_cartesian(ylim = c(0, 2e+05)) +\n  \n  labs(\n    title = \"Relationship Between Driver Age and Total Incurred Claims\",\n    x = \"Driver Age\",\n    y = \"Total Incurred\"\n  ) +\n  \n  theme_minimal()"
   },
   {
     "objectID": "Take-Home_Ex/Take_Home_1.html#distribution-of-profitability-by-policy-type",
@@ -1075,14 +1075,14 @@
     "href": "Take-Home_Ex/presentation.html#univariate-policy-type-counts",
     "title": "Take Home Exercise 1 Executive Summary",
     "section": "Univariate: Policy type counts",
-    "text": "Univariate: Policy type counts\n\nView full analysis in report"
+    "text": "Univariate: Policy type counts\n\nView full analysis in report\n\nCC is the policy type with the largest number, at 200,000 policies. It exceeds all others. TP has the fewest with fewer than 10,000 records. TP provides basic coverage, however CC offers more coverage. Customers strongly prefer comprehensive coverage over basic plans."
   },
   {
     "objectID": "Take-Home_Ex/presentation.html#univariate-vehicle-brand-counts",
     "href": "Take-Home_Ex/presentation.html#univariate-vehicle-brand-counts",
     "title": "Take Home Exercise 1 Executive Summary",
     "section": "Univariate: Vehicle brand counts",
-    "text": "Univariate: Vehicle brand counts\n\n\n\nView full analysis in report"
+    "text": "Univariate: Vehicle brand counts\n\n\n\nView full analysis in report\n\nFew major brands make up the majority of the portfolio. Renault has the largest at approximately 34,000, followed by Citroen and Peugeot at 29,000 each. Most top brands are mass market European manufacturers. This insurer has customers who are mainly mainstream vehicle owners, rather than high end brands."
   },
   {
     "objectID": "Take-Home_Ex/presentation.html#univariate-vehicle-brand-counts-1",
@@ -1096,28 +1096,28 @@
     "href": "Take-Home_Ex/presentation.html#univariate-vehicle-age-percentage-distribution",
     "title": "Take Home Exercise 1 Executive Summary",
     "section": "Univariate: Vehicle age percentage distribution",
-    "text": "Univariate: Vehicle age percentage distribution\n\nView full analysis in report"
+    "text": "Univariate: Vehicle age percentage distribution\n\nView full analysis in report\n\nOld vehicles make up a large portion of this portfolio, 91% of all insured vehicles. This indicates that the insurer mainly covers older vehicles rather than newly purchased vehicles. Older vehicles have very unique traits and portray different risk characteristics."
   },
   {
     "objectID": "Take-Home_Ex/presentation.html#bivariate-trend-of-all-claims-by-claim-type",
     "href": "Take-Home_Ex/presentation.html#bivariate-trend-of-all-claims-by-claim-type",
     "title": "Take Home Exercise 1 Executive Summary",
     "section": "Bivariate: Trend of all claims by claim type",
-    "text": "Bivariate: Trend of all claims by claim type\n\nView full analysis in report"
+    "text": "Bivariate: Trend of all claims by claim type\n\nView full analysis in report\n\nMost claim categories increased from 2022 to 2024. Liability claims recorded the highest volume increase from 7000 to over 18000. Liability property claims also grew sharply, increasing from around 6000 to more than 16000 claims. Property claims increased from about 3000 in 2022 to over 12000 in 2024. Occupant claims remained low with slight dip to 12 in 2023. Overall, the upward trend suggests increasing insurer exposure and possibly higher overall claims costs over time."
   },
   {
     "objectID": "Take-Home_Ex/presentation.html#bivariate-distribution-of-loss-ratio-by-policy-type",
     "href": "Take-Home_Ex/presentation.html#bivariate-distribution-of-loss-ratio-by-policy-type",
     "title": "Take Home Exercise 1 Executive Summary",
     "section": "Bivariate: Distribution of loss ratio by policy type",
-    "text": "Bivariate: Distribution of loss ratio by policy type\n\nView full analysis in report"
+    "text": "Bivariate: Distribution of loss ratio by policy type\n\nView full analysis in report\n\nLoss ratios are highly skewed across all policy types, with most observations concentrated near 0. There are some outliers. COMP-E has the most extreme outlier with loss ratio exceeding 10,000 far higher than the rest. CC and TPG also contain outliers, with some exceeding 2000. While most policies remain profitable or low-loss , a small number of claims generate extremely large losses. High loss events are rare but have significant impact."
   },
   {
     "objectID": "Take-Home_Ex/presentation.html#bivariate-heatmap-of-circulation-area-by-municipality-type",
     "href": "Take-Home_Ex/presentation.html#bivariate-heatmap-of-circulation-area-by-municipality-type",
     "title": "Take Home Exercise 1 Executive Summary",
     "section": "Bivariate: Heatmap of circulation area by municipality type",
-    "text": "Bivariate: Heatmap of circulation area by municipality type\n\nView full analysis in report"
+    "text": "Bivariate: Heatmap of circulation area by municipality type\n\nView full analysis in report\n\nType I municipality has the highest concentration of policies in both rural and urban areas, with roughly 115,000 rural and 112,000 in urban areas. Municipality type I dominates the portfolio. Municipality type C has more records in urban at 66,000 compared to rural which has only 34,000 records. Overall IS municaplity type has lower counts overall."
   },
   {
     "objectID": "Take-Home_Ex/presentation.html#bivariate-heatmap-of-circulation-area-by-municipality-type-1",
@@ -1125,5 +1125,33 @@
     "title": "Take Home Exercise 1 Executive Summary",
     "section": "Bivariate: Heatmap of circulation area by municipality type",
     "text": "Bivariate: Heatmap of circulation area by municipality type\n\nView full analysis in report"
+  },
+  {
+    "objectID": "Take-Home_Ex/presentation.html#bivariate-profitability-by-driver-risk-group",
+    "href": "Take-Home_Ex/presentation.html#bivariate-profitability-by-driver-risk-group",
+    "title": "Take Home Exercise 1 Executive Summary",
+    "section": "Bivariate: Profitability by driver risk group",
+    "text": "Bivariate: Profitability by driver risk group\n\nView full analysis in report\n\nYoung drivers show the highest median profitability compared to other groups. It has larger interquartile range, indicating greater variability in outcomes. Middle-aged and senior drivers have similar median profitability levels, but both groups contain many extreme negative outliers, with losses extending below -5,000. Young drivers also have negative outliers, though fewer observations reach the most severe losses. Though all groups have extreme outliers, most policies still remain profitable, as the median is above 0. Driver risk group affects profitability distribution, young drivers appear more profitable."
+  },
+  {
+    "objectID": "Take-Home_Ex/presentation.html#insights-conclusion",
+    "href": "Take-Home_Ex/presentation.html#insights-conclusion",
+    "title": "Take Home Exercise 1 Executive Summary",
+    "section": "Insights & Conclusion",
+    "text": "Insights & Conclusion\n\nportfolio is heavily concentrated in CC policies, old vehicles and European car brands.\nclaims activity increased from 2022 to 2024.\ncirculation area alone is not sufficient to predict claims behaviour\nMost policies are low loss, small number of claims drive huge losses\nlower premium policies are much more volatile"
+  },
+  {
+    "objectID": "Take-Home_Ex/presentation.html#bivariate-claim-frequency-distribution",
+    "href": "Take-Home_Ex/presentation.html#bivariate-claim-frequency-distribution",
+    "title": "Take Home Exercise 1 Executive Summary",
+    "section": "Bivariate: Claim frequency distribution",
+    "text": "Bivariate: Claim frequency distribution\n\nView full analysis in report\n\nThe distribution for both circulation areas are very similar. For both, most policies are concentrated near very low claim frequency values. The right skewed distribution shows that most policyholders make few to 0 claims. This indicates that circulation area alone may not be sufficient in explaining the differences in claim frequency. Other factors may have greater influence on claims behaviour."
+  },
+  {
+    "objectID": "Take-Home_Ex/presentation.html#bivariate-relationship-between-total-premium-and-loss-ratio",
+    "href": "Take-Home_Ex/presentation.html#bivariate-relationship-between-total-premium-and-loss-ratio",
+    "title": "Take Home Exercise 1 Executive Summary",
+    "section": "Bivariate: Relationship between total premium and loss ratio",
+    "text": "Bivariate: Relationship between total premium and loss ratio\n\nView full analysis in report\n\nThe scatterplot shows an inverse relationship between total premium and loss ratio. Policies with lower premiums, below 500, display the highest variability and contain many extreme loss ratios exceeding 200. As premiums increase beyond 1000, the loss ratio are nearer to 0, with significantly fewer extreme outliers. This shows that lower premium policies are more volatile and prone to huge loss, while higher premium policies are more stable and predictable."
   }
 ]

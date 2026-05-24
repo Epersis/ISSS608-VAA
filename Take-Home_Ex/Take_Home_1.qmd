@@ -755,7 +755,7 @@ ggplot(risk_counts,
 ```
 :::
 
-The red line in the Pareto Chart represents the cumulative percentage distribution. It shows the running cumulative proportion of the portfolio contributed by each driver risk group. Based on the chart, we can infer that the portfolio is heavily concentrated in midddle-aged drivers. The senior drivers form a much smaller segment and young drivers are very minimally represented.
+The red line in the Pareto Chart represents the cumulative percentage distribution. It shows the running cumulative proportion of the portfolio contributed by each driver risk group. Based on the chart, we can infer that the portfolio is heavily concentrated in middle-aged drivers. The senior drivers form a much smaller segment and young drivers are very minimally represented.
 
 ## Proportion of claim severity among claim records
 
@@ -1013,7 +1013,7 @@ ggplot(yearly_claims,
 
 ```
 :::
-There is an increasing trend from 2022 to 2024, reaching a total of 40000 total claims in 2024.
+There is an increasing trend from 2022 to 2024, reaching a total of 38937 total claims in 2024.
 
 
 ## Trend of total liability claims over time
@@ -1569,7 +1569,7 @@ ggplot(yearly_claims,
 
 ```
 :::
-There is an increasing trend, with the total property claims increasing from 2022 to 2024.
+There is an increasing trend, with the total theft claims increasing from 2022 to 2024.
 
 
 ## Trend of total fire claims over time
@@ -2023,7 +2023,7 @@ ggplot(yearly_claims,
 
 ```
 :::
-There is generally an increasing trend from 2022 to 2024, where the total occupants claim increased from 13 to 18. There was a very minimal decline in 2023, where the total occupants claim decreased to 12. 
+There is generally an increasing trend from 2022 to 2024, where the total occupants claim increased from 13 to 18. There was a very minimal decline in 2023, where the total occupants claim decreased from 13 to 12. 
 
 ## Trend of all claims by Claim type
 
@@ -2154,6 +2154,8 @@ ggplot(claims_long,
 ```
 :::
 
+This is a concise view of the trends for all the different claim types from 2022 to 2024. 
+
 
 ## Distribution of loss ratio by policy type
 
@@ -2182,7 +2184,7 @@ ggplot(dataset,
 
 ```
 :::
-In the plot above, we can see how loss ratio varies across policy type. From this plot, we can tell that most boxplots are compressed near 0, while there are many extreme points extending upward.The actual box and whiskers become tiny and flattened near 0, making them nearly visible. This indicates that most policies have low loss ratios and a small number of policies generate very high losses. The distribution of loss ratio is highly right-skewed across all policy types, indicating that most policies are profitable or low-loss, while a small number of policies incur extremely high claim costs. The dots above the whiskers are outliers. COMP_E has the most extreme outlier, with CC and TPG having extreme outliers too. A key limitation of the current plot is that extreme outliers compress the rest of the distribution.
+In the plot above, we can see how loss ratio varies across policy type. From this plot, we can tell that most boxplots are compressed near 0, while there are many extreme points extending upward.The actual box and whiskers become tiny and flattened near 0, making them nearly invisible. This indicates that most policies have low loss ratios and a small number of policies generate very high losses. The distribution of loss ratio is highly right-skewed across all policy types, indicating that most policies are profitable or low-loss, while a small number of policies incur extremely high claim costs. The dots above the whiskers are outliers. COMP_E has the most extreme outlier, with CC and TPG having extreme outliers too. A key limitation of the current plot is that extreme outliers compress the rest of the distribution.
 
 A zoomed in version of the plot:
 
@@ -2214,7 +2216,7 @@ ggplot(dataset,
   scale_y_log10()
 ```
 :::
-Differences in median is not extremely large. TP appears to have slightly higher median loss ratio.
+Differences in median is not extremely large. TP appears to have slightly higher median loss ratio. 
 
 
 ## Profitability by driver risk group
@@ -2656,6 +2658,60 @@ ggplot(dataset,
 :::
 
 This scatter plot shows the relationship between driver age and total incurred claims. As points are compressed toward the bottom, most drivers have little to no total incurred claims regardless of age. There are several extreme outliers which represent rare but extremely costly claims. This shows that the insurance losses are driven by small number of severe cases. A small minority of customers can contribute to a large proportion of total payouts by insurer. Generally, the large extreme cases which lead to high incurred values are from drivers aged 35 to 80 years old. Very young (below 20 years old) and very old(above 80 years old) drivers show much less observations. The LOESS trend line suggests that there is no strong linear relationship between driver age and total incurred claims.
+
+Zoomed in version:
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+ggplot(dataset,
+       aes(x = driver_age,
+           y = total_incurred)) +
+  
+  geom_point(alpha = 0.2) +
+  
+  geom_smooth(method = "loess",
+              se = TRUE) +
+  
+  coord_cartesian(ylim = c(0, 2e+05)) +
+  
+  labs(
+    title = "Relationship Between Driver Age and Total Incurred Claims",
+    x = "Driver Age",
+    y = "Total Incurred"
+  ) +
+  
+  theme_minimal()
+```
+
+## The code
+
+```{r}
+#| eval: false
+ggplot(dataset,
+       aes(x = driver_age,
+           y = total_incurred)) +
+  
+  geom_point(alpha = 0.2) +
+  
+  geom_smooth(method = "loess",
+              se = TRUE) +
+  
+  coord_cartesian(ylim = c(0, 2e+05)) +
+  
+  labs(
+    title = "Relationship Between Driver Age and Total Incurred Claims",
+    x = "Driver Age",
+    y = "Total Incurred"
+  ) +
+  
+  theme_minimal()
+```
+:::
+
+
 
 ## Distribution of profitability by policy type
 

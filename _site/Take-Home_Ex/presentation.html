@@ -150,6 +150,7 @@ Persis Evangeline
 <li class="fragment">Feature engineering</li>
 <li class="fragment">Univariate analysis</li>
 <li class="fragment">Bivariate analysis</li>
+<li class="fragment">Insights &amp; conclusion</li>
 </ul>
 </section>
 <section id="feature-engineering-new-variables" class="slide level2">
@@ -170,6 +171,19 @@ Persis Evangeline
 <h2>Univariate: Policy type counts</h2>
 
 <img data-src="policytype.png" style="width:75.0%" class="r-stretch"><p><a href="Take_Home_1.html#counts-of-each-policy-type">View full analysis in report</a></p>
+<aside class="notes">
+<p>CC is the policy type with the largest number, at 200,000 policies. It exceeds all others. TP has the fewest with fewer than 10,000 records. TP provides basic coverage, however CC offers more coverage. Customers strongly prefer comprehensive coverage over basic plans.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="univariate-vehicle-brand-counts" class="slide level2">
 <h2>Univariate: Vehicle brand counts</h2>
@@ -177,31 +191,155 @@ Persis Evangeline
 <p><img data-src="vehiclebrands.png" style="width:75.0%"></p>
 </div>
 <p><a href="Take_Home_1.html#counts-of-vehicle-brands">View full analysis in report</a></p>
+<aside class="notes">
+<p>Few major brands make up the majority of the portfolio. Renault has the largest at approximately 34,000, followed by Citroen and Peugeot at 29,000 each. Most top brands are mass market European manufacturers. This insurer has customers who are mainly mainstream vehicle owners, rather than high end brands.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="univariate-vehicle-age-percentage-distribution" class="slide level2">
 <h2>Univariate: Vehicle age percentage distribution</h2>
 
 <img data-src="vehicleage.png" style="width:75.0%" class="r-stretch"><p><a href="Take_Home_1.html#percentage-distribution-of-each-vehicle-age-group">View full analysis in report</a></p>
+<aside class="notes">
+<p>Old vehicles make up a large portion of this portfolio, 91% of all insured vehicles. This indicates that the insurer mainly covers older vehicles rather than newly purchased vehicles. Older vehicles have very unique traits and portray different risk characteristics.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="bivariate-trend-of-all-claims-by-claim-type" class="slide level2">
 <h2>Bivariate: Trend of all claims by claim type</h2>
 
 <img data-src="allclaim.png" style="width:75.0%" class="r-stretch"><p><a href="Take_Home_1.html#trend-of-total-claims-over-time">View full analysis in report</a></p>
+<aside class="notes">
+<p>Most claim categories increased from 2022 to 2024. Liability claims recorded the highest volume increase from 7000 to over 18000. Liability property claims also grew sharply, increasing from around 6000 to more than 16000 claims. Property claims increased from about 3000 in 2022 to over 12000 in 2024. Occupant claims remained low with slight dip to 12 in 2023. Overall, the upward trend suggests increasing insurer exposure and possibly higher overall claims costs over time.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="bivariate-distribution-of-loss-ratio-by-policy-type" class="slide level2">
 <h2>Bivariate: Distribution of loss ratio by policy type</h2>
 
 <img data-src="lossratiopolicy.png" style="width:75.0%" class="r-stretch"><p><a href="Take_Home_1.html#distribution-of-loss-ratio-by-policy-type">View full analysis in report</a></p>
+<aside class="notes">
+<p>Loss ratios are highly skewed across all policy types, with most observations concentrated near 0. There are some outliers. COMP-E has the most extreme outlier with loss ratio exceeding 10,000 far higher than the rest. CC and TPG also contain outliers, with some exceeding 2000. While most policies remain profitable or low-loss , a small number of claims generate extremely large losses. High loss events are rare but have significant impact.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="bivariate-heatmap-of-circulation-area-by-municipality-type" class="slide level2">
 <h2>Bivariate: Heatmap of circulation area by municipality type</h2>
 
 <img data-src="heatmap.png" style="width:75.0%" class="r-stretch"><p><a href="Take_Home_1.html#heatmap-of-circulation-area-by-municiality-type">View full analysis in report</a></p>
+<aside class="notes">
+<p>Type I municipality has the highest concentration of policies in both rural and urban areas, with roughly 115,000 rural and 112,000 in urban areas. Municipality type I dominates the portfolio. Municipality type C has more records in urban at 66,000 compared to rural which has only 34,000 records. Overall IS municaplity type has lower counts overall.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="bivariate-heatmap-of-circulation-area-by-municipality-type-1" class="slide level2">
-<h2>Bivariate: Heatmap of circulation area by municipality type</h2>
+<section id="bivariate-claim-frequency-distribution" class="slide level2">
+<h2>Bivariate: Claim frequency distribution</h2>
 
 <img data-src="claimdistribution.png" style="width:75.0%" class="r-stretch"><p><a href="Take_Home_1.html#claim-frequency-distribution-by-circulation-area">View full analysis in report</a></p>
+<aside class="notes">
+<p>The distribution for both circulation areas are very similar. For both, most policies are concentrated near very low claim frequency values. The right skewed distribution shows that most policyholders make few to 0 claims. This indicates that circulation area alone may not be sufficient in explaining the differences in claim frequency. Other factors may have greater influence on claims behaviour.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="bivariate-profitability-by-driver-risk-group" class="slide level2">
+<h2>Bivariate: Profitability by driver risk group</h2>
+
+<img data-src="driverriskgrp.png" style="width:75.0%" class="r-stretch"><p><a href="Take_Home_1.html#profitability-by-driver-risk-group">View full analysis in report</a></p>
+<aside class="notes">
+<p>Young drivers show the highest median profitability compared to other groups. It has larger interquartile range, indicating greater variability in outcomes. Middle-aged and senior drivers have similar median profitability levels, but both groups contain many extreme negative outliers, with losses extending below -5,000. Young drivers also have negative outliers, though fewer observations reach the most severe losses. Though all groups have extreme outliers, most policies still remain profitable, as the median is above 0. Driver risk group affects profitability distribution, young drivers appear more profitable.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="bivariate-relationship-between-total-premium-and-loss-ratio" class="slide level2">
+<h2>Bivariate: Relationship between total premium and loss ratio</h2>
+
+<img data-src="totalpremtotalloss.png" style="width:75.0%" class="r-stretch"><p><a href="Take_Home_1.html#relationship-between-total-premium-and-loss-ratio">View full analysis in report</a></p>
+<aside class="notes">
+<p>The scatterplot shows an inverse relationship between total premium and loss ratio. Policies with lower premiums, below 500, display the highest variability and contain many extreme loss ratios exceeding 200. As premiums increase beyond 1000, the loss ratio are nearer to 0, with significantly fewer extreme outliers. This shows that lower premium policies are more volatile and prone to huge loss, while higher premium policies are more stable and predictable.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="insights-conclusion" class="slide level2">
+<h2>Insights &amp; Conclusion</h2>
+<ul>
+<li class="fragment"><p>portfolio is heavily concentrated in CC policies, old vehicles and European car brands.</p></li>
+<li class="fragment"><p>claims activity increased from 2022 to 2024.</p></li>
+<li class="fragment"><p>circulation area alone is not sufficient to predict claims behaviour</p></li>
+<li class="fragment"><p>Most policies are low loss, small number of claims drive huge losses</p></li>
+<li class="fragment"><p>lower premium policies are much more volatile</p></li>
+</ul>
 
 
 </section>
