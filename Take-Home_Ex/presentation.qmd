@@ -15,65 +15,66 @@ execute:
   freeze: true
 ---
 
-
 ## Contents
-- Feature engineering
-- Univariate analysis
-- Bivariate analysis
+
+-   Feature engineering
+-   Univariate analysis
+-   Bivariate analysis
 
 ## Feature engineering (new variables)
 
-- Profitability = total_premium - total_incurred
-- Loss ratio = total_incurred/total_premium
-- Claim flag. If total_incurred \>0, means claim has been made.
-- Claim severity
-- Claims per exposure = total_incurred / total_exposure
-- Driver risk group.Taking age into consideration
-- driving_experience = driver_age - age_driving_licence
-- Vehicle age group. Grouping based on age of vehicle.
-- claim_frequency = total_claims / total_exposure
+-   Profitability = total_premium - total_incurred
+-   Loss ratio = total_incurred/total_premium
+-   Claim flag. If total_incurred \>0, means claim has been made.
+-   Claim severity
+-   Claims per exposure = total_incurred / total_exposure
+-   Driver risk group.Taking age into consideration
+-   driving_experience = driver_age - age_driving_licence
+-   Vehicle age group. Grouping based on age of vehicle.
+-   claim_frequency = total_claims / total_exposure
 
 ## Univariate: Policy type counts
 
-![](policytype.png){width=75%}
+![](policytype.png){width="75%"}
 
 [View full analysis in report](Take_Home_1.html#counts-of-each-policy-type)
 
-
 ## Univariate: Vehicle brand counts
 
-<div style="height:400px; overflow:hidden;">
-
-![](vehiclebrands.png){width=75%}
-
-</div>
+::: {style="height:400px; overflow:hidden;"}
+![](vehiclebrands.png){width="75%"}
+:::
 
 [View full analysis in report](Take_Home_1.html#counts-of-vehicle-brands)
 
-
 ## Univariate: Vehicle age percentage distribution
 
-
-![](vehicleage.png){width=75%}
-
+![](vehicleage.png){width="75%"}
 
 [View full analysis in report](Take_Home_1.html#percentage-distribution-of-each-vehicle-age-group)
 
-
 ## Bivariate: Trend of all claims by claim type
 
-![](allclaim.png){width=75%}
-
+![](allclaim.png){width="75%"}
 
 [View full analysis in report](Take_Home_1.html#trend-of-total-claims-over-time)
 
-
 ## Bivariate: Distribution of loss ratio by policy type
 
-![](lossratiopolicy.png){width=75%}
-
+![](lossratiopolicy.png){width="75%"}
 
 [View full analysis in report](Take_Home_1.html#distribution-of-loss-ratio-by-policy-type)
 
+## Bivariate: Heatmap of circulation area by municipality type
 
+![](heatmap.png){width="75%"}
+
+[View full analysis in report](Take_Home_1.html#heatmap-of-circulation-area-by-municiality-type)
+
+
+## Bivariate: Heatmap of circulation area by municipality type
+
+![](claimdistribution.png){width="75%"}
+
+[View full analysis in report](Take_Home_1.html#claim-frequency-distribution-by-circulation-area)
 
