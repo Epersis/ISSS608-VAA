@@ -93,16 +93,16 @@ pacman::p_load(
 
 library(DT)
 
-#dataset <- read.csv("Dataset.csv")
+dataset <- read.csv("Dataset.csv")
 
-#datatable(
-#  dataset,
-#  options = list(
-#    scrollX = TRUE,
-#    scrollY = "300px",
-#    pageLength = 10
-#  )
-#)
+datatable(
+  dataset,
+  options = list(
+    scrollX = TRUE,
+    scrollY = "300px",
+    pageLength = 10
+  )
+)
 ```
 
 Split the data such that each variable is 1 column
@@ -115,36 +115,36 @@ Split the data such that each variable is 1 column
 library(tidyverse)
 library(DT)
 
-#dataset <- read_delim(
-#  "Dataset.csv",
-#  delim = ";",
-#  quote = "",
-#  show_col_types = FALSE
-#)
+dataset <- read_delim(
+  "Dataset.csv",
+  delim = ";",
+  quote = "",
+  show_col_types = FALSE
+)
 
-#names(dataset) <- names(dataset) %>%
-#  str_remove_all('"') %>%
-#  str_remove_all("^X") %>%
-#  janitor::make_clean_names()
+names(dataset) <- names(dataset) %>%
+  str_remove_all('"') %>%
+  str_remove_all("^X") %>%
+  janitor::make_clean_names()
 
 
-#dataset <- dataset %>%
-#  mutate(across(where(is.character), ~ str_remove_all(.x, '"')))
+dataset <- dataset %>%
+  mutate(across(where(is.character), ~ str_remove_all(.x, '"')))
 
-#write_csv(dataset, "Dataset_Splitted.csv")
+write_csv(dataset, "Dataset_Splitted.csv")
 
-#datatable(
-#  dataset,
-#  options = list(
-#    scrollX = TRUE,
-#    scrollY = "300px",
-#    pageLength = 10
-#  )
-#)
-#
+datatable(
+  dataset,
+  options = list(
+    scrollX = TRUE,
+    scrollY = "300px",
+    pageLength = 10
+  )
+)
+
 ```
 
-# remove when done
+
 
 ```{r}
 dataset <- read.csv("Dataset_Splitted.csv")
@@ -2957,4 +2957,17 @@ ggplot(dataset,
 ```
 :::
 
-This plot shows a violin plot with a boxplot embedded into it. For a violin plot, the width of the violin represents where observations are more concentrated. Most observations are concentrated near 0, meaning most policyholders have very low claim frequency. This is typical and common insurance pattern. As the claim frequency is highly concentrated near 0 for both rural and urban circulation areas, it suggests that people make few claims despite the driving environment. The urban circulation plot appears slightly more spread out while the rural circulation is more concentrated at very low frequencies. The difference in urban driving environments could play a role in this. However, there could be other differentiating factors which are much stronger in explaining claim frequency.           
+This plot shows a violin plot with a boxplot embedded into it. For a violin plot, the width of the violin represents where observations are more concentrated. Most observations are concentrated near 0, meaning most policyholders have very low claim frequency. This is typical and common insurance pattern. As the claim frequency is highly concentrated near 0 for both rural and urban circulation areas, it suggests that people make few claims despite the driving environment. The urban circulation plot appears slightly more spread out while the rural circulation is more concentrated at very low frequencies. The difference in urban driving environments could play a role in this. However, there could be other differentiating factors which are much stronger in explaining claim frequency.      
+
+
+# Insights & Conclusion
+
+- portfolio is heavily concentrated in CC policies, old vehicles and European car brands. 
+
+- claims activity increased from 2022 to 2024. 
+
+- circulation area alone is not sufficient to predict claims behaviour
+
+- Most policies are low loss, small number of claims drive huge losses
+
+- lower premium policies are much more volatile
