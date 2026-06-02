@@ -9,3 +9,7 @@
 **/*.quarto_ipynb
 _site/
 _freeze/
+
+Take-Home_Ex/Dataset.csv
+Take-Home_Ex/Dataset_Engineered.csv
+Take-Home_Ex/Dataset_Splitted.csv
