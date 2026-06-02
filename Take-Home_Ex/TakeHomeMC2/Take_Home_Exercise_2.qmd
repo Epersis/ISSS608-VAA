@@ -1,0 +1,120 @@
+---
+title: "Take Home Exercise 2"
+format: html
+author: "Persis Evangeline"
+date: "June 2, 2026"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+# Overview
+
+## Background
+We investigate an anomalous SaidIT post made by John Windward on 17 May 2046 at 4:21 am. The post appears to have been published in an unrelated forum, suggesting malfunctioning behaviour. The objective is to reconstruct the sequence of events leading to the post, determine the origin and meaning of its contents, identify if similar incidents have occured before and recommend an intervention to reduce the likelihood of its recurrence. 
+
+## Questions to address
+
+1. How was the anomalous SaidIT post created?
+
+2. What is the origin and meaning of the post contents?
+
+3. Have similar incidents occurred before?
+
+4. What intervention point would most effectively prevent future occurrences?
+
+
+## Methodology
+
+This analysis will include:
+
+Event Log Analysis
+
+To reconstruct the sequence of actions performed by people, agents and systems.
+
+Network Analysis
+
+To understand interactions between humans, agents and platforms.
+
+Temporal Analysis
+
+To examine system behaviour before, during and after the incident.
+
+Text Similarity Analysis
+
+To identify potential sources of the anomalous content.
+
+Centrality Analysis
+
+To identify critical nodes and recommend intervention points.
+
+# Setup
+
+```{r}
+pacman::p_load(
+  tidyverse,
+  jsonlite,
+  lubridate,
+
+  igraph,
+  tidygraph,
+  ggraph,
+
+  DT,
+  patchwork,
+  ggrepel,
+
+  stringdist,
+  tidytext,
+
+  knitr,
+  kableExtra
+)
+
+```
+
+
+## Loading data
+
+### Event log
+
+```{r}
+mc2_raw <- fromJSON(
+  "MC2 data/VAST_Challenge_2026_MC2/MC2_data.json",
+  simplifyVector = FALSE
+)
+
+```
+
+### Organisation chart
+
+```{r}
+org_raw <- fromJSON(
+  "MC2 data/VAST_Challenge_2026_MC2/org_chart.json"
+)
+```
+
+
+# Data wrangling
+
+## Preparing Event data
+
+```{r}
+
+```
+
+## Preparing actor information 
+
+
+
+## Creating nodes and edges
+
+
+
+## Integrating organisation structure
+
+
+# System overview
