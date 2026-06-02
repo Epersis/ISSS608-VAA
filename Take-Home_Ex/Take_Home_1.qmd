@@ -1,6 +1,8 @@
 ---
 title: "Take Home Exercise 1"
-format: html
+format:
+  html:
+    embed-resources: false
 author: "Persis Evangeline"
 date: "May 20, 2026"
 date-modified: "last-modified"
@@ -96,12 +98,13 @@ library(DT)
 dataset <- read.csv("Dataset.csv")
 
 datatable(
-  dataset,
+  head(dataset, 50),
   options = list(
     scrollX = TRUE,
     scrollY = "300px",
     pageLength = 10
-  )
+  ),
+  caption = "Preview of first 50 rows only"
 )
 ```
 
@@ -134,17 +137,16 @@ dataset <- dataset %>%
 write_csv(dataset, "Dataset_Splitted.csv")
 
 datatable(
-  dataset,
+  head(dataset, 50),
   options = list(
     scrollX = TRUE,
     scrollY = "300px",
     pageLength = 10
-  )
+  ),
+  caption = "Preview of first 50 rows only"
 )
 
 ```
-
-
 
 ```{r}
 dataset <- read.csv("Dataset_Splitted.csv")
@@ -262,8 +264,7 @@ Before moving on to feature engineering, it is important to understand key conce
 
 4.  Claim: A request for compensation after a loss event. For instance, in the event of a car accident, the insurer investigates whether the event is covered, the claim is genuine and if policy conditions were followed.
 
-5.  Deductible/Excess: The amount the customer must pay before insurance starts paying. Its purpose is to reduce small claims, discourage careless behaviour and lower premiums. For example, repair cost= SGD 5000, deductible= SGD 1000, 
-insurer pays = repair cost - deductible
+5.  Deductible/Excess: The amount the customer must pay before insurance starts paying. Its purpose is to reduce small claims, discourage careless behaviour and lower premiums. For example, repair cost= SGD 5000, deductible= SGD 1000, insurer pays = repair cost - deductible
 
 6.  Sum insured/ coverage limit: maximum amount insurer will pay.
 
@@ -273,9 +274,9 @@ insurer pays = repair cost - deductible
 
 9.  Premium: Price that is paid for insurance.
 
-10. Municipality type (in dataset): This refers to location where policyholder resides or is registered. 
+10. Municipality type (in dataset): This refers to location where policyholder resides or is registered.
 
-11. Circulation area (in dataset): This refers to where the insured vehicle is mainly driven. It describes the vehicle's operating environment and not ncessarily where the owner lives. 
+11. Circulation area (in dataset): This refers to where the insured vehicle is mainly driven. It describes the vehicle's operating environment and not ncessarily where the owner lives.
 
 Feature Engineering:
 
@@ -302,7 +303,7 @@ dataset <- dataset %>%
   )
 ```
 
-3.  Claim flag. 
+3.  Claim flag.
 
 If the total_incurred \>0, means claim has been made. Else, no claim.
 
@@ -314,7 +315,7 @@ dataset <- dataset %>%
   )
 ```
 
-4.  Claim severity. 
+4.  Claim severity.
 
 Insurance losses are usually grouped by severity.
 
@@ -332,8 +333,7 @@ dataset <- dataset %>%
 
 ```
 
-5.  Claims per exposure. 
-A policy exposed for 12 months should not be compared directly with a 1 month policy. This measures average claim cost per unit exposure, cost intensity and severity adjusted exposure risk. This is a financial metric. A higher value would mean higher insurer losses per exposure. Lower value would mean low insurer losses per exposure.
+5.  Claims per exposure. A policy exposed for 12 months should not be compared directly with a 1 month policy. This measures average claim cost per unit exposure, cost intensity and severity adjusted exposure risk. This is a financial metric. A higher value would mean higher insurer losses per exposure. Lower value would mean low insurer losses per exposure.
 
 Claims per exposure= Total Incurred/ Exposure
 
@@ -345,8 +345,7 @@ dataset <- dataset %>%
   )
 ```
 
-6.  Driver risk group.
-Taking age into consideration
+6.  Driver risk group. Taking age into consideration
 
 ```{r}
 dataset <- dataset %>%
@@ -360,7 +359,7 @@ dataset <- dataset %>%
   )
 ```
 
-7.  Driving experience 
+7.  Driving experience
 
 The driving experience can be derived by finding the difference between the driver age and the age at which the driving licence was obtained.
 
@@ -372,7 +371,7 @@ dataset <- dataset %>%
   )
 ```
 
-8.  Vehicle age group 
+8.  Vehicle age group
 
 Vehicles which are much older perform and behave differently from newer vehicles.
 
@@ -389,7 +388,7 @@ dataset <- dataset %>%
 
 ```
 
-9.  Claim Frequency 
+9.  Claim Frequency
 
 Claim frequency measures how often claims occur and NOT how expensive they are. This is a frequency metric. A higher value would mean claims occur more frequently.
 
@@ -451,7 +450,6 @@ ggplot(data = dataset,
   ggtitle("Distribution of Claim Flag")
 ```
 :::
-
 
 There is a much higher number of transactions that have made no claim as compared to those which have made claims.
 
@@ -525,9 +523,7 @@ ggplot(policy_counts,
 ```
 :::
 
-
 CC Policy takes up majority of the transactions. TP makes up a small minority of the transactions.
-
 
 ## Counts of vehicle brands
 
@@ -896,9 +892,8 @@ ggplot(claim_severity_counts,
 
 ```
 :::
+
 After filtering out records where claims have been made, half of the claims made are of low severity. The next largest proportion are of medium severity. The high severity make up the smallest proportion of all claims. This pattern is common in insurance portfolios.
-
-
 
 # Bivariate visual analytics
 
@@ -1013,8 +1008,8 @@ ggplot(yearly_claims,
 
 ```
 :::
-There is an increasing trend from 2022 to 2024, reaching a total of 38937 total claims in 2024.
 
+There is an increasing trend from 2022 to 2024, reaching a total of 38937 total claims in 2024.
 
 ## Trend of total liability claims over time
 
@@ -1123,6 +1118,7 @@ ggplot(yearly_claims,
   theme_minimal()
 ```
 :::
+
 There is an increasing trend from 2022 to 2024.
 
 ## Trend of total property claims over time
@@ -1235,8 +1231,8 @@ ggplot(yearly_claims,
 
 ```
 :::
-There is an increasing trend in total liability property claims over the years from 2022 to 2024. 
 
+There is an increasing trend in total liability property claims over the years from 2022 to 2024.
 
 ## Trend of total liability injury claims over time
 
@@ -1347,7 +1343,8 @@ ggplot(yearly_claims,
 
 ```
 :::
-The total number of liability injury claims from 2022 to 2024 has increased over the years. There is an increasing trend. 
+
+The total number of liability injury claims from 2022 to 2024 has increased over the years. There is an increasing trend.
 
 ## Trend of total property claims over time
 
@@ -1458,7 +1455,8 @@ ggplot(yearly_claims,
 
 ```
 :::
-There is an increasing trend, with the total property claims increasing from 2022 to 2024. 
+
+There is an increasing trend, with the total property claims increasing from 2022 to 2024.
 
 ## Trend of total theft claims over time
 
@@ -1569,11 +1567,10 @@ ggplot(yearly_claims,
 
 ```
 :::
+
 There is an increasing trend, with the total theft claims increasing from 2022 to 2024.
 
-
 ## Trend of total fire claims over time
-
 
 ::: panel-tabset
 ## The plot
@@ -1682,6 +1679,7 @@ ggplot(yearly_claims,
 
 ```
 :::
+
 There is a generally increasing trend on the total fire claims from 2022 to 2024.
 
 ## Trend of total glass claims over time
@@ -1796,11 +1794,11 @@ ggplot(yearly_claims,
 
 ```
 :::
-There is an increasing trend, with total glass claims increasing from 2039 to 5718 in 2024. 
+
+There is an increasing trend, with total glass claims increasing from 2039 to 5718 in 2024.
 
 ## Trend of total legal protection claims over time
 
-
 ::: panel-tabset
 ## The plot
 
@@ -1910,12 +1908,11 @@ ggplot(yearly_claims,
 
 ```
 :::
-There is an increasing trend, where the total legal protection claims increased from 666 in 2022 to 1639 in 2024. 
 
+There is an increasing trend, where the total legal protection claims increased from 666 in 2022 to 1639 in 2024.
 
 ## Trend of total occupants claims over time
 
-
 ::: panel-tabset
 ## The plot
 
@@ -2023,11 +2020,11 @@ ggplot(yearly_claims,
 
 ```
 :::
-There is generally an increasing trend from 2022 to 2024, where the total occupants claim increased from 13 to 18. There was a very minimal decline in 2023, where the total occupants claim decreased from 13 to 12. 
+
+There is generally an increasing trend from 2022 to 2024, where the total occupants claim increased from 13 to 18. There was a very minimal decline in 2023, where the total occupants claim decreased from 13 to 12.
 
 ## Trend of all claims by Claim type
 
-
 ::: panel-tabset
 ## The plot
 
@@ -2154,8 +2151,7 @@ ggplot(claims_long,
 ```
 :::
 
-This is a concise view of the trends for all the different claim types from 2022 to 2024. 
-
+This is a concise view of the trends for all the different claim types from 2022 to 2024.
 
 ## Distribution of loss ratio by policy type
 
@@ -2184,6 +2180,7 @@ ggplot(dataset,
 
 ```
 :::
+
 In the plot above, we can see how loss ratio varies across policy type. From this plot, we can tell that most boxplots are compressed near 0, while there are many extreme points extending upward.The actual box and whiskers become tiny and flattened near 0, making them nearly invisible. This indicates that most policies have low loss ratios and a small number of policies generate very high losses. The distribution of loss ratio is highly right-skewed across all policy types, indicating that most policies are profitable or low-loss, while a small number of policies incur extremely high claim costs. The dots above the whiskers are outliers. COMP_E has the most extreme outlier, with CC and TPG having extreme outliers too. A key limitation of the current plot is that extreme outliers compress the rest of the distribution.
 
 A zoomed in version of the plot:
@@ -2216,8 +2213,8 @@ ggplot(dataset,
   scale_y_log10()
 ```
 :::
-Differences in median is not extremely large. TP appears to have slightly higher median loss ratio. 
 
+Differences in median is not extremely large. TP appears to have slightly higher median loss ratio.
 
 ## Profitability by driver risk group
 
@@ -2261,7 +2258,6 @@ ggplot(dataset,
 The above plot is a boxplot comparing the distribution of profitability across different age groups. The profitability values are heavily negative. What can be inferred, is that most profitability values are near 0.There are also many extreme negative values, especially for the senior and middle aged groups. Senior drivers appear to be volatile, which could indicate that senior drivers have larger severe-loss events compared to young drivers.
 
 Zooming in:
-
 
 ::: panel-tabset
 ## The plot
@@ -2420,7 +2416,7 @@ ggplot(
 ```
 :::
 
-High claim severity has the highest median, while median claim severity has lower median with Low claim having the next lowest and No claim being at 0. High claim severity also has the largest interquartile range. 
+High claim severity has the highest median, while median claim severity has lower median with Low claim having the next lowest and No claim being at 0. High claim severity also has the largest interquartile range.
 
 ## Claim frequency by driver risk group
 
@@ -2499,7 +2495,6 @@ ggplot(dataset,
 ```
 :::
 
-
 ## Relationship between total premium and loss ratio
 
 ::: panel-tabset
@@ -2544,7 +2539,7 @@ ggplot(dataset,
 
 This plot suggests that there is little to no strong linear relationship between total_premium and loss_ratio. Most points are concentrated towards the bottom, with only a few points having loss ratio above 9000 when the total premium is small. At low premium values, loss ratios are spread very widely, with loss ratio values ranging from 0 to 3000, and some extreme values above 9000. At higher total premium values, the loss ratio is concentrated around 0. This means that high premium policies are more stable whiile low premium prices are more volatile.
 
-As outliers are compressing the graph, we will zoom in to see the trend more closely. 
+As outliers are compressing the graph, we will zoom in to see the trend more closely.
 
 ::: panel-tabset
 ## The plot
@@ -2615,7 +2610,6 @@ ggplot(dataset,
   theme_minimal()
 ```
 :::
-
 
 ## Scatterplot of driver age vs Total incurred claims
 
@@ -2710,8 +2704,6 @@ ggplot(dataset,
   theme_minimal()
 ```
 :::
-
-
 
 ## Distribution of profitability by policy type
 
@@ -2819,8 +2811,6 @@ ggplot(dataset,
 ```
 :::
 
-
-
 ## Heatmap of circulation area by municiality type
 
 ::: panel-tabset
@@ -2884,10 +2874,9 @@ ggplot(area_counts,
 ```
 :::
 
-This heatmap displays the relationship between circulation area and municipality type. The lighter blue indicates higher count. The inland row has the highest counts overall. This suggests that most insurance policies come from inland municipalities. Island municipalities account for the least number of policy counts. Among those that are from coastal areas, cars driven in Urban circulation area dominate.  
+This heatmap displays the relationship between circulation area and municipality type. The lighter blue indicates higher count. The inland row has the highest counts overall. This suggests that most insurance policies come from inland municipalities. Island municipalities account for the least number of policy counts. Among those that are from coastal areas, cars driven in Urban circulation area dominate.
 
 ## Claim frequency distribution by circulation area
-
 
 ::: panel-tabset
 ## The plot
@@ -2957,17 +2946,16 @@ ggplot(dataset,
 ```
 :::
 
-This plot shows a violin plot with a boxplot embedded into it. For a violin plot, the width of the violin represents where observations are more concentrated. Most observations are concentrated near 0, meaning most policyholders have very low claim frequency. This is typical and common insurance pattern. As the claim frequency is highly concentrated near 0 for both rural and urban circulation areas, it suggests that people make few claims despite the driving environment. The urban circulation plot appears slightly more spread out while the rural circulation is more concentrated at very low frequencies. The difference in urban driving environments could play a role in this. However, there could be other differentiating factors which are much stronger in explaining claim frequency.      
-
+This plot shows a violin plot with a boxplot embedded into it. For a violin plot, the width of the violin represents where observations are more concentrated. Most observations are concentrated near 0, meaning most policyholders have very low claim frequency. This is typical and common insurance pattern. As the claim frequency is highly concentrated near 0 for both rural and urban circulation areas, it suggests that people make few claims despite the driving environment. The urban circulation plot appears slightly more spread out while the rural circulation is more concentrated at very low frequencies. The difference in urban driving environments could play a role in this. However, there could be other differentiating factors which are much stronger in explaining claim frequency.
 
 # Insights & Conclusion
 
-- portfolio is heavily concentrated in CC policies, old vehicles and European car brands. 
+-   portfolio is heavily concentrated in CC policies, old vehicles and European car brands.
 
-- claims activity increased from 2022 to 2024. 
+-   claims activity increased from 2022 to 2024.
 
-- circulation area alone is not sufficient to predict claims behaviour
+-   circulation area alone is not sufficient to predict claims behaviour
 
-- Most policies are low loss, small number of claims drive huge losses
+-   Most policies are low loss, small number of claims drive huge losses
 
-- lower premium policies are much more volatile
+-   lower premium policies are much more volatile
