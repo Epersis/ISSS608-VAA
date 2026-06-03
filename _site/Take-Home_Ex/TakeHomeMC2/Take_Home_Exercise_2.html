@@ -251,10 +251,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#preparing-event-data" id="toc-preparing-event-data" class="nav-link" data-scroll-target="#preparing-event-data">Preparing Event data</a></li>
   <li><a href="#preparing-actor-information" id="toc-preparing-actor-information" class="nav-link" data-scroll-target="#preparing-actor-information">Preparing actor information</a></li>
-  <li><a href="#creating-nodes-and-edges" id="toc-creating-nodes-and-edges" class="nav-link" data-scroll-target="#creating-nodes-and-edges">Creating nodes and edges</a></li>
+  <li><a href="#preparing-organisation-data" id="toc-preparing-organisation-data" class="nav-link" data-scroll-target="#preparing-organisation-data">Preparing organisation data</a></li>
+  <li><a href="#viewing-the-4-tables-made-earlier" id="toc-viewing-the-4-tables-made-earlier" class="nav-link" data-scroll-target="#viewing-the-4-tables-made-earlier">Viewing the 4 tables made earlier</a></li>
+  <li><a href="#network-construction" id="toc-network-construction" class="nav-link" data-scroll-target="#network-construction">Network construction</a>
+  <ul class="collapse">
+  <li><a href="#create-event-edges" id="toc-create-event-edges" class="nav-link" data-scroll-target="#create-event-edges">Create event edges</a></li>
+  <li><a href="#check-edge-types" id="toc-check-edge-types" class="nav-link" data-scroll-target="#check-edge-types">Check edge types</a></li>
+  <li><a href="#creating-event-nodes" id="toc-creating-event-nodes" class="nav-link" data-scroll-target="#creating-event-nodes">Creating event nodes</a></li>
+  <li><a href="#check-node-types" id="toc-check-node-types" class="nav-link" data-scroll-target="#check-node-types">Check node types</a></li>
+  <li><a href="#creating-event-graph" id="toc-creating-event-graph" class="nav-link" data-scroll-target="#creating-event-graph">Creating event graph</a></li>
+  <li><a href="#graph-summary" id="toc-graph-summary" class="nav-link" data-scroll-target="#graph-summary">Graph summary</a></li>
+  </ul></li>
+  <li><a href="#creating-organisation-network" id="toc-creating-organisation-network" class="nav-link" data-scroll-target="#creating-organisation-network">Creating organisation network</a></li>
   <li><a href="#integrating-organisation-structure" id="toc-integrating-organisation-structure" class="nav-link" data-scroll-target="#integrating-organisation-structure">Integrating organisation structure</a></li>
   </ul></li>
-  <li><a href="#system-overview" id="toc-system-overview" class="nav-link" data-scroll-target="#system-overview">System overview</a></li>
+  <li><a href="#system-overview" id="toc-system-overview" class="nav-link" data-scroll-target="#system-overview">System overview</a>
+  <ul class="collapse">
+  <li><a href="#event-log-analysis" id="toc-event-log-analysis" class="nav-link" data-scroll-target="#event-log-analysis">Event log analysis</a></li>
+  <li><a href="#event-log-summary-table" id="toc-event-log-summary-table" class="nav-link" data-scroll-target="#event-log-summary-table">Event log summary table:</a></li>
+  <li><a href="#event-participant-composition" id="toc-event-participant-composition" class="nav-link" data-scroll-target="#event-participant-composition">Event participant composition:</a></li>
+  <li><a href="#events-by-number-of-parties" id="toc-events-by-number-of-parties" class="nav-link" data-scroll-target="#events-by-number-of-parties">Events by number of parties:</a></li>
+  <li><a href="#event-type-distribution-visual" id="toc-event-type-distribution-visual" class="nav-link" data-scroll-target="#event-type-distribution-visual">Event type distribution visual</a></li>
+  <li><a href="#daily-system-activity-visual" id="toc-daily-system-activity-visual" class="nav-link" data-scroll-target="#daily-system-activity-visual">Daily system activity visual</a></li>
+  <li><a href="#most-common-interaction-paths" id="toc-most-common-interaction-paths" class="nav-link" data-scroll-target="#most-common-interaction-paths">Most common interaction paths</a></li>
+  <li><a href="#system-interaction-network-visual" id="toc-system-interaction-network-visual" class="nav-link" data-scroll-target="#system-interaction-network-visual">system interaction network visual</a></li>
+  <li><a href="#organisation-structure-visual" id="toc-organisation-structure-visual" class="nav-link" data-scroll-target="#organisation-structure-visual">Organisation structure visual</a></li>
+  </ul></li>
+  <li><a href="#extracting-the-anomalous-chain" id="toc-extracting-the-anomalous-chain" class="nav-link" data-scroll-target="#extracting-the-anomalous-chain">Extracting the anomalous chain</a>
+  <ul class="collapse">
+  <li><a href="#locating-the-target-event" id="toc-locating-the-target-event" class="nav-link" data-scroll-target="#locating-the-target-event">Locating the target event</a></li>
+  <li><a href="#event-window-extraction" id="toc-event-window-extraction" class="nav-link" data-scroll-target="#event-window-extraction">event window extraction</a></li>
+  <li><a href="#incident-timeline-visual" id="toc-incident-timeline-visual" class="nav-link" data-scroll-target="#incident-timeline-visual">Incident timeline visual</a></li>
+  <li><a href="#event-chain-network" id="toc-event-chain-network" class="nav-link" data-scroll-target="#event-chain-network">Event chain network</a></li>
+  <li><a href="#key-actors-involved" id="toc-key-actors-involved" class="nav-link" data-scroll-target="#key-actors-involved">key actors involved</a></li>
+  </ul></li>
+  <li><a href="#content-origin-analysis" id="toc-content-origin-analysis" class="nav-link" data-scroll-target="#content-origin-analysis">Content origin analysis</a>
+  <ul class="collapse">
+  <li><a href="#extract-text-sources" id="toc-extract-text-sources" class="nav-link" data-scroll-target="#extract-text-sources">Extract text sources</a></li>
+  <li><a href="#content-similarity-analysis-visual" id="toc-content-similarity-analysis-visual" class="nav-link" data-scroll-target="#content-similarity-analysis-visual">Content Similarity Analysis visual</a></li>
+  <li><a href="#evidence-supporting-content-origin" id="toc-evidence-supporting-content-origin" class="nav-link" data-scroll-target="#evidence-supporting-content-origin">Evidence supporting content origin</a></li>
+  <li><a href="#interpretation-of-post-meaning" id="toc-interpretation-of-post-meaning" class="nav-link" data-scroll-target="#interpretation-of-post-meaning">interpretation of post meaning</a></li>
+  </ul></li>
+  <li><a href="#historical-behaviour-analysis" id="toc-historical-behaviour-analysis" class="nav-link" data-scroll-target="#historical-behaviour-analysis">Historical behaviour analysis</a>
+  <ul class="collapse">
+  <li><a href="#identifying-similar-events" id="toc-identifying-similar-events" class="nav-link" data-scroll-target="#identifying-similar-events">Identifying similar events</a></li>
+  <li><a href="#historical-incident-timeline" id="toc-historical-incident-timeline" class="nav-link" data-scroll-target="#historical-incident-timeline">Historical incident timeline</a></li>
+  <li><a href="#comparative-analysis" id="toc-comparative-analysis" class="nav-link" data-scroll-target="#comparative-analysis">Comparative analysis</a></li>
+  <li><a href="#historical-event-chain-comparison" id="toc-historical-event-chain-comparison" class="nav-link" data-scroll-target="#historical-event-chain-comparison">Historical event chain comparison</a></li>
+  </ul></li>
+  <li><a href="#intervention-analysis" id="toc-intervention-analysis" class="nav-link" data-scroll-target="#intervention-analysis">Intervention analysis</a>
+  <ul class="collapse">
+  <li><a href="#centrality-analysis" id="toc-centrality-analysis" class="nav-link" data-scroll-target="#centrality-analysis">Centrality analysis</a></li>
+  <li><a href="#critical-node-analysis-visual" id="toc-critical-node-analysis-visual" class="nav-link" data-scroll-target="#critical-node-analysis-visual">Critical node analysis visual</a></li>
+  <li><a href="#candidate-intervention-points" id="toc-candidate-intervention-points" class="nav-link" data-scroll-target="#candidate-intervention-points">Candidate intervention points</a></li>
+  <li><a href="#recommended-intervention" id="toc-recommended-intervention" class="nav-link" data-scroll-target="#recommended-intervention">Recommended intervention</a></li>
+  </ul></li>
+  <li><a href="#mini-challenge-answers" id="toc-mini-challenge-answers" class="nav-link" data-scroll-target="#mini-challenge-answers">Mini challenge answers</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
 </nav>
     </div>
@@ -287,7 +340,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">June 3, 2026</p>
+      <p class="date-modified">June 4, 2026</p>
     </div>
   </div>
     
@@ -302,7 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Overview</h1>
 <section id="background" class="level2">
 <h2 class="anchored" data-anchor-id="background">Background</h2>
-<p>We investigate an anomalous SaidIT post made by John Windward on 17 May 2046 at 4:21 am. The post appears to have been published in an unrelated forum, suggesting malfunctioning behaviour. The objective is to reconstruct the sequence of events leading to the post, determine the origin and meaning of its contents, identify if similar incidents have occured before and recommend an intervention to reduce the likelihood of its recurrence.</p>
+<p>We investigate an anomalous SaidIT post made by John Windward on 17 May 2046 at 4:21 am. The post appears to have been published in an unrelated forum, suggesting malfunctioning behaviour. The objective is to reconstruct the sequence of events leading to the post, determine the origin and meaning of its contents, identify if similar incidents have occurred before and recommend an intervention to reduce the likelihood of its recurrence.</p>
 </section>
 <section id="questions-to-address" class="level2">
 <h2 class="anchored" data-anchor-id="questions-to-address">Questions to address</h2>
@@ -315,17 +368,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="methodology" class="level2">
 <h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
-<p>This analysis will include:</p>
-<p>Event Log Analysis</p>
-<p>To reconstruct the sequence of actions performed by people, agents and systems.</p>
-<p>Network Analysis</p>
-<p>To understand interactions between humans, agents and platforms.</p>
-<p>Temporal Analysis</p>
-<p>To examine system behaviour before, during and after the incident.</p>
-<p>Text Similarity Analysis</p>
-<p>To identify potential sources of the anomalous content.</p>
-<p>Centrality Analysis</p>
-<p>To identify critical nodes and recommend intervention points.</p>
+<p>This analysis will include the following below:</p>
+<p>Data preparation &amp; wrangling<br> ↓<br> Event Log Analysis<br> ↓<br> Network Construction<br> ↓<br> Baseline System Behaviour<br> ↓<br> Anomalous Chain Reconstruction<br> ↓<br> Content Origin Analysis<br> ↓<br> Historical Comparison<br> ↓<br> Intervention Analysis</p>
 </section>
 </section>
 <section id="setup" class="level1">
@@ -376,19 +420,1803 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Data wrangling</h1>
 <section id="preparing-event-data" class="level2">
 <h2 class="anchored" data-anchor-id="preparing-event-data">Preparing Event data</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>events <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">event =</span> mc2_raw<span class="sc">$</span>events</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_wider</span>(event)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(events)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 185,147
+Columns: 5
+$ short_name &lt;chr&gt; "sent", "propose_meeting", "access_email", "assign_agent_ta…
+$ parties    &lt;list&gt; ["person:isaac_mast", "person:levi_signal"], ["person:levi…
+$ when       &lt;dbl&gt; 2409423492, 2409423542, 2409423545, 2409423565, 2409423577,…
+$ details    &lt;list&gt; ["person:isaac_mast", "person:levi_signal", "calendar: mee…
+$ id         &lt;int&gt; 15246, 15249, 15251, 15252, 15259, 15264, 15266, 15272, 152…</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>events <span class="ot">&lt;-</span> events <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">datetime =</span> <span class="fu">as.POSIXct</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>      when,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">origin =</span> <span class="st">"1970-01-01"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">tz =</span> <span class="st">"UTC"</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">date =</span> <span class="fu">as.Date</span>(datetime),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">hour =</span> <span class="fu">hour</span>(datetime),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_parties =</span> <span class="fu">map_int</span>(parties, length)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(datetime)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>events <span class="sc">|&gt;</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_events =</span> <span class="fu">n</span>(),</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">earliest_event =</span> <span class="fu">min</span>(datetime),</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">latest_event =</span> <span class="fu">max</span>(datetime)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  total_events earliest_event      latest_event       
+         &lt;int&gt; &lt;dttm&gt;              &lt;dttm&gt;             
+1       185147 2046-05-08 20:18:12 2046-07-16 17:05:59</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>events <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(short_name, <span class="at">sort =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 24 × 2
+   short_name                 n
+   &lt;chr&gt;                  &lt;int&gt;
+ 1 check_email            37286
+ 2 assign_agent_task      18856
+ 3 read_file              18838
+ 4 queue_subordinate_task 17038
+ 5 create_file            16000
+ 6 delete_file            15057
+ 7 check_in               15051
+ 8 sent                    7407
+ 9 received                7266
+10 access_email            6442
+# ℹ 14 more rows</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>events <span class="sc">|&gt;</span> <span class="fu">count</span>(n_parties)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  n_parties      n
+      &lt;int&gt;  &lt;int&gt;
+1         1 105268
+2         2  76877
+3         3   1054
+4         4    959
+5         5    989</code></pre>
+</div>
+</div>
 </section>
 <section id="preparing-actor-information" class="level2">
 <h2 class="anchored" data-anchor-id="preparing-actor-information">Preparing actor information</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>event_parties <span class="ot">&lt;-</span> events <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>         datetime,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>         short_name,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>         parties) <span class="sc">|&gt;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_longer</span>(parties,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">values_to =</span> <span class="st">"party"</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>event_parties <span class="ot">&lt;-</span> event_parties <span class="sc">|&gt;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">actor_type =</span> <span class="fu">case_when</span>(</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(party, <span class="st">"^person:"</span>) <span class="sc">~</span> <span class="st">"Person"</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(party, <span class="st">"^Agent/"</span>) <span class="sc">~</span> <span class="st">"Agent"</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(party, <span class="st">"^world:"</span>) <span class="sc">~</span> <span class="st">"System"</span>,</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(party, <span class="st">"^team:"</span>) <span class="sc">~</span> <span class="st">"Team"</span>,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(party, <span class="st">"^company:"</span>) <span class="sc">~</span> <span class="st">"Company"</span>,</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Other"</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>event_parties <span class="sc">|&gt;</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(actor_type,</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">sort =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  actor_type      n
+  &lt;chr&gt;       &lt;int&gt;
+1 Person     111180
+2 Agent      101326
+3 Other       55502
+4 System       2957</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>event_parties <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(party,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20 × 2
+   party                          n
+   &lt;chr&gt;                      &lt;int&gt;
+ 1 system:file_system         45165
+ 2 Agent/person:zoey_drydock  30339
+ 3 Agent/person:gabriel_sonar 21613
+ 4 Agent/person:owen_hatch    15770
+ 5 Agent/person:evelyn_dock   10254
+ 6 person:zoey_drydock         8139
+ 7 person:gabriel_sonar        6042
+ 8 person:owen_hatch           5075
+ 9 person:evelyn_dock          4176
+10 world:calendar              2957
+11 person:olivia_keel          2285
+12 person:david_breakwater     2200
+13 person:daniel_gangway       2170
+14 person:chloe_ballast        2166
+15 person:william_rudder       2130
+16 person:matthew_tide         2120
+17 person:ella_pilot           2109
+18 person:julian_seaway        2061
+19 person:liam_anchor          2046
+20 person:alexander_jetty      2023</code></pre>
+</div>
+</div>
 </section>
-<section id="creating-nodes-and-edges" class="level2">
-<h2 class="anchored" data-anchor-id="creating-nodes-and-edges">Creating nodes and edges</h2>
+<section id="preparing-organisation-data" class="level2">
+<h2 class="anchored" data-anchor-id="preparing-organisation-data">Preparing organisation data</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>org_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(org_raw<span class="sc">$</span>nodes)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(org_nodes)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 75
+Columns: 4
+$ id    &lt;chr&gt; "company:tenant_thread", "department:executive_suite", "departme…
+$ label &lt;chr&gt; "Tenant Thread", "Executive Suite", "Products", "Human Resources…
+$ type  &lt;chr&gt; "company", "department", "department", "department", "department…
+$ title &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>org_nodes <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(type)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  type           n
+  &lt;chr&gt;      &lt;int&gt;
+1 company        1
+2 department     6
+3 person        49
+4 team          19</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>org_edges <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(org_raw<span class="sc">$</span>edges)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(org_edges)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 74
+Columns: 3
+$ source   &lt;chr&gt; "company:tenant_thread", "company:tenant_thread", "company:te…
+$ target   &lt;chr&gt; "department:executive_suite", "department:products", "departm…
+$ relation &lt;chr&gt; "contains", "contains", "contains", "contains", "contains", "…</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>org_edges <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(relation)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  relation     n
+  &lt;chr&gt;    &lt;int&gt;
+1 contains    69
+2 led_by       5</code></pre>
+</div>
+</div>
+</section>
+<section id="viewing-the-4-tables-made-earlier" class="level2">
+<h2 class="anchored" data-anchor-id="viewing-the-4-tables-made-earlier">Viewing the 4 tables made earlier</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>First 5 records of events</caption>
+<colgroup>
+<col style="width: 2%">
+<col style="width: 19%">
+<col style="width: 1%">
+<col style="width: 68%">
+<col style="width: 0%">
+<col style="width: 3%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">short_name</th>
+<th style="text-align: left;">parties</th>
+<th style="text-align: right;">when</th>
+<th style="text-align: left;">details</th>
+<th style="text-align: right;">id</th>
+<th style="text-align: left;">datetime</th>
+<th style="text-align: left;">date</th>
+<th style="text-align: right;">hour</th>
+<th style="text-align: right;">n_parties</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">sent</td>
+<td style="text-align: left;">person:isaac_mast , person:levi_signal</td>
+<td style="text-align: right;">2409423492</td>
+<td style="text-align: left;">person:isaac_mast , person:levi_signal , calendar: meeting request from person:isaac_mast, sent</td>
+<td style="text-align: right;">15246</td>
+<td style="text-align: left;">2046-05-08 20:18:12</td>
+<td style="text-align: left;">2046-05-08</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">propose_meeting</td>
+<td style="text-align: left;">person:levi_signal , person:avery_sextant , person:sophia_beacon , world:calendar , Agent/person:isaac_mast</td>
+<td style="text-align: right;">2409423542</td>
+<td style="text-align: left;">person:isaac_mast , person:isaac_mast , person:sophia_beacon , person:avery_sextant , person:levi_signal , 2046-05-08T04:59:53 , person:sophia_beacon , person:avery_sextant , person:levi_signal , agent:person:isaac_mast, world:calendar , propose_meeting , 2046-05-08T13:14:11 , person:isaac_mast , person:sophia_beacon , person:avery_sextant , person:levi_signal , 2046-05-08T04:59:53</td>
+<td style="text-align: right;">15249</td>
+<td style="text-align: left;">2046-05-08 20:19:02</td>
+<td style="text-align: left;">2046-05-08</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">access_email</td>
+<td style="text-align: left;">person:isaac_mast</td>
+<td style="text-align: right;">2409423545</td>
+<td style="text-align: left;">access_email , 2046-05-08T11:45:16</td>
+<td style="text-align: right;">15251</td>
+<td style="text-align: left;">2046-05-08 20:19:05</td>
+<td style="text-align: left;">2046-05-08</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">assign_agent_task</td>
+<td style="text-align: left;">person:mia_fender</td>
+<td style="text-align: right;">2409423565</td>
+<td style="text-align: left;">queue_subordinate_task, person:gabriel_sonar , access_email , person:mia_fender</td>
+<td style="text-align: right;">15252</td>
+<td style="text-align: left;">2046-05-08 20:19:25</td>
+<td style="text-align: left;">2046-05-08</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">access_email</td>
+<td style="text-align: left;">Agent/person:isaac_mast</td>
+<td style="text-align: right;">2409423577</td>
+<td style="text-align: left;">person:isaac_mast</td>
+<td style="text-align: right;">15259</td>
+<td style="text-align: left;">2046-05-08 20:19:37</td>
+<td style="text-align: left;">2046-05-08</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>First 5 records of event_parties</caption>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 27%">
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: left;">datetime</th>
+<th style="text-align: left;">short_name</th>
+<th style="text-align: left;">party</th>
+<th style="text-align: left;">actor_type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">15246</td>
+<td style="text-align: left;">2046-05-08 20:18:12</td>
+<td style="text-align: left;">sent</td>
+<td style="text-align: left;">person:isaac_mast</td>
+<td style="text-align: left;">Person</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15246</td>
+<td style="text-align: left;">2046-05-08 20:18:12</td>
+<td style="text-align: left;">sent</td>
+<td style="text-align: left;">person:levi_signal</td>
+<td style="text-align: left;">Person</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15249</td>
+<td style="text-align: left;">2046-05-08 20:19:02</td>
+<td style="text-align: left;">propose_meeting</td>
+<td style="text-align: left;">person:levi_signal</td>
+<td style="text-align: left;">Person</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15249</td>
+<td style="text-align: left;">2046-05-08 20:19:02</td>
+<td style="text-align: left;">propose_meeting</td>
+<td style="text-align: left;">person:avery_sextant</td>
+<td style="text-align: left;">Person</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15249</td>
+<td style="text-align: left;">2046-05-08 20:19:02</td>
+<td style="text-align: left;">propose_meeting</td>
+<td style="text-align: left;">person:sophia_beacon</td>
+<td style="text-align: left;">Person</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>First 5 records of org_nodes</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">id</th>
+<th style="text-align: left;">label</th>
+<th style="text-align: left;">type</th>
+<th style="text-align: left;">title</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">company:tenant_thread</td>
+<td style="text-align: left;">Tenant Thread</td>
+<td style="text-align: left;">company</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">department:executive_suite</td>
+<td style="text-align: left;">Executive Suite</td>
+<td style="text-align: left;">department</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">department:products</td>
+<td style="text-align: left;">Products</td>
+<td style="text-align: left;">department</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">department:human_resources</td>
+<td style="text-align: left;">Human Resources</td>
+<td style="text-align: left;">department</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">department:legal</td>
+<td style="text-align: left;">Legal</td>
+<td style="text-align: left;">department</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>First 5 records of org_edges</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">source</th>
+<th style="text-align: left;">target</th>
+<th style="text-align: left;">relation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">company:tenant_thread</td>
+<td style="text-align: left;">department:executive_suite</td>
+<td style="text-align: left;">contains</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">company:tenant_thread</td>
+<td style="text-align: left;">department:products</td>
+<td style="text-align: left;">contains</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">company:tenant_thread</td>
+<td style="text-align: left;">department:human_resources</td>
+<td style="text-align: left;">contains</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">company:tenant_thread</td>
+<td style="text-align: left;">department:legal</td>
+<td style="text-align: left;">contains</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">company:tenant_thread</td>
+<td style="text-align: left;">department:information_technologies</td>
+<td style="text-align: left;">contains</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>events <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"First 5 records of events"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>event_parties <span class="sc">|&gt;</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"First 5 records of event_parties"</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>org_nodes <span class="sc">|&gt;</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"First 5 records of org_nodes"</span>)</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>org_edges <span class="sc">|&gt;</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"First 5 records of org_edges"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="network-construction" class="level2">
+<h2 class="anchored" data-anchor-id="network-construction">Network construction</h2>
+<p>Not all events have clear from and to information. Therefore, only events with explicit or clear inferable interactions are included into the directed network edges.</p>
+<section id="create-event-edges" class="level3">
+<h3 class="anchored" data-anchor-id="create-event-edges">Create event edges</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>First 10 records of event_edges</caption>
+<colgroup>
+<col style="width: 6%">
+<col style="width: 15%">
+<col style="width: 17%">
+<col style="width: 23%">
+<col style="width: 19%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">event_id</th>
+<th style="text-align: left;">datetime</th>
+<th style="text-align: left;">short_name</th>
+<th style="text-align: left;">from</th>
+<th style="text-align: left;">to</th>
+<th style="text-align: left;">edge_type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">15246</td>
+<td style="text-align: left;">2046-05-08 20:18:12</td>
+<td style="text-align: left;">sent</td>
+<td style="text-align: left;">person:isaac_mast</td>
+<td style="text-align: left;">person:levi_signal</td>
+<td style="text-align: left;">sent</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15249</td>
+<td style="text-align: left;">2046-05-08 20:19:02</td>
+<td style="text-align: left;">propose_meeting</td>
+<td style="text-align: left;">agent:person:isaac_mast</td>
+<td style="text-align: left;">world:calendar</td>
+<td style="text-align: left;">propose_meeting</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15285</td>
+<td style="text-align: left;">2046-05-08 20:25:00</td>
+<td style="text-align: left;">list_files</td>
+<td style="text-align: left;">Agent/person:lily_anchorline</td>
+<td style="text-align: left;">/</td>
+<td style="text-align: left;">list_files</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15291</td>
+<td style="text-align: left;">2046-05-08 20:25:00</td>
+<td style="text-align: left;">sent</td>
+<td style="text-align: left;">person:lily_anchorline</td>
+<td style="text-align: left;">person:sebastian_cutter</td>
+<td style="text-align: left;">sent</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15314</td>
+<td style="text-align: left;">2046-05-08 20:26:56</td>
+<td style="text-align: left;">queue_subordinate_task</td>
+<td style="text-align: left;">Agent/person:lily_anchorline</td>
+<td style="text-align: left;">Agent/person:evelyn_dock</td>
+<td style="text-align: left;">queue_subordinate_task</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15322</td>
+<td style="text-align: left;">2046-05-08 20:29:14</td>
+<td style="text-align: left;">propose_meeting</td>
+<td style="text-align: left;">agent:person:lily_anchorline</td>
+<td style="text-align: left;">world:calendar</td>
+<td style="text-align: left;">propose_meeting</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15331</td>
+<td style="text-align: left;">2046-05-08 20:32:07</td>
+<td style="text-align: left;">list_files</td>
+<td style="text-align: left;">Agent/person:david_breakwater</td>
+<td style="text-align: left;">/</td>
+<td style="text-align: left;">list_files</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15338</td>
+<td style="text-align: left;">2046-05-08 20:32:33</td>
+<td style="text-align: left;">list_files</td>
+<td style="text-align: left;">Agent/person:gabriel_sonar</td>
+<td style="text-align: left;">/</td>
+<td style="text-align: left;">list_files</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15347</td>
+<td style="text-align: left;">2046-05-08 20:34:13</td>
+<td style="text-align: left;">queue_subordinate_task</td>
+<td style="text-align: left;">Agent/person:gabriel_sonar</td>
+<td style="text-align: left;">Agent/person:levi_signal</td>
+<td style="text-align: left;">queue_subordinate_task</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15348</td>
+<td style="text-align: left;">2046-05-08 20:35:47</td>
+<td style="text-align: left;">list_files</td>
+<td style="text-align: left;">Agent/person:ava_tiller</td>
+<td style="text-align: left;">/</td>
+<td style="text-align: left;">list_files</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>get_detail <span class="ot">&lt;-</span> <span class="cf">function</span>(x, path) {</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">pluck</span>(x, <span class="sc">!!!</span>path, <span class="at">.default =</span> <span class="cn">NA_character_</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(out) <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> <span class="fu">is.null</span>(out) <span class="sc">||</span> <span class="fu">all</span>(<span class="fu">is.na</span>(out))) {</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="cn">NA_character_</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.character</span>(out[<span class="dv">1</span>])</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>get_party <span class="ot">&lt;-</span> <span class="cf">function</span>(x, position) {</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(x) <span class="sc">&gt;=</span> position) {</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.character</span>(x[position])</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    <span class="cn">NA_character_</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>get_contacts <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>  contacts <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">pluck</span>(x, <span class="st">"contacts"</span>, <span class="at">.default =</span> <span class="cn">NA_character_</span>)</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(contacts) <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> <span class="fu">all</span>(<span class="fu">is.na</span>(contacts))) {</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>    <span class="cn">NA_character_</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(<span class="fu">unlist</span>(contacts), <span class="at">collapse =</span> <span class="st">"; "</span>)</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>event_edges <span class="ot">&lt;-</span> events <span class="sc">|&gt;</span></span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">from =</span> <span class="fu">case_when</span>(</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>      short_name <span class="sc">==</span> <span class="st">"sent"</span> <span class="sc">~</span> <span class="fu">map_chr</span>(details, <span class="sc">~</span> <span class="fu">get_detail</span>(.x, <span class="fu">c</span>(<span class="st">"from"</span>))),</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>      short_name <span class="sc">==</span> <span class="st">"propose_meeting"</span> <span class="sc">~</span> <span class="fu">map_chr</span>(details, <span class="sc">~</span> <span class="fu">get_detail</span>(.x, <span class="fu">c</span>(<span class="st">"a2a"</span>, <span class="st">"from"</span>))),</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>      short_name <span class="sc">==</span> <span class="st">"queue_subordinate_task"</span> <span class="sc">~</span> <span class="fu">map_chr</span>(parties, <span class="sc">~</span> <span class="fu">get_party</span>(.x, <span class="dv">1</span>)),</span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>      short_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"read_file"</span>, <span class="st">"list_files"</span>, <span class="st">"access_files"</span>) <span class="sc">~</span> <span class="fu">map_chr</span>(parties, <span class="sc">~</span> <span class="fu">get_party</span>(.x, <span class="dv">1</span>)),</span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>      short_name <span class="sc">==</span> <span class="st">"suggest_contacts"</span> <span class="sc">~</span> <span class="fu">map_chr</span>(parties, <span class="sc">~</span> <span class="fu">get_party</span>(.x, <span class="dv">1</span>)),</span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span></span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">to =</span> <span class="fu">case_when</span>(</span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>      short_name <span class="sc">==</span> <span class="st">"sent"</span> <span class="sc">~</span> <span class="fu">map_chr</span>(details, <span class="sc">~</span> <span class="fu">get_detail</span>(.x, <span class="fu">c</span>(<span class="st">"to"</span>))),</span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a>      short_name <span class="sc">==</span> <span class="st">"propose_meeting"</span> <span class="sc">~</span> <span class="fu">map_chr</span>(details, <span class="sc">~</span> <span class="fu">get_detail</span>(.x, <span class="fu">c</span>(<span class="st">"a2a"</span>, <span class="st">"to"</span>))),</span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a>      short_name <span class="sc">==</span> <span class="st">"queue_subordinate_task"</span> <span class="sc">~</span> <span class="fu">map_chr</span>(parties, <span class="sc">~</span> <span class="fu">get_party</span>(.x, <span class="dv">2</span>)),</span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>      short_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"read_file"</span>, <span class="st">"list_files"</span>) <span class="sc">~</span> <span class="fu">map_chr</span>(details, <span class="sc">~</span> <span class="fu">get_detail</span>(.x, <span class="fu">c</span>(<span class="st">"target"</span>))),</span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a>      short_name <span class="sc">==</span> <span class="st">"access_files"</span> <span class="sc">~</span> <span class="fu">map_chr</span>(details, <span class="sc">~</span> <span class="fu">get_detail</span>(.x, <span class="fu">c</span>(<span class="st">"file"</span>))),</span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a>      short_name <span class="sc">==</span> <span class="st">"suggest_contacts"</span> <span class="sc">~</span> <span class="fu">map_chr</span>(details, get_contacts),</span>
+<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span></span>
+<span id="cb25-59"><a href="#cb25-59" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb25-60"><a href="#cb25-60" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-61"><a href="#cb25-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">edge_type =</span> short_name</span>
+<span id="cb25-62"><a href="#cb25-62" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb25-63"><a href="#cb25-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb25-64"><a href="#cb25-64" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(from),</span>
+<span id="cb25-65"><a href="#cb25-65" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(to),</span>
+<span id="cb25-66"><a href="#cb25-66" aria-hidden="true" tabindex="-1"></a>    from <span class="sc">!=</span> <span class="st">""</span>,</span>
+<span id="cb25-67"><a href="#cb25-67" aria-hidden="true" tabindex="-1"></a>    to <span class="sc">!=</span> <span class="st">""</span>,</span>
+<span id="cb25-68"><a href="#cb25-68" aria-hidden="true" tabindex="-1"></a>    to <span class="sc">!=</span> <span class="st">"NA"</span></span>
+<span id="cb25-69"><a href="#cb25-69" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb25-70"><a href="#cb25-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb25-71"><a href="#cb25-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">event_id =</span> id,</span>
+<span id="cb25-72"><a href="#cb25-72" aria-hidden="true" tabindex="-1"></a>    datetime,</span>
+<span id="cb25-73"><a href="#cb25-73" aria-hidden="true" tabindex="-1"></a>    short_name,</span>
+<span id="cb25-74"><a href="#cb25-74" aria-hidden="true" tabindex="-1"></a>    from,</span>
+<span id="cb25-75"><a href="#cb25-75" aria-hidden="true" tabindex="-1"></a>    to,</span>
+<span id="cb25-76"><a href="#cb25-76" aria-hidden="true" tabindex="-1"></a>    edge_type</span>
+<span id="cb25-77"><a href="#cb25-77" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-78"><a href="#cb25-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-79"><a href="#cb25-79" aria-hidden="true" tabindex="-1"></a>event_edges <span class="sc">|&gt;</span></span>
+<span id="cb25-80"><a href="#cb25-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-81"><a href="#cb25-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"First 10 records of event_edges"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="check-edge-types" class="level3">
+<h3 class="anchored" data-anchor-id="check-edge-types">Check edge types</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Number of edges created by event type</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">edge_type</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">read_file</td>
+<td style="text-align: right;">18838</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sent</td>
+<td style="text-align: right;">7407</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">suggest_contacts</td>
+<td style="text-align: right;">2972</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">propose_meeting</td>
+<td style="text-align: right;">2957</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">list_files</td>
+<td style="text-align: right;">2640</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">queue_subordinate_task</td>
+<td style="text-align: right;">1689</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">access_files</td>
+<td style="text-align: right;">1504</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>event_edges <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(edge_type, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Number of edges created by event type"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="creating-event-nodes" class="level3">
+<h3 class="anchored" data-anchor-id="creating-event-nodes">Creating event nodes</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>First 10 records of event_nodes</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">node_type</th>
+<th style="text-align: left;">label</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">person:isaac_mast</td>
+<td style="text-align: left;">Person</td>
+<td style="text-align: left;">Isaac Mast</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">agent:person:isaac_mast</td>
+<td style="text-align: left;">Agent</td>
+<td style="text-align: left;">Isaac Mast</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Agent/person:lily_anchorline</td>
+<td style="text-align: left;">Agent</td>
+<td style="text-align: left;">Lily Anchorline</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">person:lily_anchorline</td>
+<td style="text-align: left;">Person</td>
+<td style="text-align: left;">Lily Anchorline</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">agent:person:lily_anchorline</td>
+<td style="text-align: left;">Agent</td>
+<td style="text-align: left;">Lily Anchorline</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Agent/person:david_breakwater</td>
+<td style="text-align: left;">Agent</td>
+<td style="text-align: left;">David Breakwater</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Agent/person:gabriel_sonar</td>
+<td style="text-align: left;">Agent</td>
+<td style="text-align: left;">Gabriel Sonar</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Agent/person:ava_tiller</td>
+<td style="text-align: left;">Agent</td>
+<td style="text-align: left;">Ava Tiller</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Agent/person:alexander_jetty</td>
+<td style="text-align: left;">Agent</td>
+<td style="text-align: left;">Alexander Jetty</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Agent/person:hannah_starboard</td>
+<td style="text-align: left;">Agent</td>
+<td style="text-align: left;">Hannah Starboard</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>event_nodes <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="fu">unique</span>(<span class="fu">c</span>(event_edges<span class="sc">$</span>from, event_edges<span class="sc">$</span>to))</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">node_type =</span> <span class="fu">case_when</span>(</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(name, <span class="st">"^person:"</span>) <span class="sc">~</span> <span class="st">"Person"</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(name, <span class="st">"^Agent/"</span>) <span class="sc">~</span> <span class="st">"Agent"</span>,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(name, <span class="st">"^agent:"</span>) <span class="sc">~</span> <span class="st">"Agent"</span>,</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(name, <span class="st">"^world:"</span>) <span class="sc">~</span> <span class="st">"System"</span>,</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(name, <span class="st">"^team:"</span>) <span class="sc">~</span> <span class="st">"Team"</span>,</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(name, <span class="st">"^company:"</span>) <span class="sc">~</span> <span class="st">"Company"</span>,</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(name, <span class="st">"</span><span class="sc">\\</span><span class="st">.json$"</span>) <span class="sc">~</span> <span class="st">"File"</span>,</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>      name <span class="sc">==</span> <span class="st">"/"</span> <span class="sc">~</span> <span class="st">"File System"</span>,</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Other"</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> name <span class="sc">|&gt;</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_remove</span>(<span class="st">"^person:"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_remove</span>(<span class="st">"^Agent/person:"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_remove</span>(<span class="st">"^agent:person:"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_remove</span>(<span class="st">"^world:"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_replace_all</span>(<span class="st">"_"</span>, <span class="st">" "</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_replace_all</span>(<span class="st">":"</span>, <span class="st">" "</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_to_title</span>()</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>event_nodes <span class="sc">|&gt;</span></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"First 10 records of event_nodes"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="check-node-types" class="level3">
+<h3 class="anchored" data-anchor-id="check-node-types">Check node types</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Number of nodes by node type</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">node_type</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Person</td>
+<td style="text-align: right;">1978</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Team</td>
+<td style="text-align: right;">769</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Other</td>
+<td style="text-align: right;">332</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">File</td>
+<td style="text-align: right;">105</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Agent</td>
+<td style="text-align: right;">98</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Company</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">File System</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">System</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>event_nodes <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(node_type, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Number of nodes by node type"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="creating-event-graph" class="level3">
+<h3 class="anchored" data-anchor-id="creating-event-graph">Creating event graph</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tbl_graph: 3315 nodes and 38007 edges
+#
+# A directed multigraph with 3 components
+#
+# Node Data: 3,315 × 3 (active)
+   name                          node_type label           
+   &lt;chr&gt;                         &lt;chr&gt;     &lt;chr&gt;           
+ 1 person:isaac_mast             Person    Isaac Mast      
+ 2 agent:person:isaac_mast       Agent     Isaac Mast      
+ 3 Agent/person:lily_anchorline  Agent     Lily Anchorline 
+ 4 person:lily_anchorline        Person    Lily Anchorline 
+ 5 agent:person:lily_anchorline  Agent     Lily Anchorline 
+ 6 Agent/person:david_breakwater Agent     David Breakwater
+ 7 Agent/person:gabriel_sonar    Agent     Gabriel Sonar   
+ 8 Agent/person:ava_tiller       Agent     Ava Tiller      
+ 9 Agent/person:alexander_jetty  Agent     Alexander Jetty 
+10 Agent/person:hannah_starboard Agent     Hannah Starboard
+# ℹ 3,305 more rows
+#
+# Edge Data: 38,007 × 6
+   from    to event_id datetime            short_name      edge_type      
+  &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;dttm&gt;              &lt;chr&gt;           &lt;chr&gt;          
+1     1   124    15246 2046-05-08 20:18:12 sent            sent           
+2     2   148    15249 2046-05-08 20:19:02 propose_meeting propose_meeting
+3     3   149    15285 2046-05-08 20:25:00 list_files      list_files     
+# ℹ 38,004 more rows</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>event_graph <span class="ot">&lt;-</span> <span class="fu">tbl_graph</span>(</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">nodes =</span> event_nodes,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">edges =</span> event_edges,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">TRUE</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>event_graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="graph-summary" class="level3">
+<h3 class="anchored" data-anchor-id="graph-summary">Graph summary</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Summary of constructed event interaction graph</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">total_nodes</th>
+<th style="text-align: right;">total_edges</th>
+<th style="text-align: left;">directed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">3315</td>
+<td style="text-align: right;">38007</td>
+<td style="text-align: left;">TRUE</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">total_nodes =</span> <span class="fu">gorder</span>(event_graph),</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">total_edges =</span> <span class="fu">gsize</span>(event_graph),</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="fu">is_directed</span>(event_graph)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Summary of constructed event interaction graph"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="creating-organisation-network" class="level2">
+<h2 class="anchored" data-anchor-id="creating-organisation-network">Creating organisation network</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tbl_graph: 75 nodes and 74 edges
+#
+# A rooted tree
+#
+# Node Data: 75 × 4 (active)
+   id                                  label                    type       title
+   &lt;chr&gt;                               &lt;chr&gt;                    &lt;chr&gt;      &lt;chr&gt;
+ 1 company:tenant_thread               Tenant Thread            company    &lt;NA&gt; 
+ 2 department:executive_suite          Executive Suite          department &lt;NA&gt; 
+ 3 department:products                 Products                 department &lt;NA&gt; 
+ 4 department:human_resources          Human Resources          department &lt;NA&gt; 
+ 5 department:legal                    Legal                    department &lt;NA&gt; 
+ 6 department:information_technologies Information Technologies department &lt;NA&gt; 
+ 7 department:customer_support         Customer Support         department &lt;NA&gt; 
+ 8 team:residential_app                Residential App          team       &lt;NA&gt; 
+ 9 team:property_ops_console           Property Ops Console     team       &lt;NA&gt; 
+10 team:analytics_suite                Analytics Suite          team       &lt;NA&gt; 
+# ℹ 65 more rows
+#
+# Edge Data: 74 × 3
+   from    to relation
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;   
+1     1     2 contains
+2     1     3 contains
+3     1     4 contains
+# ℹ 71 more rows</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>org_graph <span class="ot">&lt;-</span> <span class="fu">tbl_graph</span>(</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">nodes =</span> org_nodes,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">edges =</span> org_edges,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">TRUE</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>org_graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Summary of constructed organisation graph</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">total_org_nodes</th>
+<th style="text-align: right;">total_org_edges</th>
+<th style="text-align: left;">directed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: left;">TRUE</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">total_org_nodes =</span> <span class="fu">gorder</span>(org_graph),</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">total_org_edges =</span> <span class="fu">gsize</span>(org_graph),</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="fu">is_directed</span>(org_graph)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Summary of constructed organisation graph"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="integrating-organisation-structure" class="level2">
 <h2 class="anchored" data-anchor-id="integrating-organisation-structure">Integrating organisation structure</h2>
+<p>This is to link employees appearing in the event logs to their organisational context from the organisational chart.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" role="tab" aria-controls="tabset-10-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" role="tab" aria-controls="tabset-10-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>First 10 event actors linked with organisation chart</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">party</th>
+<th style="text-align: left;">person_label</th>
+<th style="text-align: left;">title</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">person:isaac_mast</td>
+<td style="text-align: left;">Isaac Mast</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">person:levi_signal</td>
+<td style="text-align: left;">Levi Signal</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">person:avery_sextant</td>
+<td style="text-align: left;">Avery Sextant</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">person:sophia_beacon</td>
+<td style="text-align: left;">Sophia Beacon</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">person:mia_fender</td>
+<td style="text-align: left;">Mia Fender</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">person:lily_anchorline</td>
+<td style="text-align: left;">Lily Anchorline</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">person:sebastian_cutter</td>
+<td style="text-align: left;">Sebastian Cutter</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">person:gabriel_sonar</td>
+<td style="text-align: left;">Gabriel Sonar</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">person:alexander_jetty</td>
+<td style="text-align: left;">Alexander Jetty</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">person:ava_tiller</td>
+<td style="text-align: left;">Ava Tiller</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>People appearing in event logs but not found in organisation chart</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">party</th>
+<th style="text-align: left;">person_label</th>
+<th style="text-align: left;">title</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>event_people <span class="ot">&lt;-</span> event_parties <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(actor_type <span class="sc">==</span> <span class="st">"Person"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(party)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>people_org_lookup <span class="ot">&lt;-</span> org_nodes <span class="sc">|&gt;</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">"person"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">party =</span> id,</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">person_label =</span> label,</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    title</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>event_people_org <span class="ot">&lt;-</span> event_people <span class="sc">|&gt;</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    people_org_lookup,</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"party"</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>event_people_org <span class="sc">|&gt;</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"First 10 event actors linked with organisation chart"</span>)</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>event_people_org <span class="sc">|&gt;</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(person_label)) <span class="sc">|&gt;</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"People appearing in event logs but not found in organisation chart"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="system-overview" class="level1">
 <h1>System overview</h1>
+<p>The purpose is to provide context to understand where anomalous event occurred. There is a need to understand what “normal” activity looks like before investigating the anomaly.</p>
+<section id="event-log-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="event-log-analysis">Event log analysis</h2>
+<p>Summarising what we learnt from the event log.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" role="tab" aria-controls="tabset-11-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" role="tab" aria-controls="tabset-11-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-11-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-11-1-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  total_events earliest_event      latest_event       
+         &lt;int&gt; &lt;dttm&gt;              &lt;dttm&gt;             
+1       185147 2046-05-08 20:18:12 2046-07-16 17:05:59</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-11-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>events <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_events =</span> <span class="fu">n</span>(),</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">earliest_event =</span> <span class="fu">min</span>(datetime),</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">latest_event =</span> <span class="fu">max</span>(datetime)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-12-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-1" role="tab" aria-controls="tabset-12-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-12-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-2" role="tab" aria-controls="tabset-12-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-12-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-12-1-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 24 × 2
+   short_name                 n
+   &lt;chr&gt;                  &lt;int&gt;
+ 1 check_email            37286
+ 2 assign_agent_task      18856
+ 3 read_file              18838
+ 4 queue_subordinate_task 17038
+ 5 create_file            16000
+ 6 delete_file            15057
+ 7 check_in               15051
+ 8 sent                    7407
+ 9 received                7266
+10 access_email            6442
+# ℹ 14 more rows</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-12-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-12-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>events <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(short_name, <span class="at">sort =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-13-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-1" role="tab" aria-controls="tabset-13-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-13-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-2" role="tab" aria-controls="tabset-13-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-13-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-13-1-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  n_parties      n
+      &lt;int&gt;  &lt;int&gt;
+1         1 105268
+2         2  76877
+3         3   1054
+4         4    959
+5         5    989</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-13-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-13-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>events <span class="sc">|&gt;</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(n_parties)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-14-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-14-1" role="tab" aria-controls="tabset-14-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-14-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-14-2" role="tab" aria-controls="tabset-14-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-14-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-14-1-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  actor_type      n
+  &lt;chr&gt;       &lt;int&gt;
+1 Agent      101326
+2 Other       55502
+3 Person     111180
+4 System       2957</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-14-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-14-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>event_parties <span class="sc">|&gt;</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(actor_type)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="event-log-summary-table" class="level2">
+<h2 class="anchored" data-anchor-id="event-log-summary-table">Event log summary table:</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-15-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-15-1" role="tab" aria-controls="tabset-15-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-15-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-15-2" role="tab" aria-controls="tabset-15-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-15-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-15-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Summary of Event Log</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metric</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Total Events</td>
+<td style="text-align: right;">185147</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Unique Event Types</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Earliest Event</td>
+<td style="text-align: right;">2409423492</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Latest Event</td>
+<td style="text-align: right;">2415373559</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tabset-15-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-15-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>event_summary <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Metric =</span> <span class="fu">c</span>(</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Total Events"</span>,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Unique Event Types"</span>,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Earliest Event"</span>,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Latest Event"</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Value =</span> <span class="fu">c</span>(</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nrow</span>(events),</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">n_distinct</span>(events<span class="sc">$</span>short_name),</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">min</span>(events<span class="sc">$</span>datetime),</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">max</span>(events<span class="sc">$</span>datetime)</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>event_summary <span class="sc">|&gt;</span></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Summary of Event Log"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="event-participant-composition" class="level2">
+<h2 class="anchored" data-anchor-id="event-participant-composition">Event participant composition:</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-16-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-16-1" role="tab" aria-controls="tabset-16-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-16-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-16-2" role="tab" aria-controls="tabset-16-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-16-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-16-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take_Home_Exercise_2_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-16-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-16-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>event_parties <span class="sc">|&gt;</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(actor_type) <span class="sc">|&gt;</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="fu">reorder</span>(actor_type, n),</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> n</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Composition of Actors Appearing in Event Logs"</span>,</span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Actor Type"</span>,</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Appearances"</span></span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="events-by-number-of-parties" class="level2">
+<h2 class="anchored" data-anchor-id="events-by-number-of-parties">Events by number of parties:</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-17-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-1" role="tab" aria-controls="tabset-17-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-17-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-2" role="tab" aria-controls="tabset-17-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-17-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-17-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take_Home_Exercise_2_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-17-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-17-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>events <span class="sc">|&gt;</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(n_parties) <span class="sc">|&gt;</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="fu">factor</span>(n_parties),</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> n</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Number of Participants per Event"</span>,</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Number of Parties"</span>,</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Events"</span></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="event-type-distribution-visual" class="level2">
+<h2 class="anchored" data-anchor-id="event-type-distribution-visual">Event type distribution visual</h2>
+<p>Here we aim to find what activities dominate the system.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-18-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-18-1" role="tab" aria-controls="tabset-18-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-18-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-18-2" role="tab" aria-controls="tabset-18-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-18-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-18-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take_Home_Exercise_2_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-18-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-18-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>event_type_counts <span class="ot">&lt;-</span> events <span class="sc">|&gt;</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(short_name, <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>event_type_counts <span class="sc">|&gt;</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="fu">reorder</span>(short_name, n),</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> n</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Event Types in Tenant Thread Activity Logs"</span>,</span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"This shows which activities dominate the multi-agent system."</span>,</span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Event Type"</span>,</span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Events"</span></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="daily-system-activity-visual" class="level2">
+<h2 class="anchored" data-anchor-id="daily-system-activity-visual">Daily system activity visual</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-19-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-19-1" role="tab" aria-controls="tabset-19-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-19-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-19-2" role="tab" aria-controls="tabset-19-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-19-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-19-1-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  min_date   max_date   n_days
+  &lt;date&gt;     &lt;date&gt;      &lt;int&gt;
+1 2046-05-08 2046-07-16     70</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-19-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-19-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>events <span class="sc">|&gt;</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_date =</span> <span class="fu">min</span>(date),</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_date =</span> <span class="fu">max</span>(date),</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_days =</span> <span class="fu">n_distinct</span>(date)</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<p>This shows there are 70 records, 70 distinct days, therefore we can do a daily activity line chart.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-20-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-20-1" role="tab" aria-controls="tabset-20-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-20-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-20-2" role="tab" aria-controls="tabset-20-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-20-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-20-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take_Home_Exercise_2_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-20-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-20-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>daily_activity <span class="ot">&lt;-</span> events <span class="sc">|&gt;</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(date)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>daily_activity <span class="sc">|&gt;</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> date,</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> n</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Daily System Activity Over Time"</span>,</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Number of events recorded per day"</span>,</span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Date"</span>,</span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Events"</span></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="most-common-interaction-paths" class="level2">
+<h2 class="anchored" data-anchor-id="most-common-interaction-paths">Most common interaction paths</h2>
+<p>Here, it would be necessary to discover which interactions occur most frequently within the multi-agent system.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-21-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-21-1" role="tab" aria-controls="tabset-21-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-21-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-21-2" role="tab" aria-controls="tabset-21-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-21-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-21-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take_Home_Exercise_2_files/figure-html/unnamed-chunk-47-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-21-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-21-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>common_paths <span class="ot">&lt;-</span> event_edges <span class="sc">|&gt;</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(from, to, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">15</span>) <span class="sc">|&gt;</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">interaction_path =</span> <span class="fu">paste</span>(from, <span class="st">"→"</span>, to)</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>common_paths <span class="sc">|&gt;</span></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="fu">reorder</span>(interaction_path, n),</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> n</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Most Common Interaction Paths"</span>,</span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Top 15 interaction paths observed in the system"</span>,</span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Interaction Path"</span>,</span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Frequency"</span></span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="system-interaction-network-visual" class="level2">
+<h2 class="anchored" data-anchor-id="system-interaction-network-visual">system interaction network visual</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-22-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-22-1" role="tab" aria-controls="tabset-22-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-22-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-22-2" role="tab" aria-controls="tabset-22-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-22-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-22-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take_Home_Exercise_2_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-22-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-22-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(event_graph,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">layout =</span> <span class="st">"fr"</span>) <span class="sc">+</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.15</span>,</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"grey70"</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(</span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">colour =</span> node_type),</span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span></span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"System Interaction Network"</span>,</span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Interactions between people, agents, systems and files"</span></span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_graph</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="organisation-structure-visual" class="level2">
+<h2 class="anchored" data-anchor-id="organisation-structure-visual">Organisation structure visual</h2>
+<p>The purpose is to show where John Winward sits in the company, which gives organisational context. This will help give context and insight when looking into this event chain containing the anomaly post by John.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-23-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-23-1" role="tab" aria-controls="tabset-23-1" aria-selected="true" href="">The plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-23-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-23-2" role="tab" aria-controls="tabset-23-2" aria-selected="false" href="">The code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-23-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-23-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take_Home_Exercise_2_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-23-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-23-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>john_org_nodes <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"company:tenant_thread"</span>,</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"department:customer_support"</span>,</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"team:phone_center"</span>,</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"team:billing"</span>,</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"team:concierge"</span>,</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"team:public_relations"</span>,</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"person:john_windward"</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>customer_support_nodes <span class="ot">&lt;-</span> org_nodes <span class="sc">|&gt;</span></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(id <span class="sc">%in%</span> john_org_nodes) <span class="sc">|&gt;</span></span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">highlight =</span> id <span class="sc">==</span> <span class="st">"person:john_windward"</span></span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a>customer_support_edges <span class="ot">&lt;-</span> org_edges <span class="sc">|&gt;</span></span>
+<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>    source <span class="sc">%in%</span> john_org_nodes,</span>
+<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a>    target <span class="sc">%in%</span> john_org_nodes</span>
+<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb53-22"><a href="#cb53-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-23"><a href="#cb53-23" aria-hidden="true" tabindex="-1"></a>customer_support_graph <span class="ot">&lt;-</span> <span class="fu">tbl_graph</span>(</span>
+<span id="cb53-24"><a href="#cb53-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">nodes =</span> customer_support_nodes,</span>
+<span id="cb53-25"><a href="#cb53-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">edges =</span> customer_support_edges,</span>
+<span id="cb53-26"><a href="#cb53-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">TRUE</span></span>
+<span id="cb53-27"><a href="#cb53-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-28"><a href="#cb53-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-29"><a href="#cb53-29" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb53-30"><a href="#cb53-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-31"><a href="#cb53-31" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(customer_support_graph, <span class="at">layout =</span> <span class="st">"tree"</span>) <span class="sc">+</span></span>
+<span id="cb53-32"><a href="#cb53-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(</span>
+<span id="cb53-33"><a href="#cb53-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">"mm"</span>)),</span>
+<span id="cb53-34"><a href="#cb53-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">end_cap =</span> <span class="fu">circle</span>(<span class="dv">2</span>, <span class="st">"mm"</span>),</span>
+<span id="cb53-35"><a href="#cb53-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"grey70"</span></span>
+<span id="cb53-36"><a href="#cb53-36" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb53-37"><a href="#cb53-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(</span>
+<span id="cb53-38"><a href="#cb53-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb53-39"><a href="#cb53-39" aria-hidden="true" tabindex="-1"></a>      <span class="at">colour =</span> type,</span>
+<span id="cb53-40"><a href="#cb53-40" aria-hidden="true" tabindex="-1"></a>      <span class="at">size =</span> highlight</span>
+<span id="cb53-41"><a href="#cb53-41" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb53-42"><a href="#cb53-42" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb53-43"><a href="#cb53-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(</span>
+<span id="cb53-44"><a href="#cb53-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> label),</span>
+<span id="cb53-45"><a href="#cb53-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">repel =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb53-46"><a href="#cb53-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span></span>
+<span id="cb53-47"><a href="#cb53-47" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb53-48"><a href="#cb53-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_manual</span>(</span>
+<span id="cb53-49"><a href="#cb53-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"FALSE"</span> <span class="ot">=</span> <span class="dv">3</span>, <span class="st">"TRUE"</span> <span class="ot">=</span> <span class="dv">6</span>),</span>
+<span id="cb53-50"><a href="#cb53-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">guide =</span> <span class="st">"none"</span></span>
+<span id="cb53-51"><a href="#cb53-51" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb53-52"><a href="#cb53-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb53-53"><a href="#cb53-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Organisation Structure Around John Windward"</span>,</span>
+<span id="cb53-54"><a href="#cb53-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"John Windward is highlighted within the Customer Support department"</span>,</span>
+<span id="cb53-55"><a href="#cb53-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Node Type"</span></span>
+<span id="cb53-56"><a href="#cb53-56" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb53-57"><a href="#cb53-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_graph</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="extracting-the-anomalous-chain" class="level1">
+<h1>Extracting the anomalous chain</h1>
+<p>The purpose is to reconstruct the exact sequence of events leading to the anomalous post.</p>
+<section id="locating-the-target-event" class="level2">
+<h2 class="anchored" data-anchor-id="locating-the-target-event">Locating the target event</h2>
+</section>
+<section id="event-window-extraction" class="level2">
+<h2 class="anchored" data-anchor-id="event-window-extraction">event window extraction</h2>
+</section>
+<section id="incident-timeline-visual" class="level2">
+<h2 class="anchored" data-anchor-id="incident-timeline-visual">Incident timeline visual</h2>
+</section>
+<section id="event-chain-network" class="level2">
+<h2 class="anchored" data-anchor-id="event-chain-network">Event chain network</h2>
+</section>
+<section id="key-actors-involved" class="level2">
+<h2 class="anchored" data-anchor-id="key-actors-involved">key actors involved</h2>
+</section>
+</section>
+<section id="content-origin-analysis" class="level1">
+<h1>Content origin analysis</h1>
+<p>The purpose is to determine what the post means and where its contents originated.</p>
+<section id="extract-text-sources" class="level2">
+<h2 class="anchored" data-anchor-id="extract-text-sources">Extract text sources</h2>
+</section>
+<section id="content-similarity-analysis-visual" class="level2">
+<h2 class="anchored" data-anchor-id="content-similarity-analysis-visual">Content Similarity Analysis visual</h2>
+</section>
+<section id="evidence-supporting-content-origin" class="level2">
+<h2 class="anchored" data-anchor-id="evidence-supporting-content-origin">Evidence supporting content origin</h2>
+</section>
+<section id="interpretation-of-post-meaning" class="level2">
+<h2 class="anchored" data-anchor-id="interpretation-of-post-meaning">interpretation of post meaning</h2>
+</section>
+</section>
+<section id="historical-behaviour-analysis" class="level1">
+<h1>Historical behaviour analysis</h1>
+<p>The purpose is to determine where the incident is isolated. Also, to determine whether similar incidents occurred previously.</p>
+<section id="identifying-similar-events" class="level2">
+<h2 class="anchored" data-anchor-id="identifying-similar-events">Identifying similar events</h2>
+</section>
+<section id="historical-incident-timeline" class="level2">
+<h2 class="anchored" data-anchor-id="historical-incident-timeline">Historical incident timeline</h2>
+</section>
+<section id="comparative-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="comparative-analysis">Comparative analysis</h2>
+<p>Using the comparison table, compare between historical cases and the May 17 incident.</p>
+</section>
+<section id="historical-event-chain-comparison" class="level2">
+<h2 class="anchored" data-anchor-id="historical-event-chain-comparison">Historical event chain comparison</h2>
+</section>
+</section>
+<section id="intervention-analysis" class="level1">
+<h1>Intervention analysis</h1>
+<section id="centrality-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="centrality-analysis">Centrality analysis</h2>
+</section>
+<section id="critical-node-analysis-visual" class="level2">
+<h2 class="anchored" data-anchor-id="critical-node-analysis-visual">Critical node analysis visual</h2>
+</section>
+<section id="candidate-intervention-points" class="level2">
+<h2 class="anchored" data-anchor-id="candidate-intervention-points">Candidate intervention points</h2>
+</section>
+<section id="recommended-intervention" class="level2">
+<h2 class="anchored" data-anchor-id="recommended-intervention">Recommended intervention</h2>
+</section>
+</section>
+<section id="mini-challenge-answers" class="level1">
+<h1>Mini challenge answers</h1>
+<ol type="1">
+<li><p>How was the anomalous SaidIT post made?</p></li>
+<li><p>What does the post mean?</p></li>
+<li><p>Are there prior occurrences?</p></li>
+<li><p>What intervention should be implemented?</p></li>
+</ol>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
 
 
 </section>
