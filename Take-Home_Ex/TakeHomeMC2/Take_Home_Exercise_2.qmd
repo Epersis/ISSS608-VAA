@@ -1427,13 +1427,457 @@ The purpose is to reconstruct the exact sequence of events leading to the anomal
 
 ## Locating  the target event
 
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+events_text <- events |>
+  mutate(
+    details_text = map_chr(
+      details,
+      ~ paste(unlist(.x), collapse = " | ")
+    )
+  )
+
+target_candidates <- events_text |>
+  filter(
+    date == as.Date("2046-05-17"),
+    str_detect(details_text, regex("john_windward|saidit|said_it|said it", ignore_case = TRUE)) |
+      map_lgl(parties, ~ any(str_detect(.x, regex("john_windward", ignore_case = TRUE))))
+  ) |>
+  arrange(datetime)
+
+target_candidates |>
+  select(id, datetime, short_name, n_parties, details_text) |>
+  kable(caption = "Candidate events related to John Windward or SaidIT on 17 May 2046")
+
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+events_text <- events |>
+  mutate(
+    details_text = map_chr(
+      details,
+      ~ paste(unlist(.x), collapse = " | ")
+    )
+  )
+
+target_candidates <- events_text |>
+  filter(
+    date == as.Date("2046-05-17"),
+    str_detect(details_text, regex("john_windward|saidit|said_it|said it", ignore_case = TRUE)) |
+      map_lgl(parties, ~ any(str_detect(.x, regex("john_windward", ignore_case = TRUE))))
+  ) |>
+  arrange(datetime)
+
+target_candidates |>
+  select(id, datetime, short_name, n_parties, details_text) |>
+  kable(caption = "Candidate events related to John Windward or SaidIT on 17 May 2046")
+
+```
+:::
+
 ## event window extraction
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+target_time <- as.POSIXct(
+  "2046-05-17 04:21:00",
+  tz = "UTC"
+)
+
+incident_window_events <- events_text |>
+  filter(
+    datetime >= target_time - hours(24),
+    datetime <= target_time + hours(1)
+  ) |>
+  arrange(datetime)
+
+incident_window_events |>
+  select(id, datetime, short_name, n_parties, details_text) |>
+  slice_head(n = 30) |>
+  kable(caption = "First 30 events in the 24-hour window before the anomalous post")
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+target_time <- as.POSIXct(
+  "2046-05-17 04:21:00",
+  tz = "UTC"
+)
+
+incident_window_events <- events_text |>
+  filter(
+    datetime >= target_time - hours(24),
+    datetime <= target_time + hours(1)
+  ) |>
+  arrange(datetime)
+
+incident_window_events |>
+  select(id, datetime, short_name, n_parties, details_text) |>
+  slice_head(n = 30) |>
+  kable(caption = "First 30 events in the 24-hour window before the anomalous post")
+
+```
+:::
 
 ## Incident timeline visual
 
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+incident_timeline <- incident_window_events |>
+  mutate(
+    is_target = abs(as.numeric(difftime(datetime, target_time, units = "mins"))) <= 1,
+    related_to_john = str_detect(details_text, regex("john_windward", ignore_case = TRUE)) |
+      map_lgl(parties, ~ any(str_detect(.x, regex("john_windward", ignore_case = TRUE))))
+  )
+
+incident_timeline |>
+  ggplot(
+    aes(
+      x = datetime,
+      y = short_name
+    )
+  ) +
+  geom_point(
+    aes(
+      shape = related_to_john,
+      size = is_target
+    ),
+    alpha = 0.8
+  ) +
+  geom_vline(
+    xintercept = target_time,
+    linetype = "dashed"
+  ) +
+  labs(
+    title = "Incident Timeline Around the Anomalous SaidIT Post",
+    subtitle = "Events within 24 hours before and 1 hour after 17 May 2046, 04:21",
+    x = "Datetime",
+    y = "Event Type",
+    shape = "Related to John Windward",
+    size = "Target Time"
+  ) +
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+incident_timeline <- incident_window_events |>
+  mutate(
+    is_target = abs(as.numeric(difftime(datetime, target_time, units = "mins"))) <= 1,
+    related_to_john = str_detect(details_text, regex("john_windward", ignore_case = TRUE)) |
+      map_lgl(parties, ~ any(str_detect(.x, regex("john_windward", ignore_case = TRUE))))
+  )
+
+incident_timeline |>
+  ggplot(
+    aes(
+      x = datetime,
+      y = short_name
+    )
+  ) +
+  geom_point(
+    aes(
+      shape = related_to_john,
+      size = is_target
+    ),
+    alpha = 0.8
+  ) +
+  geom_vline(
+    xintercept = target_time,
+    linetype = "dashed"
+  ) +
+  labs(
+    title = "Incident Timeline Around the Anomalous SaidIT Post",
+    subtitle = "Events within 24 hours before and 1 hour after 17 May 2046, 04:21",
+    x = "Datetime",
+    y = "Event Type",
+    shape = "Related to John Windward",
+    size = "Target Time"
+  ) +
+  theme_minimal()
+
+```
+:::
+
+
 ## Event chain network
 
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+incident_event_ids <- incident_window_events$id
+
+incident_edges <- event_edges |>
+  filter(event_id %in% incident_event_ids)
+
+john_nodes <- c(
+  "person:john_windward",
+  "Agent/person:john_windward",
+  "agent:person:john_windward"
+)
+
+incident_focus_edges <- incident_edges |>
+  filter(
+    str_detect(from, regex("john_windward|saidit|said_it|said it", ignore_case = TRUE)) |
+      str_detect(to, regex("john_windward|saidit|said_it|said it", ignore_case = TRUE))
+  )
+
+incident_focus_nodes <- tibble(
+  name = unique(c(incident_focus_edges$from, incident_focus_edges$to))
+) |>
+  left_join(event_nodes, by = "name") |>
+  mutate(
+    highlight = case_when(
+      str_detect(name, regex("john_windward", ignore_case = TRUE)) ~ "John Windward",
+      str_detect(name, regex("saidit|said_it|said it", ignore_case = TRUE)) ~ "SaidIT",
+      TRUE ~ "Related Node"
+    )
+  )
+
+incident_focus_graph <- tbl_graph(
+  nodes = incident_focus_nodes,
+  edges = incident_focus_edges,
+  directed = TRUE
+)
+
+set.seed(123)
+
+ggraph(incident_focus_graph, layout = "fr") +
+  geom_edge_link(
+    aes(label = edge_type),
+    alpha = 0.45,
+    colour = "grey60",
+    arrow = arrow(length = unit(2, "mm")),
+    end_cap = circle(2, "mm")
+  ) +
+  geom_node_point(
+    aes(
+      colour = highlight,
+      shape = node_type
+    ),
+    size = 4
+  ) +
+  geom_node_text(
+    aes(label = label),
+    repel = TRUE,
+    size = 3
+  ) +
+  labs(
+    title = "Focused Event Chain Network",
+    subtitle = "Interactions connected to John Windward or SaidIT within the incident window",
+    colour = "Node Role",
+    shape = "Node Type"
+  ) +
+  theme_graph()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+incident_event_ids <- incident_window_events$id
+
+incident_edges <- event_edges |>
+  filter(event_id %in% incident_event_ids)
+
+john_nodes <- c(
+  "person:john_windward",
+  "Agent/person:john_windward",
+  "agent:person:john_windward"
+)
+
+incident_focus_edges <- incident_edges |>
+  filter(
+    str_detect(from, regex("john_windward|saidit|said_it|said it", ignore_case = TRUE)) |
+      str_detect(to, regex("john_windward|saidit|said_it|said it", ignore_case = TRUE))
+  )
+
+incident_focus_nodes <- tibble(
+  name = unique(c(incident_focus_edges$from, incident_focus_edges$to))
+) |>
+  left_join(event_nodes, by = "name") |>
+  mutate(
+    highlight = case_when(
+      str_detect(name, regex("john_windward", ignore_case = TRUE)) ~ "John Windward",
+      str_detect(name, regex("saidit|said_it|said it", ignore_case = TRUE)) ~ "SaidIT",
+      TRUE ~ "Related Node"
+    )
+  )
+
+incident_focus_graph <- tbl_graph(
+  nodes = incident_focus_nodes,
+  edges = incident_focus_edges,
+  directed = TRUE
+)
+
+set.seed(123)
+
+ggraph(incident_focus_graph, layout = "fr") +
+  geom_edge_link(
+    aes(label = edge_type),
+    alpha = 0.45,
+    colour = "grey60",
+    arrow = arrow(length = unit(2, "mm")),
+    end_cap = circle(2, "mm")
+  ) +
+  geom_node_point(
+    aes(
+      colour = highlight,
+      shape = node_type
+    ),
+    size = 4
+  ) +
+  geom_node_text(
+    aes(label = label),
+    repel = TRUE,
+    size = 3
+  ) +
+  labs(
+    title = "Focused Event Chain Network",
+    subtitle = "Interactions connected to John Windward or SaidIT within the incident window",
+    colour = "Node Role",
+    shape = "Node Type"
+  ) +
+  theme_graph()
+
+```
+:::
+
+
 ## key actors involved
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+key_actors <- incident_window_events |>
+  select(id, datetime, short_name, parties) |>
+  unnest_longer(parties, values_to = "party") |>
+  mutate(
+    actor_type = case_when(
+      str_detect(party, "^person:") ~ "Person",
+      str_detect(party, "^Agent/") ~ "Agent",
+      str_detect(party, "^agent:") ~ "Agent",
+      str_detect(party, "^world:") ~ "System",
+      str_detect(party, "^team:") ~ "Team",
+      str_detect(party, "^company:") ~ "Company",
+      TRUE ~ "Other"
+    ),
+    related_to_john = str_detect(party, regex("john_windward", ignore_case = TRUE))
+  ) |>
+  count(party, actor_type, related_to_john, sort = TRUE)
+
+key_actors |>
+  slice_head(n = 20) |>
+  kable(caption = "Most frequent actors in the incident window")
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+key_actors <- incident_window_events |>
+  select(id, datetime, short_name, parties) |>
+  unnest_longer(parties, values_to = "party") |>
+  mutate(
+    actor_type = case_when(
+      str_detect(party, "^person:") ~ "Person",
+      str_detect(party, "^Agent/") ~ "Agent",
+      str_detect(party, "^agent:") ~ "Agent",
+      str_detect(party, "^world:") ~ "System",
+      str_detect(party, "^team:") ~ "Team",
+      str_detect(party, "^company:") ~ "Company",
+      TRUE ~ "Other"
+    ),
+    related_to_john = str_detect(party, regex("john_windward", ignore_case = TRUE))
+  ) |>
+  count(party, actor_type, related_to_john, sort = TRUE)
+
+key_actors |>
+  slice_head(n = 20) |>
+  kable(caption = "Most frequent actors in the incident window")
+```
+:::
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+key_actors |>
+  slice_head(n = 15) |>
+  ggplot(
+    aes(
+      x = reorder(party, n),
+      y = n
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Key Actors in the Incident Window",
+    subtitle = "Top actors appearing in events around the anomalous post",
+    x = "Actor",
+    y = "Number of Event Appearances"
+  ) +
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+key_actors |>
+  slice_head(n = 15) |>
+  ggplot(
+    aes(
+      x = reorder(party, n),
+      y = n
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Key Actors in the Incident Window",
+    subtitle = "Top actors appearing in events around the anomalous post",
+    x = "Actor",
+    y = "Number of Event Appearances"
+  ) +
+  theme_minimal()
+```
+:::
 
 # Content origin analysis
 
@@ -1441,11 +1885,358 @@ The purpose is to determine what the post means and where its contents originate
 
 ## Extract text sources
 
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+text_sources <- events_text |>
+  mutate(
+    text_source = case_when(
+      str_detect(details_text, regex("subject", ignore_case = TRUE)) ~ "Subject / message metadata",
+      str_detect(details_text, regex("advice", ignore_case = TRUE)) ~ "Agent advice",
+      str_detect(details_text, regex("topic", ignore_case = TRUE)) ~ "Topic",
+      str_detect(details_text, regex("post|saidit|forum", ignore_case = TRUE)) ~ "Post / forum content",
+      str_detect(details_text, regex("file|target", ignore_case = TRUE)) ~ "File reference",
+      TRUE ~ "Other text"
+    )
+  ) |>
+  filter(
+    !is.na(details_text),
+    details_text != ""
+  ) |>
+  select(
+    id,
+    datetime,
+    date,
+    short_name,
+    text_source,
+    details_text
+  )
+
+text_sources |>
+  slice_head(n = 10) |>
+  kable(caption = "First 10 extracted text-bearing events")
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+text_sources <- events_text |>
+  mutate(
+    text_source = case_when(
+      str_detect(details_text, regex("subject", ignore_case = TRUE)) ~ "Subject / message metadata",
+      str_detect(details_text, regex("advice", ignore_case = TRUE)) ~ "Agent advice",
+      str_detect(details_text, regex("topic", ignore_case = TRUE)) ~ "Topic",
+      str_detect(details_text, regex("post|saidit|forum", ignore_case = TRUE)) ~ "Post / forum content",
+      str_detect(details_text, regex("file|target", ignore_case = TRUE)) ~ "File reference",
+      TRUE ~ "Other text"
+    )
+  ) |>
+  filter(
+    !is.na(details_text),
+    details_text != ""
+  ) |>
+  select(
+    id,
+    datetime,
+    date,
+    short_name,
+    text_source,
+    details_text
+  )
+
+text_sources |>
+  slice_head(n = 10) |>
+  kable(caption = "First 10 extracted text-bearing events")
+```
+:::
+
 ## Content Similarity Analysis visual
+
+Locate the anomalous post text, then compute similarity with earlier text sources. 
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+target_post <- text_sources |>
+  filter(
+    date == as.Date("2046-05-17"),
+    str_detect(details_text, regex("john_windward|saidit|said_it|said it|forum|post", ignore_case = TRUE))
+  ) |>
+  arrange(
+    abs(as.numeric(difftime(datetime, target_time, units = "mins")))
+  ) |>
+  slice_head(n = 1)
+
+target_post |>
+  select(id, datetime, short_name, details_text) |>
+  kable(caption = "Target anomalous post candidate")
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+target_post <- text_sources |>
+  filter(
+    date == as.Date("2046-05-17"),
+    str_detect(details_text, regex("john_windward|saidit|said_it|said it|forum|post", ignore_case = TRUE))
+  ) |>
+  arrange(
+    abs(as.numeric(difftime(datetime, target_time, units = "mins")))
+  ) |>
+  slice_head(n = 1)
+
+target_post |>
+  select(id, datetime, short_name, details_text) |>
+  kable(caption = "Target anomalous post candidate")
+```
+:::
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+target_text <- target_post$details_text[1]
+
+similarity_results <- text_sources |>
+  filter(
+    datetime < target_post$datetime[1],
+    id != target_post$id[1],
+    !is.na(details_text),
+    details_text != ""
+  ) |>
+  mutate(
+    similarity_score = stringdist::stringsim(
+      details_text,
+      target_text,
+      method = "jw"
+    )
+  ) |>
+  arrange(desc(similarity_score))
+
+similarity_results |>
+  select(
+    id,
+    datetime,
+    short_name,
+    text_source,
+    similarity_score,
+    details_text
+  ) |>
+  slice_head(n = 10) |>
+  kable(caption = "Top 10 text sources most similar to the anomalous post")
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+
+target_text <- target_post$details_text[1]
+
+similarity_results <- text_sources |>
+  filter(
+    datetime < target_post$datetime[1],
+    id != target_post$id[1],
+    !is.na(details_text),
+    details_text != ""
+  ) |>
+  mutate(
+    similarity_score = stringdist::stringsim(
+      details_text,
+      target_text,
+      method = "jw"
+    )
+  ) |>
+  arrange(desc(similarity_score))
+
+similarity_results |>
+  select(
+    id,
+    datetime,
+    short_name,
+    text_source,
+    similarity_score,
+    details_text
+  ) |>
+  slice_head(n = 10) |>
+  kable(caption = "Top 10 text sources most similar to the anomalous post")
+```
+:::
+
+Visual:
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+similarity_results |>
+  slice_head(n = 10) |>
+  mutate(
+    source_label = paste0(short_name, " | ", id)
+  ) |>
+  ggplot(
+    aes(
+      x = reorder(source_label, similarity_score),
+      y = similarity_score
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Most Similar Prior Text Sources",
+    subtitle = "Text similarity between prior system content and the anomalous SaidIT post",
+    x = "Prior Text Source",
+    y = "Similarity Score"
+  ) +
+  theme_minimal()
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+
+similarity_results |>
+  slice_head(n = 10) |>
+  mutate(
+    source_label = paste0(short_name, " | ", id)
+  ) |>
+  ggplot(
+    aes(
+      x = reorder(source_label, similarity_score),
+      y = similarity_score
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Most Similar Prior Text Sources",
+    subtitle = "Text similarity between prior system content and the anomalous SaidIT post",
+    x = "Prior Text Source",
+    y = "Similarity Score"
+  ) +
+  theme_minimal()
+```
+:::
+
 
 ## Evidence supporting content origin
 
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+content_origin_evidence <- similarity_results |>
+  slice_head(n = 5) |>
+  select(
+    id,
+    datetime,
+    short_name,
+    text_source,
+    similarity_score,
+    details_text
+  )
+
+content_origin_evidence |>
+  mutate(
+    details_preview = str_trunc(details_text, width = 120)
+  ) |>
+  select(
+    id,
+    datetime,
+    short_name,
+    text_source,
+    similarity_score,
+    details_preview
+  ) |>
+  kable(caption = "Top evidence for probable content origin")
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+
+content_origin_evidence <- similarity_results |>
+  slice_head(n = 5) |>
+  select(
+    id,
+    datetime,
+    short_name,
+    text_source,
+    similarity_score,
+    details_text
+  )
+
+content_origin_evidence |>
+  mutate(
+    details_preview = str_trunc(details_text, width = 120)
+  ) |>
+  select(
+    id,
+    datetime,
+    short_name,
+    text_source,
+    similarity_score,
+    details_preview
+  ) |>
+  kable(caption = "Top evidence for probable content origin")
+```
+:::
+
+
 ## interpretation of post meaning
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+text_sources |>
+  filter(
+    date == as.Date("2046-05-17"),
+    str_detect(details_text, regex("said|post|forum|john|windward", ignore_case = TRUE))
+  ) |>
+  select(id, datetime, short_name, details_text) |>
+  kable()
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+
+text_sources |>
+  filter(
+    date == as.Date("2046-05-17"),
+    str_detect(details_text, regex("said|post|forum|john|windward", ignore_case = TRUE))
+  ) |>
+  select(id, datetime, short_name, details_text) |>
+  kable()
+```
+:::
 
 # Historical behaviour analysis
 
@@ -1453,23 +2244,645 @@ The purpose is to determine where the incident is isolated. Also, to determine w
 
 ## Identifying similar events
 
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+similarity_threshold <- 0.75
+
+historical_similar_events <- similarity_results |>
+  filter(
+    similarity_score >= similarity_threshold,
+    datetime < target_time
+  ) |>
+  mutate(
+    incident_type = case_when(
+      str_detect(details_text, regex("saidit|said_it|post|forum", ignore_case = TRUE)) ~ "Possible external post",
+      str_detect(details_text, regex("advice|topic", ignore_case = TRUE)) ~ "Agent-generated text",
+      str_detect(details_text, regex("subject|calendar|meeting", ignore_case = TRUE)) ~ "Message / meeting text",
+      str_detect(details_text, regex("file|target", ignore_case = TRUE)) ~ "File-related text",
+      TRUE ~ "Other similar text"
+    )
+  )
+
+historical_similar_events |>
+  select(
+    id,
+    datetime,
+    short_name,
+    incident_type,
+    similarity_score,
+    details_text
+  ) |>
+  slice_head(n = 20) |>
+  kable(caption = "Historical events with similar content to the anomalous post")
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+
+similarity_threshold <- 0.75
+
+historical_similar_events <- similarity_results |>
+  filter(
+    similarity_score >= similarity_threshold,
+    datetime < target_time
+  ) |>
+  mutate(
+    incident_type = case_when(
+      str_detect(details_text, regex("saidit|said_it|post|forum", ignore_case = TRUE)) ~ "Possible external post",
+      str_detect(details_text, regex("advice|topic", ignore_case = TRUE)) ~ "Agent-generated text",
+      str_detect(details_text, regex("subject|calendar|meeting", ignore_case = TRUE)) ~ "Message / meeting text",
+      str_detect(details_text, regex("file|target", ignore_case = TRUE)) ~ "File-related text",
+      TRUE ~ "Other similar text"
+    )
+  )
+
+historical_similar_events |>
+  select(
+    id,
+    datetime,
+    short_name,
+    incident_type,
+    similarity_score,
+    details_text
+  ) |>
+  slice_head(n = 20) |>
+  kable(caption = "Historical events with similar content to the anomalous post")
+```
+:::
+
+
 ## Historical incident timeline
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+historical_similar_events |>
+  count(date, incident_type) |>
+  ggplot(
+    aes(
+      x = date,
+      y = n,
+      colour = incident_type
+    )
+  ) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  geom_vline(
+    xintercept = as.Date("2046-05-17"),
+    linetype = "dashed"
+  ) +
+  labs(
+    title = "Historical Timeline of Similar Events",
+    subtitle = "Events with similar text before the anomalous May 17 post",
+    x = "Date",
+    y = "Number of Similar Events",
+    colour = "Incident Type"
+  ) +
+  theme_minimal()
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+historical_similar_events |>
+  count(date, incident_type) |>
+  ggplot(
+    aes(
+      x = date,
+      y = n,
+      colour = incident_type
+    )
+  ) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  geom_vline(
+    xintercept = as.Date("2046-05-17"),
+    linetype = "dashed"
+  ) +
+  labs(
+    title = "Historical Timeline of Similar Events",
+    subtitle = "Events with similar text before the anomalous May 17 post",
+    x = "Date",
+    y = "Number of Similar Events",
+    colour = "Incident Type"
+  ) +
+  theme_minimal()
+
+```
+:::
 
 ## Comparative analysis
 
 Using the comparison table, compare between historical cases and the May 17 incident.
 
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+may17_case <- tibble(
+  case_date_or_label = "2046-05-17",
+  case_type = "May 17 Incident",
+  event_count = nrow(incident_window_events),
+  first_event = min(incident_window_events$datetime),
+  last_event = max(incident_window_events$datetime),
+  involved_actors = incident_window_events |>
+    select(parties) |>
+    unnest_longer(parties) |>
+    distinct(parties) |>
+    nrow(),
+  text_similarity_max = max(similarity_results$similarity_score, na.rm = TRUE)
+)
+
+historical_case_summary <- historical_similar_events |>
+  mutate(case_date_or_label = as.character(as.Date(datetime))) |>
+  group_by(case_date_or_label) |>
+  summarise(
+    case_type = "Historical Similar Event",
+    event_count = n(),
+    first_event = min(datetime),
+    last_event = max(datetime),
+    involved_actors = NA_integer_,
+    text_similarity_max = max(similarity_score, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  arrange(desc(text_similarity_max)) |>
+  slice_head(n = 5)
+
+comparison_table <- bind_rows(
+  historical_case_summary,
+  may17_case
+)
+
+comparison_table |>
+  kable(caption = "Comparison of historical similar cases with the May 17 incident")
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+may17_case <- tibble(
+  case_date_or_label = "2046-05-17",
+  case_type = "May 17 Incident",
+  event_count = nrow(incident_window_events),
+  first_event = min(incident_window_events$datetime),
+  last_event = max(incident_window_events$datetime),
+  involved_actors = incident_window_events |>
+    select(parties) |>
+    unnest_longer(parties) |>
+    distinct(parties) |>
+    nrow(),
+  text_similarity_max = max(similarity_results$similarity_score, na.rm = TRUE)
+)
+
+historical_case_summary <- historical_similar_events |>
+  mutate(case_date_or_label = as.character(as.Date(datetime))) |>
+  group_by(case_date_or_label) |>
+  summarise(
+    case_type = "Historical Similar Event",
+    event_count = n(),
+    first_event = min(datetime),
+    last_event = max(datetime),
+    involved_actors = NA_integer_,
+    text_similarity_max = max(similarity_score, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  arrange(desc(text_similarity_max)) |>
+  slice_head(n = 5)
+
+comparison_table <- bind_rows(
+  historical_case_summary,
+  may17_case
+)
+
+comparison_table |>
+  kable(caption = "Comparison of historical similar cases with the May 17 incident")
+
+```
+:::
+
+
+
 ## Historical event chain comparison
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+historical_case_dates <- historical_similar_events |>
+  mutate(case_date = as.Date(datetime)) |>
+  count(case_date, sort = TRUE) |>
+  slice_head(n = 3) |>
+  pull(case_date)
+
+historical_chain_events <- events_text |>
+  filter(date %in% historical_case_dates) |>
+  mutate(case_label = paste("Historical case:", date))
+
+current_chain_events <- incident_window_events |>
+  mutate(case_label = "May 17 incident")
+
+chain_comparison_events <- bind_rows(
+  historical_chain_events,
+  current_chain_events
+)
+
+chain_comparison_events |>
+  count(case_label, short_name) |>
+  ggplot(
+    aes(
+      x = reorder(short_name, n),
+      y = n
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ case_label, scales = "free_y") +
+  labs(
+    title = "Historical Event Chain Comparison",
+    subtitle = "Event-type patterns in historical cases compared with the May 17 incident",
+    x = "Event Type",
+    y = "Number of Events"
+  ) +
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+historical_case_dates <- historical_similar_events |>
+  mutate(case_date = as.Date(datetime)) |>
+  count(case_date, sort = TRUE) |>
+  slice_head(n = 3) |>
+  pull(case_date)
+
+historical_chain_events <- events_text |>
+  filter(date %in% historical_case_dates) |>
+  mutate(case_label = paste("Historical case:", date))
+
+current_chain_events <- incident_window_events |>
+  mutate(case_label = "May 17 incident")
+
+chain_comparison_events <- bind_rows(
+  historical_chain_events,
+  current_chain_events
+)
+
+chain_comparison_events |>
+  count(case_label, short_name) |>
+  ggplot(
+    aes(
+      x = reorder(short_name, n),
+      y = n
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ case_label, scales = "free_y") +
+  labs(
+    title = "Historical Event Chain Comparison",
+    subtitle = "Event-type patterns in historical cases compared with the May 17 incident",
+    x = "Event Type",
+    y = "Number of Events"
+  ) +
+  theme_minimal()
+
+```
+:::
 
 # Intervention analysis
 
 ## Centrality analysis
 
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+centrality_nodes <- event_graph |>
+  activate(nodes) |>
+  mutate(
+    degree = centrality_degree(mode = "all"),
+    in_degree = centrality_degree(mode = "in"),
+    out_degree = centrality_degree(mode = "out"),
+    betweenness = centrality_betweenness()
+  ) |>
+  as_tibble() |>
+  arrange(desc(betweenness))
+
+centrality_nodes |>
+  select(name, label, node_type, degree, in_degree, out_degree, betweenness) |>
+  slice_head(n = 20) |>
+  kable(caption = "Top 20 nodes by betweenness centrality")
+```
+
+## The code
+
+```{r}
+#| eval: false
+centrality_nodes <- event_graph |>
+  activate(nodes) |>
+  mutate(
+    degree = centrality_degree(mode = "all"),
+    in_degree = centrality_degree(mode = "in"),
+    out_degree = centrality_degree(mode = "out"),
+    betweenness = centrality_betweenness()
+  ) |>
+  as_tibble() |>
+  arrange(desc(betweenness))
+
+centrality_nodes |>
+  select(name, label, node_type, degree, in_degree, out_degree, betweenness) |>
+  slice_head(n = 20) |>
+  kable(caption = "Top 20 nodes by betweenness centrality")
+```
+:::
+
+
 ## Critical node analysis visual
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+critical_nodes <- centrality_nodes |>
+  slice_head(n = 30) |>
+  pull(name)
+
+critical_graph <- event_graph |>
+  activate(nodes) |>
+  mutate(
+    degree = centrality_degree(mode = "all"),
+    betweenness = centrality_betweenness(),
+    critical = name %in% critical_nodes
+  ) |>
+  filter(critical)
+
+set.seed(123)
+
+ggraph(critical_graph, layout = "fr") +
+  geom_edge_link(
+    alpha = 0.35,
+    colour = "grey70",
+    arrow = arrow(length = unit(2, "mm")),
+    end_cap = circle(2, "mm")
+  ) +
+  geom_node_point(
+    aes(
+      colour = node_type,
+      size = betweenness
+    )
+  ) +
+  geom_node_text(
+    aes(label = label),
+    repel = TRUE,
+    size = 3
+  ) +
+  labs(
+    title = "Critical Nodes in the Multi-Agent System",
+    subtitle = "Node size represents betweenness centrality",
+    colour = "Node Type",
+    size = "Betweenness"
+  ) +
+  theme_graph()
+```
+
+## The code
+
+```{r}
+#| eval: false
+critical_nodes <- centrality_nodes |>
+  slice_head(n = 30) |>
+  pull(name)
+
+critical_graph <- event_graph |>
+  activate(nodes) |>
+  mutate(
+    degree = centrality_degree(mode = "all"),
+    betweenness = centrality_betweenness(),
+    critical = name %in% critical_nodes
+  ) |>
+  filter(critical)
+
+set.seed(123)
+
+ggraph(critical_graph, layout = "fr") +
+  geom_edge_link(
+    alpha = 0.35,
+    colour = "grey70",
+    arrow = arrow(length = unit(2, "mm")),
+    end_cap = circle(2, "mm")
+  ) +
+  geom_node_point(
+    aes(
+      colour = node_type,
+      size = betweenness
+    )
+  ) +
+  geom_node_text(
+    aes(label = label),
+    repel = TRUE,
+    size = 3
+  ) +
+  labs(
+    title = "Critical Nodes in the Multi-Agent System",
+    subtitle = "Node size represents betweenness centrality",
+    colour = "Node Type",
+    size = "Betweenness"
+  ) +
+  theme_graph()
+```
+:::
 
 ## Candidate intervention points
 
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+candidate_interventions <- centrality_nodes |>
+  filter(
+    node_type %in% c("Agent", "System", "File System", "File")
+  ) |>
+  arrange(desc(betweenness)) |>
+  slice_head(n = 10) |>
+  mutate(
+    intervention_reason = case_when(
+      node_type == "System" ~ "System-level control point",
+      node_type == "Agent" ~ "Agent-level behaviour control point",
+      node_type %in% c("File", "File System") ~ "Content-access control point",
+      TRUE ~ "Potential control point"
+    )
+  )
+
+candidate_interventions |>
+  select(
+    name,
+    label,
+    node_type,
+    degree,
+    in_degree,
+    out_degree,
+    betweenness,
+    intervention_reason
+  ) |>
+  kable(caption = "Candidate intervention points ranked by centrality")
+```
+
+## The code
+
+```{r}
+#| eval: false
+candidate_interventions <- centrality_nodes |>
+  filter(
+    node_type %in% c("Agent", "System", "File System", "File")
+  ) |>
+  arrange(desc(betweenness)) |>
+  slice_head(n = 10) |>
+  mutate(
+    intervention_reason = case_when(
+      node_type == "System" ~ "System-level control point",
+      node_type == "Agent" ~ "Agent-level behaviour control point",
+      node_type %in% c("File", "File System") ~ "Content-access control point",
+      TRUE ~ "Potential control point"
+    )
+  )
+
+candidate_interventions |>
+  select(
+    name,
+    label,
+    node_type,
+    degree,
+    in_degree,
+    out_degree,
+    betweenness,
+    intervention_reason
+  ) |>
+  kable(caption = "Candidate intervention points ranked by centrality")
+```
+:::
+
+Optional Visual:
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+candidate_interventions |>
+  ggplot(
+    aes(
+      x = reorder(label, betweenness),
+      y = betweenness
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Candidate Intervention Points",
+    subtitle = "Ranked by betweenness centrality",
+    x = "Candidate Node",
+    y = "Betweenness Centrality"
+  ) +
+  theme_minimal()
+```
+
+## The code
+
+```{r}
+#| eval: false
+candidate_interventions |>
+  ggplot(
+    aes(
+      x = reorder(label, betweenness),
+      y = betweenness
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Candidate Intervention Points",
+    subtitle = "Ranked by betweenness centrality",
+    x = "Candidate Node",
+    y = "Betweenness Centrality"
+  ) +
+  theme_minimal()
+```
+:::
+
 ## Recommended intervention
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+recommended_intervention <- candidate_interventions |>
+  slice_head(n = 1)
+
+recommended_intervention |>
+  select(
+    name,
+    label,
+    node_type,
+    degree,
+    in_degree,
+    out_degree,
+    betweenness,
+    intervention_reason
+  ) |>
+  kable(caption = "Recommended intervention point")
+```
+
+## The code
+
+```{r}
+#| eval: false
+recommended_intervention <- candidate_interventions |>
+  slice_head(n = 1)
+
+recommended_intervention |>
+  select(
+    name,
+    label,
+    node_type,
+    degree,
+    in_degree,
+    out_degree,
+    betweenness,
+    intervention_reason
+  ) |>
+  kable(caption = "Recommended intervention point")
+```
+:::
 
 # Mini challenge answers
 
