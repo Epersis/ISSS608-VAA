@@ -1384,5 +1384,110 @@
     "title": "Hands-on_Ex07A",
     "section": "Community bubble network",
     "text": "Community bubble network\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(ggforce)\n\nGAStech_graph %&gt;%\n  activate(nodes) %&gt;%\n  mutate(\n    community = as.factor(group_infomap()),\n    degree = centrality_degree()\n  ) %&gt;%\n\n  ggraph(layout = \"fr\") +\n\n  geom_mark_hull(\n    aes(\n      x = x,\n      y = y,\n      group = community,\n      fill = community\n    ),\n    alpha = 0.15\n  ) +\n\n  geom_edge_link(\n    alpha = 0.2\n  ) +\n\n  geom_node_point(\n    aes(\n      size = degree,\n      colour = Department\n    )\n  ) +\n\n  theme_graph()\n\n\n\n\nThe organisation contains several distinct communication communities, but a small number of highly connected employees act as bridges linking these communities together."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html",
+    "title": "Hands-on_Ex07B",
+    "section": "",
+    "text": "pacman::p_load(tidytext, widyr, wordcloud, DT, ggwordcloud, textplot, lubridate, hms,\ntidyverse, tidygraph, ggraph, igraph)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#function-to-read-all-files-from-folder-into-data-frame",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#function-to-read-all-files-from-folder-into-data-frame",
+    "title": "Hands-on_Ex07B",
+    "section": "function to read all files from folder into data frame",
+    "text": "function to read all files from folder into data frame\n\nread_folder &lt;- function(infolder) {\n  tibble(file = dir(infolder, \n                    full.names = TRUE)) %&gt;%\n    mutate(text = map(file, \n                      read_lines)) %&gt;%\n    transmute(id = basename(file), \n              text) %&gt;%\n    unnest(text)\n}"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#reading-all-the-files-from-the-20news-folder",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#reading-all-the-files-from-the-20news-folder",
+    "title": "Hands-on_Ex07B",
+    "section": "reading all the files from the 20news folder",
+    "text": "reading all the files from the 20news folder\n\nraw_text &lt;- tibble(folder = \n                     dir(news20, \n                         full.names = TRUE)) %&gt;%\n  mutate(folder_out = map(folder, \n                          read_folder)) %&gt;%\n  unnest(cols = c(folder_out)) %&gt;%\n  transmute(newsgroup = basename(folder), \n            id, text)\n\ndir.create(\"rds\", showWarnings = FALSE)\n\nwrite_rds(raw_text, \"rds/news20.rds\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#removing-header-automated-email-signatures",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#removing-header-automated-email-signatures",
+    "title": "Hands-on_Ex07B",
+    "section": "removing header & automated email signatures",
+    "text": "removing header & automated email signatures\n\ncleaned_text &lt;- raw_text %&gt;%\n  group_by(newsgroup, id) %&gt;%\n  filter(cumsum(text == \"\") &gt; 0,\n         cumsum(str_detect(\n           text, \"^--\")) == 0) %&gt;%\n  ungroup()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#removing-lines-with-nested-text-representing-quotes-from-other-users",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#removing-lines-with-nested-text-representing-quotes-from-other-users",
+    "title": "Hands-on_Ex07B",
+    "section": "removing lines with nested text representing quotes from other users",
+    "text": "removing lines with nested text representing quotes from other users\n\ncleaned_text &lt;- cleaned_text %&gt;%\n  filter(str_detect(text, \"^[^&gt;]+[A-Za-z\\\\d]\")\n         | text == \"\",\n         !str_detect(text, \n                     \"writes(:|\\\\.\\\\.\\\\.)$\"),\n         !str_detect(text, \n                     \"^In article &lt;\")\n  )"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#text-data-processing",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#text-data-processing",
+    "title": "Hands-on_Ex07B",
+    "section": "text data processing",
+    "text": "text data processing\n\nThe plotThe code\n\n\n\n\n# A tibble: 5,542 × 2\n   word           n\n   &lt;chr&gt;      &lt;int&gt;\n 1 people        57\n 2 time          50\n 3 jesus         47\n 4 god           44\n 5 message       40\n 6 br            27\n 7 bible         23\n 8 drive         23\n 9 homosexual    23\n10 read          22\n# ℹ 5,532 more rows\n\n\n\n\n\nusenet_words &lt;- cleaned_text %&gt;%\n  unnest_tokens(word, text) %&gt;%\n  filter(str_detect(word, \"[a-z']$\"),\n         !word %in% stop_words$word)\nusenet_words %&gt;%\n  count(word, sort = TRUE)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#visualising-words-in-newsgroups",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#visualising-words-in-newsgroups",
+    "title": "Hands-on_Ex07B",
+    "section": "visualising words in newsgroups",
+    "text": "visualising words in newsgroups\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwords_by_newsgroup &lt;- usenet_words %&gt;%\n  count(newsgroup, word, sort = TRUE)\n\nwordcloud(\n  words = words_by_newsgroup$word,\n  freq = words_by_newsgroup$n,\n  max.words = 300\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#visualising-words-in-newsgroups-1",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#visualising-words-in-newsgroups-1",
+    "title": "Hands-on_Ex07B",
+    "section": "visualising words in newsgroups",
+    "text": "visualising words in newsgroups\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nset.seed(1234)\n\nwords_by_newsgroup %&gt;%\n  filter(n &gt; 0) %&gt;%\nggplot(aes(label = word,\n           size = n)) +\n  geom_text_wordcloud() +\n  theme_minimal() +\n  facet_wrap(~newsgroup)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#visualising-tf-idf",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#visualising-tf-idf",
+    "title": "Hands-on_Ex07B",
+    "section": "Visualising tf-idf",
+    "text": "Visualising tf-idf\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nDT::datatable(tf_idf, filter = 'top') %&gt;% \n  formatRound(columns = c('tf', 'idf', \n                          'tf_idf'), \n              digits = 3) %&gt;%\n  formatStyle(0, \n              target = 'row', \n              lineHeight='25%')"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#visualising-tf-idf-within-newsgroups",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#visualising-tf-idf-within-newsgroups",
+    "title": "Hands-on_Ex07B",
+    "section": "visualising tf-idf within newsgroups",
+    "text": "visualising tf-idf within newsgroups\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ntf_idf %&gt;%\n  filter(str_detect(newsgroup, \"^sci\\\\.\")) %&gt;%\n  group_by(newsgroup) %&gt;%\n  slice_max(tf_idf, \n            n = 12) %&gt;%\n  ungroup() %&gt;%\n  mutate(word = reorder(word, \n                        tf_idf)) %&gt;%\n  ggplot(aes(tf_idf, \n             word, \n             fill = newsgroup)) +\n  geom_col(show.legend = FALSE) +\n  facet_wrap(~ newsgroup, \n             scales = \"free\") +\n  labs(x = \"tf-idf\", \n       y = NULL)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#counting-and-correlating-pairs-of-words",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#counting-and-correlating-pairs-of-words",
+    "title": "Hands-on_Ex07B",
+    "section": "Counting and correlating pairs of words",
+    "text": "Counting and correlating pairs of words\nUse widyr when you want word co-occurence networks, topic structure exploration, word association analysis and text similarity between terms.\n\nnewsgroup_cors &lt;- words_by_newsgroup %&gt;%\n  pairwise_cor(newsgroup, \n               word, \n               n, \n               sort = TRUE)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#visualising-correlation-as-network",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#visualising-correlation-as-network",
+    "title": "Hands-on_Ex07B",
+    "section": "visualising correlation as network",
+    "text": "visualising correlation as network\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nset.seed(2017)\n\nnewsgroup_cors %&gt;%\n  filter(correlation &gt; .025) %&gt;%\n  graph_from_data_frame() %&gt;%\n  ggraph(layout = \"fr\") +\n  geom_edge_link(aes(alpha = correlation, \n                     width = correlation)) +\n  geom_node_point(size = 6, \n                  color = \"lightblue\") +\n  geom_node_text(aes(label = name),\n                 color = \"red\",\n                 repel = TRUE) +\n  theme_void()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#bigram",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#bigram",
+    "title": "Hands-on_Ex07B",
+    "section": "Bigram",
+    "text": "Bigram\nA bigram is a sequence of 2 consecutive words in a text. For instance, in a sentence “I like to code”, the bigrams are ” I like”, “like to”, “to code”.\n\nThe plotThe code\n\n\n\n\n# A tibble: 28,827 × 3\n   newsgroup   id    bigram    \n   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     \n 1 alt.atheism 54256 &lt;NA&gt;      \n 2 alt.atheism 54256 &lt;NA&gt;      \n 3 alt.atheism 54256 as i      \n 4 alt.atheism 54256 i don't   \n 5 alt.atheism 54256 don't know\n 6 alt.atheism 54256 know this \n 7 alt.atheism 54256 this book \n 8 alt.atheism 54256 book i    \n 9 alt.atheism 54256 i will    \n10 alt.atheism 54256 will use  \n# ℹ 28,817 more rows\n\n\n\n\n\nbigrams &lt;- cleaned_text %&gt;%\n  unnest_tokens(bigram, \n                text, \n                token = \"ngrams\", \n                n = 2)\nbigrams\n\n\n\n\n\nCounting bigrams\n\nThe plotThe code\n\n\n\n\n# A tibble: 28,827 × 3\n   newsgroup   id    bigram    \n   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     \n 1 alt.atheism 54256 &lt;NA&gt;      \n 2 alt.atheism 54256 &lt;NA&gt;      \n 3 alt.atheism 54256 as i      \n 4 alt.atheism 54256 i don't   \n 5 alt.atheism 54256 don't know\n 6 alt.atheism 54256 know this \n 7 alt.atheism 54256 this book \n 8 alt.atheism 54256 book i    \n 9 alt.atheism 54256 i will    \n10 alt.atheism 54256 will use  \n# ℹ 28,817 more rows\n\n\n\n\n\nbigrams_count &lt;- bigrams %&gt;%\n  filter(bigram != 'NA') %&gt;%\n  count(bigram, sort = TRUE)\nbigrams\n\n\n\n\n\n\nCleaning bigrams\n\nThe plotThe code\n\n\n\n\n# A tibble: 4,607 × 4\n   newsgroup   id    word1        word2        \n   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;        \n 1 alt.atheism 54256 defines      god          \n 2 alt.atheism 54256 term         preclues     \n 3 alt.atheism 54256 science      ideas        \n 4 alt.atheism 54256 ideas        drawn        \n 5 alt.atheism 54256 supernatural precludes    \n 6 alt.atheism 54256 scientific   assertions   \n 7 alt.atheism 54256 religious    dogma        \n 8 alt.atheism 54256 religion     involves     \n 9 alt.atheism 54256 involves     circumventing\n10 alt.atheism 54256 gain         absolute     \n# ℹ 4,597 more rows\n\n\n\n\n\nbigrams_separated &lt;- bigrams %&gt;%\n  filter(bigram != 'NA') %&gt;%\n  separate(bigram, c(\"word1\", \"word2\"), \n           sep = \" \")\n\nbigrams_filtered &lt;- bigrams_separated %&gt;%\n  filter(!word1 %in% stop_words$word) %&gt;%\n  filter(!word2 %in% stop_words$word)\n\nbigrams_filtered\n\n\n\n\n\n\ncounting again\n\nbigram_counts &lt;- bigrams_filtered %&gt;% \n  count(word1, word2, sort = TRUE)\n\n\n\ncreating network graph from bigram data frame\n\nThe plotThe code\n\n\n\n\nIGRAPH e1e9fc6 DN-- 40 24 -- \n+ attr: name (v/c), n (e/n)\n+ edges from e1e9fc6 (vertex names):\n [1] 1          -&gt;2           1          -&gt;3           static     -&gt;void       \n [4] time       -&gt;pad         1          -&gt;4           infield    -&gt;fly        \n [7] mat        -&gt;28          vv         -&gt;vv          1          -&gt;5          \n[10] cock       -&gt;crow        noticeshell-&gt;widget      27         -&gt;1993       \n[13] 3          -&gt;4           child      -&gt;molestation cock       -&gt;crew       \n[16] gun        -&gt;violence    heat       -&gt;sink        homosexual -&gt;male       \n[19] homosexual -&gt;women       include    -&gt;xol         mary       -&gt;magdalene  \n[22] read       -&gt;write       rev        -&gt;20          tt         -&gt;ee         \n\n\n\n\n\nbigram_graph &lt;- bigram_counts %&gt;%\n  filter(n &gt; 3) %&gt;%\n  graph_from_data_frame()\nbigram_graph\n\n\n\n\n\n\nvisualising network of bigrams\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nset.seed(1234)\n\nggraph(bigram_graph, layout = \"fr\") +\n  geom_edge_link() +\n  geom_node_point() +\n  geom_node_text(aes(label = name), \n                 vjust = 1, \n                 hjust = 1)\n\n\n\n\n\n\nrevised version\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nset.seed(1234)\n\na &lt;- grid::arrow(type = \"closed\", \n                 length = unit(.15,\n                               \"inches\"))\n\nggraph(bigram_graph, \n       layout = \"fr\") +\n  geom_edge_link(aes(edge_alpha = n), \n                 show.legend = FALSE,\n                 arrow = a, \n                 end_cap = circle(.07,\n                                  'inches')) +\n  geom_node_point(color = \"lightblue\", \n                  size = 5) +\n  geom_node_text(aes(label = name), \n                 vjust = 1, \n                 hjust = 1) +\n  theme_void()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#lollipop-chart-of-top-words",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#lollipop-chart-of-top-words",
+    "title": "Hands-on_Ex07B",
+    "section": "Lollipop chart of top words",
+    "text": "Lollipop chart of top words\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ntop_words &lt;- usenet_words %&gt;%\n  count(word, sort = TRUE) %&gt;%\n  slice_max(n, n = 20) %&gt;%\n  mutate(word = reorder(word, n))\n\nggplot(top_words,\n       aes(x = n,\n           y = word)) +\n  geom_segment(aes(x = 0,\n                   xend = n,\n                   y = word,\n                   yend = word),\n               colour = \"grey\") +\n  geom_point(size = 3,\n             colour = \"purple\") +\n  labs(\n    title = \"Top 20 Most Frequent Words\",\n    x = \"Word Count\",\n    y = NULL\n  ) +\n  theme_minimal()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#tf-idf-heatmap",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07B.html#tf-idf-heatmap",
+    "title": "Hands-on_Ex07B",
+    "section": "TF-IDF heatmap",
+    "text": "TF-IDF heatmap\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ntf_idf_heatmap &lt;- tf_idf %&gt;%\n  group_by(newsgroup) %&gt;%\n  slice_max(tf_idf, n = 5) %&gt;%\n  ungroup()\n\nggplot(tf_idf_heatmap,\n       aes(x = newsgroup,\n           y = reorder(word, tf_idf),\n           fill = tf_idf)) +\n  geom_tile() +\n  labs(\n    title = \"Top Distinctive Words by Newsgroup\",\n    x = \"Newsgroup\",\n    y = \"Word\",\n    fill = \"TF-IDF\"\n  ) +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 45,\n                                   hjust = 1))"
   }
 ]
