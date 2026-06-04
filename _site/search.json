@@ -1356,5 +1356,33 @@
     "title": "Hands-on_Ex07A",
     "section": "Interactivity",
     "text": "Interactivity\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visOptions(highlightNearest = TRUE,\n             nodesIdSelection = TRUE) %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#arc-diagram",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#arc-diagram",
+    "title": "Hands-on_Ex07A",
+    "section": "Arc diagram",
+    "text": "Arc diagram\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(ggraph)\n\nGAStech_graph %&gt;%\n  activate(nodes) %&gt;%\n  mutate(\n    degree = centrality_degree()\n  ) %&gt;%\n  ggraph(layout = \"linear\") +\n\n  geom_edge_arc(\n    aes(width = Weight),\n    alpha = 0.3\n  ) +\n\n  geom_node_point(\n    aes(size = degree,\n        colour = Department)\n  ) +\n\n  geom_node_text(\n    aes(label = label),\n    angle = 90,\n    hjust = 1,\n    size = 2\n  ) +\n\n  theme_graph()\n\n\n\n\nCommunication appears to be highly concentrated around a small number of employees, indicating a hub-and-spoke network structure rather than evenly distributed interactions."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#hive-plot-ggraph",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#hive-plot-ggraph",
+    "title": "Hands-on_Ex07A",
+    "section": "Hive plot (ggraph)",
+    "text": "Hive plot (ggraph)\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(ggraph)\n\nGAStech_graph %&gt;%\n  activate(nodes) %&gt;%\n  mutate(\n    degree = centrality_degree()\n  ) %&gt;%\n  ggraph(\n    layout = \"hive\",\n    axis = Department,\n    sort.by = degree\n  ) +\n\n  geom_edge_hive(\n    alpha = 0.2\n  ) +\n\n  geom_node_point(\n    aes(size = degree,\n        colour = Department)\n  ) +\n\n  theme_graph()\n\n\n\n\nCommunication occurs extensively across departments rather than remaining within specific departments, indicating a highly interconnected organisation."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#matrix-network-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#matrix-network-plot",
+    "title": "Hands-on_Ex07A",
+    "section": "Matrix network plot",
+    "text": "Matrix network plot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(ggraph)\n\nGAStech_graph %&gt;%\n  activate(nodes) %&gt;%\n  mutate(\n    community = group_infomap()\n  ) %&gt;%\n  ggraph(\n    layout = \"matrix\"\n  ) +\n\n  geom_edge_point(\n    aes(size = Weight,\n        colour = Weight)\n  ) +\n\n  theme_graph()\n\n\n\n\nThe communication network exhibits distinct clusters of densely connected employees. This shows the presence of communities that interact more frequently within the group than with the rest of the organisation."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#community-bubble-network",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#community-bubble-network",
+    "title": "Hands-on_Ex07A",
+    "section": "Community bubble network",
+    "text": "Community bubble network\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlibrary(ggforce)\n\nGAStech_graph %&gt;%\n  activate(nodes) %&gt;%\n  mutate(\n    community = as.factor(group_infomap()),\n    degree = centrality_degree()\n  ) %&gt;%\n\n  ggraph(layout = \"fr\") +\n\n  geom_mark_hull(\n    aes(\n      x = x,\n      y = y,\n      group = community,\n      fill = community\n    ),\n    alpha = 0.15\n  ) +\n\n  geom_edge_link(\n    alpha = 0.2\n  ) +\n\n  geom_node_point(\n    aes(\n      size = degree,\n      colour = Department\n    )\n  ) +\n\n  theme_graph()\n\n\n\n\nThe organisation contains several distinct communication communities, but a small number of highly connected employees act as bridges linking these communities together."
   }
 ]

@@ -1031,3 +1031,300 @@ visNetwork(GAStech_nodes,
 :::
 
 
+# Alternatives
+
+## Arc diagram
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+library(ggraph)
+
+GAStech_graph %>%
+  activate(nodes) %>%
+  mutate(
+    degree = centrality_degree()
+  ) %>%
+  ggraph(layout = "linear") +
+
+  geom_edge_arc(
+    aes(width = Weight),
+    alpha = 0.3
+  ) +
+
+  geom_node_point(
+    aes(size = degree,
+        colour = Department)
+  ) +
+
+  geom_node_text(
+    aes(label = label),
+    angle = 90,
+    hjust = 1,
+    size = 2
+  ) +
+
+  theme_graph()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+library(ggraph)
+
+GAStech_graph %>%
+  activate(nodes) %>%
+  mutate(
+    degree = centrality_degree()
+  ) %>%
+  ggraph(layout = "linear") +
+
+  geom_edge_arc(
+    aes(width = Weight),
+    alpha = 0.3
+  ) +
+
+  geom_node_point(
+    aes(size = degree,
+        colour = Department)
+  ) +
+
+  geom_node_text(
+    aes(label = label),
+    angle = 90,
+    hjust = 1,
+    size = 2
+  ) +
+
+  theme_graph()
+
+
+```
+:::
+
+
+Communication appears to be highly concentrated around a small number of employees, indicating a hub-and-spoke network structure rather than evenly distributed interactions.
+
+## Hive plot (ggraph)
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+library(ggraph)
+
+GAStech_graph %>%
+  activate(nodes) %>%
+  mutate(
+    degree = centrality_degree()
+  ) %>%
+  ggraph(
+    layout = "hive",
+    axis = Department,
+    sort.by = degree
+  ) +
+
+  geom_edge_hive(
+    alpha = 0.2
+  ) +
+
+  geom_node_point(
+    aes(size = degree,
+        colour = Department)
+  ) +
+
+  theme_graph()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+library(ggraph)
+
+GAStech_graph %>%
+  activate(nodes) %>%
+  mutate(
+    degree = centrality_degree()
+  ) %>%
+  ggraph(
+    layout = "hive",
+    axis = Department,
+    sort.by = degree
+  ) +
+
+  geom_edge_hive(
+    alpha = 0.2
+  ) +
+
+  geom_node_point(
+    aes(size = degree,
+        colour = Department)
+  ) +
+
+  theme_graph()
+
+
+```
+:::
+
+Communication occurs extensively across departments rather than remaining within specific departments, indicating a highly interconnected organisation.
+
+
+## Matrix network plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+library(ggraph)
+
+GAStech_graph %>%
+  activate(nodes) %>%
+  mutate(
+    community = group_infomap()
+  ) %>%
+  ggraph(
+    layout = "matrix"
+  ) +
+
+  geom_edge_point(
+    aes(size = Weight,
+        colour = Weight)
+  ) +
+
+  theme_graph()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+library(ggraph)
+
+GAStech_graph %>%
+  activate(nodes) %>%
+  mutate(
+    community = group_infomap()
+  ) %>%
+  ggraph(
+    layout = "matrix"
+  ) +
+
+  geom_edge_point(
+    aes(size = Weight,
+        colour = Weight)
+  ) +
+
+  theme_graph()
+
+
+```
+:::
+
+
+The communication network exhibits  distinct clusters of densely connected employees. This shows the presence of communities that interact more frequently within the group than with the rest of the organisation.
+
+## Community bubble network
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+library(ggforce)
+
+GAStech_graph %>%
+  activate(nodes) %>%
+  mutate(
+    community = as.factor(group_infomap()),
+    degree = centrality_degree()
+  ) %>%
+
+  ggraph(layout = "fr") +
+
+  geom_mark_hull(
+    aes(
+      x = x,
+      y = y,
+      group = community,
+      fill = community
+    ),
+    alpha = 0.15
+  ) +
+
+  geom_edge_link(
+    alpha = 0.2
+  ) +
+
+  geom_node_point(
+    aes(
+      size = degree,
+      colour = Department
+    )
+  ) +
+
+  theme_graph()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+library(ggforce)
+
+GAStech_graph %>%
+  activate(nodes) %>%
+  mutate(
+    community = as.factor(group_infomap()),
+    degree = centrality_degree()
+  ) %>%
+
+  ggraph(layout = "fr") +
+
+  geom_mark_hull(
+    aes(
+      x = x,
+      y = y,
+      group = community,
+      fill = community
+    ),
+    alpha = 0.15
+  ) +
+
+  geom_edge_link(
+    alpha = 0.2
+  ) +
+
+  geom_node_point(
+    aes(
+      size = degree,
+      colour = Department
+    )
+  ) +
+
+  theme_graph()
+
+
+```
+:::
+
+The organisation contains several distinct communication communities, but a small number of highly connected employees act as bridges linking these communities together.
+
