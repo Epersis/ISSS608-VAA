@@ -1096,7 +1096,7 @@
     "href": "Take-Home_Ex/TakeHomeMC2/Take_Home_Exercise_2.html#recommended-intervention",
     "title": "Take Home Exercise 2",
     "section": "Recommended intervention",
-    "text": "Recommended intervention\n\nThe plotThe code\n\n\n\n\n\nRecommended intervention point\n\n\n\n\n\n\n\n\n\n\n\n\nname\nlabel\nnode_type\ndegree\nin_degree\nout_degree\nbetweenness\nintervention_reason\n\n\n\n\nAgent/person:chloe_ballast\nChloe Ballast\nAgent\n366\n156\n210\n32890.77\nAgent-level behaviour control point\n\n\n\n\n\n\n\n\nrecommended_intervention &lt;- candidate_interventions |&gt;\n  slice_head(n = 1)\n\nrecommended_intervention |&gt;\n  select(\n    name,\n    label,\n    node_type,\n    degree,\n    in_degree,\n    out_degree,\n    betweenness,\n    intervention_reason\n  ) |&gt;\n  kable(caption = \"Recommended intervention point\")"
+    "text": "Recommended intervention\n\nThe plotThe code\n\n\n\n\n\nRecommended intervention point\n\n\n\n\n\n\n\n\n\n\n\n\nname\nlabel\nnode_type\ndegree\nin_degree\nout_degree\nbetweenness\nintervention_reason\n\n\n\n\nAgent/person:chloe_ballast\nChloe Ballast\nAgent\n366\n156\n210\n32890.77\nAgent-level behaviour control point\n\n\n\n\n\n\n\n\nrecommended_intervention &lt;- candidate_interventions |&gt;\n  slice_head(n = 1)\n\nrecommended_intervention |&gt;\n  select(\n    name,\n    label,\n    node_type,\n    degree,\n    in_degree,\n    out_degree,\n    betweenness,\n    intervention_reason\n  ) |&gt;\n  kable(caption = \"Recommended intervention point\")\n\n\n\n\nBased on the centrality analysis, the recommended intervention point is the highest-ranked non-human control node. This is selected because it occupies an important position in the interaction network and is more practical to control than individual human users.Human users can be prone to human error or misjudgement. Placing validation, logging, or approval checks at this point would reduce the likelihood of anomalous content being posted and spread through the system again."
   },
   {
     "objectID": "Take-Home_Ex/TakeHomeMC2/Take_Home_Exercise_2.html#preparing-organisation-data",
@@ -1216,5 +1216,96 @@
     "title": "Take Home Exercise 2",
     "section": "Events by number of parties:",
     "text": "Events by number of parties:\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nevents |&gt;\n  count(n_parties) |&gt;\n  ggplot(\n    aes(\n      x = factor(n_parties),\n      y = n\n    )\n  ) +\n  geom_col() +\n  labs(\n    title = \"Number of Participants per Event\",\n    x = \"Number of Parties\",\n    y = \"Number of Events\"\n  ) +\n  theme_minimal()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html",
+    "title": "Hands-on_Ex07A",
+    "section": "",
+    "text": "This exercise is about learning to model, analyse and visualise network data using R.\nLearning objectives:"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#reviewing-output-of-the-graph-object",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#reviewing-output-of-the-graph-object",
+    "title": "Hands-on_Ex07A",
+    "section": "Reviewing output of the graph object",
+    "text": "Reviewing output of the graph object\nThe output shows that GAStech_graph is an object representing a directed multigraph consisting of 54 nodes and 1372 edges. Each node represents an employee and contains 4 attributes: id, label, department and job title. The edge data captures interactions between employees, where the from and to columns indicate the source and destination nodes respectively. Each edge has a weekday attribute and weight attribute which represents the frequency or strength of interaction between the 2 employees that day. As the graph is a directed multigraph, multiple directed edges can exist between the same pair of employees, allowing interactions on different weekdays to be represented separately."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#changing-the-color",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#changing-the-color",
+    "title": "Hands-on_Ex07A",
+    "section": "Changing the color",
+    "text": "Changing the color\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- ggraph(GAStech_graph) + \n  geom_edge_link(aes(colour = 'grey50')) +\n  geom_node_point(aes(colour = 'grey40'))\n\ng + theme_graph(background = 'grey10',\n                text_colour = 'white')"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#using-the-fruchterman-and-reingold-layout",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#using-the-fruchterman-and-reingold-layout",
+    "title": "Hands-on_Ex07A",
+    "section": "Using the Fruchterman and Reingold layout",
+    "text": "Using the Fruchterman and Reingold layout\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes())\n\ng + theme_graph()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#modifying-network-nodes",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#modifying-network-nodes",
+    "title": "Hands-on_Ex07A",
+    "section": "Modifying network nodes",
+    "text": "Modifying network nodes\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes()) +\n  geom_node_point(aes(colour = Department, \n                      size = 3))\n\ng + theme_graph()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#modifying-edges",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#modifying-edges",
+    "title": "Hands-on_Ex07A",
+    "section": "Modifying edges",
+    "text": "Modifying edges\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") +\n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 3)\n\ng + theme_graph()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#facet_edges",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#facet_edges",
+    "title": "Hands-on_Ex07A",
+    "section": "facet_edges()",
+    "text": "facet_edges()\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\n\ng + facet_edges(~Weekday)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#theme",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#theme",
+    "title": "Hands-on_Ex07A",
+    "section": "theme()",
+    "text": "theme()\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2) +\n  theme(legend.position = 'bottom')\n  \ng + facet_edges(~Weekday)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#set_graph_style",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#set_graph_style",
+    "title": "Hands-on_Ex07A",
+    "section": "set_graph_style()",
+    "text": "set_graph_style()\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nset_graph_style() \n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\n  \ng + facet_edges(~Weekday) +\n  th_foreground(foreground = \"grey80\",  \n                border = TRUE) +\n  theme(legend.position = 'bottom')"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#facet_nodes",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#facet_nodes",
+    "title": "Hands-on_Ex07A",
+    "section": "facet_nodes()",
+    "text": "facet_nodes()\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\n  \ng + facet_nodes(~Department)+\n  th_foreground(foreground = \"grey80\",  \n                border = TRUE) +\n  theme(legend.position = 'bottom')"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#computing-centrality-indices",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#computing-centrality-indices",
+    "title": "Hands-on_Ex07A",
+    "section": "Computing centrality indices",
+    "text": "Computing centrality indices\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- GAStech_graph %&gt;%\n  mutate(betweenness_centrality = centrality_betweenness()) %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department,\n            size=betweenness_centrality))\ng + theme_graph()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#visualising-network-metrics",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#visualising-network-metrics",
+    "title": "Hands-on_Ex07A",
+    "section": "visualising network metrics",
+    "text": "visualising network metrics\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- GAStech_graph %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department, \n                      size = centrality_betweenness()))\ng + theme_graph()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#visualising-community",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#visualising-community",
+    "title": "Hands-on_Ex07A",
+    "section": "Visualising community",
+    "text": "Visualising community\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- GAStech_graph %&gt;%\n  mutate(community = as.factor(\n    group_edge_betweenness(\n      weights = Weight, \n      directed = TRUE))) %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(\n    aes(\n      width=Weight), \n    alpha=0.2) +\n  scale_edge_width(\n    range = c(0.1, 5)) +\n  geom_node_point(\n    aes(colour = community))  \n\ng + theme_graph()\n\n\n\n\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- GAStech_graph %&gt;%\n  activate(nodes) %&gt;%\n  mutate(community = as.factor(\n    group_optimal(weights = Weight)),\n         betweenness_measure = centrality_betweenness()) %&gt;%\n  ggraph(layout = \"fr\") +\n  geom_mark_hull(\n    aes(x, y, \n        group = community, \n        fill = community),  \n    alpha = 0.2,  \n    expand = unit(0.3, \"cm\"),  # Expand\n    radius = unit(0.3, \"cm\")  # Smoothness\n  ) + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(fill = Department,\n                      size = betweenness_measure),\n                      color = \"black\",\n                      shape = 21)\n  \ng + theme_graph()"
   }
 ]

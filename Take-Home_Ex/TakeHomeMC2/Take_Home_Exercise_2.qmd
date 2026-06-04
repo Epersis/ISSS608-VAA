@@ -2884,6 +2884,8 @@ recommended_intervention |>
 ```
 :::
 
+Based on the centrality analysis, the recommended intervention point is the highest-ranked non-human control node. This is selected because it occupies an important position in the interaction network and is more practical to control than individual human users.Human users can be prone to human error or misjudgement. Placing validation, logging, or approval checks at this point would reduce the likelihood of anomalous content being posted and spread through the system again.
+
 # Mini challenge answers
 
 1. How was the anomalous SaidIT post made?
