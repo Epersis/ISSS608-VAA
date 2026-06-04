@@ -1307,5 +1307,54 @@
     "title": "Hands-on_Ex07A",
     "section": "Visualising community",
     "text": "Visualising community\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- GAStech_graph %&gt;%\n  mutate(community = as.factor(\n    group_edge_betweenness(\n      weights = Weight, \n      directed = TRUE))) %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(\n    aes(\n      width=Weight), \n    alpha=0.2) +\n  scale_edge_width(\n    range = c(0.1, 5)) +\n  geom_node_point(\n    aes(colour = community))  \n\ng + theme_graph()\n\n\n\n\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- GAStech_graph %&gt;%\n  activate(nodes) %&gt;%\n  mutate(community = as.factor(\n    group_optimal(weights = Weight)),\n         betweenness_measure = centrality_betweenness()) %&gt;%\n  ggraph(layout = \"fr\") +\n  geom_mark_hull(\n    aes(x, y, \n        group = community, \n        fill = community),  \n    alpha = 0.2,  \n    expand = unit(0.3, \"cm\"),  # Expand\n    radius = unit(0.3, \"cm\")  # Smoothness\n  ) + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(fill = Department,\n                      size = betweenness_measure),\n                      color = \"black\",\n                      shape = 21)\n  \ng + theme_graph()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#data-preparation",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#data-preparation",
+    "title": "Hands-on_Ex07A",
+    "section": "Data preparation",
+    "text": "Data preparation\n\nGAStech_edges_aggregated &lt;- GAStech_edges %&gt;%\n  left_join(GAStech_nodes, by = c(\"sourceLabel\" = \"label\")) %&gt;%\n  rename(from = id) %&gt;%\n  left_join(GAStech_nodes, by = c(\"targetLabel\" = \"label\")) %&gt;%\n  rename(to = id) %&gt;%\n  filter(MainSubject == \"Work related\") %&gt;%\n  group_by(from, to) %&gt;%\n    summarise(weight = n()) %&gt;%\n  filter(from!=to) %&gt;%\n  filter(weight &gt; 1) %&gt;%\n  ungroup()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#plotting-the-first-interactive-network-graph",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#plotting-the-first-interactive-network-graph",
+    "title": "Hands-on_Ex07A",
+    "section": "Plotting the first interactive network graph",
+    "text": "Plotting the first interactive network graph\n\nvisNetwork(GAStech_nodes, \n           GAStech_edges_aggregated)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#working-with-layout",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#working-with-layout",
+    "title": "Hands-on_Ex07A",
+    "section": "Working with layout",
+    "text": "Working with layout\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#working-with-visual-attributes",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#working-with-visual-attributes",
+    "title": "Hands-on_Ex07A",
+    "section": "Working with visual attributes",
+    "text": "Working with visual attributes\n\nGAStech_nodes &lt;- GAStech_nodes %&gt;%\n  rename(group = Department)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#assigning-colours",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#assigning-colours",
+    "title": "Hands-on_Ex07A",
+    "section": "Assigning colours",
+    "text": "Assigning colours\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#visual-attributes---edges",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#visual-attributes---edges",
+    "title": "Hands-on_Ex07A",
+    "section": "visual attributes - edges",
+    "text": "visual attributes - edges\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visEdges(arrows = \"to\", \n           smooth = list(enabled = TRUE, \n                         type = \"curvedCW\")) %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#interactivity",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07A.html#interactivity",
+    "title": "Hands-on_Ex07A",
+    "section": "Interactivity",
+    "text": "Interactivity\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visOptions(highlightNearest = TRUE,\n             nodesIdSelection = TRUE) %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)"
   }
 ]
