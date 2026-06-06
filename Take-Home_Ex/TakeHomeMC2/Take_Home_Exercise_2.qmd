@@ -2749,6 +2749,7 @@ historical_similar_events |>
 ```
 :::
 
+Here, we identify historical events that are textually similar to the anomalous post. These records in the table prove that similar content existed before the 17 May post. This will give us greater insight into whether the anomalous post was an isolated event or part of a broader repeated behaviour pattern.    
 
 
 
@@ -2848,6 +2849,10 @@ ggplotly(
 ```
 :::
 
+This interactive visual displays whether historically similar events occurred before the anomalous post on 17 May 2046. The timeline shows that similar events was already occurring several days before the anomaly, from 8 May to 16 May, all of which are file-related text. On average, there were about 25 incidents during the window, with a peak of 44 on 10 May. 
+This shows that the anomalous post is associated with an existing pattern of file-related content within the system.
+
+
 ## Comparative analysis
 
 Using the comparison table, compare between historical cases and the May 17 incident.
@@ -2941,6 +2946,11 @@ comparison_table |>
 ```
 :::
 
+The May 17 anomalous incident differs from the historical cases. The past events typically involved 22 to 44 events, while the May 17 incident contained 1272 events. The scale is much greater. This could suggest that this was an escalation of existing system behaviour, rather than a completely new failure/incident. 
+
+
+
+
 ## Historical event chain comparison
 
 ::: panel-tabset
@@ -2948,6 +2958,7 @@ comparison_table |>
 
 ```{r}
 #| echo: false
+
 historical_case_dates <- historical_similar_events |>
   mutate(case_date = as.Date(datetime)) |>
   count(case_date, sort = TRUE) |>
@@ -2966,25 +2977,57 @@ chain_comparison_events <- bind_rows(
   current_chain_events
 )
 
-chain_comparison_events |>
+chain_comparison_top10 <- chain_comparison_events |>
   count(case_label, short_name) |>
+  group_by(case_label) |>
+  slice_max(
+    order_by = n,
+    n = 10,
+    with_ties = FALSE
+  ) |>
+  ungroup() |>
+  mutate(
+    event_type_clean = str_replace_all(short_name, "_", " "),
+    event_type_clean = str_trunc(event_type_clean, width = 28),
+    tooltip_text = paste(
+      "Case:", case_label,
+      "<br>Event Type:", str_replace_all(short_name, "_", " "),
+      "<br>Number of Events:", n
+    )
+  )
+
+p_chain_comparison <- chain_comparison_top10 |>
   ggplot(
     aes(
-      x = reorder(short_name, n),
-      y = n
+      x = reorder(event_type_clean, n),
+      y = n,
+      text = tooltip_text
     )
   ) +
   geom_col() +
-  coord_flip() +
-  facet_wrap(~ case_label, scales = "free_y") +
+  coord_flip(clip = "off") +
+  facet_wrap(
+    ~ case_label,
+    scales = "free_y",
+    ncol = 1
+  ) +
   labs(
     title = "Historical Event Chain Comparison",
-    subtitle = "Event-type patterns in historical cases compared with the May 17 incident",
+    subtitle = "Top 10 event types within each historical case and the May 17 incident",
     x = "Event Type",
     y = "Number of Events"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.margin = margin(10, 20, 10, 80),
+    axis.text.y = element_text(size = 8),
+    strip.text = element_text(size = 9)
+  )
 
+ggplotly(
+  p_chain_comparison,
+  tooltip = "text"
+)
 ```
 
 ## The code
@@ -3010,27 +3053,63 @@ chain_comparison_events <- bind_rows(
   current_chain_events
 )
 
-chain_comparison_events |>
+chain_comparison_top10 <- chain_comparison_events |>
   count(case_label, short_name) |>
+  group_by(case_label) |>
+  slice_max(
+    order_by = n,
+    n = 10,
+    with_ties = FALSE
+  ) |>
+  ungroup() |>
+  mutate(
+    event_type_clean = str_replace_all(short_name, "_", " "),
+    event_type_clean = str_trunc(event_type_clean, width = 28),
+    tooltip_text = paste(
+      "Case:", case_label,
+      "<br>Event Type:", str_replace_all(short_name, "_", " "),
+      "<br>Number of Events:", n
+    )
+  )
+
+p_chain_comparison <- chain_comparison_top10 |>
   ggplot(
     aes(
-      x = reorder(short_name, n),
-      y = n
+      x = reorder(event_type_clean, n),
+      y = n,
+      text = tooltip_text
     )
   ) +
   geom_col() +
-  coord_flip() +
-  facet_wrap(~ case_label, scales = "free_y") +
+  coord_flip(clip = "off") +
+  facet_wrap(
+    ~ case_label,
+    scales = "free_y",
+    ncol = 1
+  ) +
   labs(
     title = "Historical Event Chain Comparison",
-    subtitle = "Event-type patterns in historical cases compared with the May 17 incident",
+    subtitle = "Top 10 event types within each historical case and the May 17 incident",
     x = "Event Type",
     y = "Number of Events"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.margin = margin(10, 20, 10, 80),
+    axis.text.y = element_text(size = 8),
+    strip.text = element_text(size = 9)
+  )
 
+ggplotly(
+  p_chain_comparison,
+  tooltip = "text"
+)
 ```
 :::
+
+The earlier similar cases were dominated by task-related events and file-related events mostly. However, on the May 17 incident, there were much lesser number of events. Also, check email was the dominant one.This suggests that while similar historical cases were mainly file-operation heavy, the May 17 incident involved a more targeted sequence of access, email and SaidIT-checking events. 
+
+
 
 # Intervention analysis
 
@@ -3080,6 +3159,10 @@ centrality_nodes |>
   kable(caption = "Top 20 nodes by betweenness centrality")
 ```
 :::
+
+The code above calculates degree, in-degree, out-degree measure and betweenness centrality. The results are ranked by betweenness. Betweenness centrality identifies nodes that act as bridges between different parts of the multi-agent system. Betweenness centrality measures how often a node lies on the shortest path between other nodes. The top ranked nodes by betweenness are important as many paths pass through them. High betweenness nodes are useful for identifying control points in the system.
+Centrality analysis helps identify where an intervention would be most effective.  
+
 
 ## Critical node analysis visual
 
@@ -3178,6 +3261,10 @@ ggraph(critical_graph, layout = "fr") +
 ```
 :::
 
+This visual shows the top 30 nodes with the highest betweenness centrality in the multi agent interaction network. The node size represents betweenness centrality value. The node size represnts how strongly each actor acts as a bridge between different parts of the system. The most critical nodes are mainly agents with larger nodes such as Chloe Ballast, Victoria Rigging, Zoey Drydock etc. These nodes are strong potential candidates for monitoring or validation controls to prevent anomalous content from spreading.   
+
+
+
 ## Candidate intervention points
 
 ::: panel-tabset
@@ -3248,6 +3335,12 @@ candidate_interventions |>
   kable(caption = "Candidate intervention points ranked by centrality")
 ```
 :::
+
+This analysis identifies the most suitable intervention points in the system by selecting highly central nodes that are heavily involved in information flow. Based on Betweenness centrality score, the top agents include Chloe Ballast, Zoey Drydock, Victoria Rigging, Mia Fender and Liam Anchor. Large number of interactions and paths pass through them. Among these Zoey Drydock shows the highest degree score of 6289. Degree score refers to how many direct connections a node has. 
+
+
+
+
 
 Optional Visual:
 
@@ -3347,14 +3440,29 @@ recommended_intervention |>
 
 Based on the centrality analysis, the recommended intervention point is the highest-ranked non-human control node. This is selected because it occupies an important position in the interaction network and is more practical to control than individual human users.Human users can be prone to human error or misjudgement. Placing validation, logging, or approval checks at this point would reduce the likelihood of anomalous content being posted and spread through the system again.
 
+For intervention analysis, we need to pick the node that controls the flow of information the most. This is measured by betweeness not degree. Therefore, we pick the node with the highest betweenness node score. 
+
+Chloe Ballast is the main intervention point as she exhibits highest betweenness centrality in the network. She would be the best opportunity to detect anamalous content before it propogates through the rest of the system. 
+
 # Mini challenge answers
 
 1.  How was the anomalous SaidIT post made?
 
+The anamalous post seems to have resulted from a chain of activity linked to John Windward. The incident timeline visual displayed earlier shows repeated access, email checking and enter_room events nearing target time. The event chain network also suggests that the clearest extractable connection was a file-reading action associated with John Windward.  This indicates that the post was likely produced through agent activity using previously accessed file or prompt content, rather than through a manual posting process.
+
 2.  What does the post mean?
+
+The post is not pure gibberish. It has high content similarity to previous text records, including perfect scores of 1.0. By looking at content similarity analysis visual, the records with highest similarity  are all of "queue_subordinate_task" events. The details of the previous records are "SwiftWren_further_instructions.md".   
 
 3.  Are there prior occurrences?
 
+Yes. Similar events have occurred prior to the May 17 incident. Under the historical incident timeline, we can see the visual timeline of past similar events. These similar events have appeared from 8 May to 16 May 2046, with a peak of 44 events on 10 May 2046. May 17 was not an entirely new incident but was an existing behaviour pattern.    
+
+
 4.  What intervention should be implemented?
 
+The recommended intervention point is Chlow Ballast's agent pathway. Reason being, she has the highest betweenness centrality. This makes her the strongest connecting point in the interaction network. Validation, checks and approvals need to be implemented at this pathway to detect anamalous or odd content before it spreads througout the rest of the wider system.
+
 # Conclusion
+
+Based on a wide range of analysis ranging from timeline, network and similarity we cna tell that this anamalous incident was part of an already existing pattern. To reduce and even prevent such incidents from happening again, monitoring and checks should be implemented at Chloe Ballast's agent pathway, as she has the highest betweenness centrality. 
