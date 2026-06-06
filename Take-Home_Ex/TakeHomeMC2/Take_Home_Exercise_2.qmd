@@ -14,39 +14,24 @@ execute:
 # Overview
 
 ## Background
-We investigate an anomalous SaidIT post made by John Windward on 17 May 2046 at 4:21 am. The post appears to have been published in an unrelated forum, suggesting malfunctioning behaviour. The objective is to reconstruct the sequence of events leading to the post, determine the origin and meaning of its contents, identify if similar incidents have occurred before and recommend an intervention to reduce the likelihood of its recurrence. 
+
+We investigate an anomalous SaidIT post made by John Windward on 17 May 2046 at 4:21 am. The post appears to have been published in an unrelated forum, suggesting malfunctioning behaviour. The objective is to reconstruct the sequence of events leading to the post, determine the origin and meaning of its contents, identify if similar incidents have occurred before and recommend an intervention to reduce the likelihood of its recurrence.
 
 ## Questions to address
 
-1. How was the anomalous SaidIT post created?
+1.  How was the anomalous SaidIT post created?
 
-2. What is the origin and meaning of the post contents?
+2.  What is the origin and meaning of the post contents?
 
-3. Have similar incidents occurred before?
+3.  Have similar incidents occurred before?
 
-4. What intervention point would most effectively prevent future occurrences?
-
+4.  What intervention point would most effectively prevent future occurrences?
 
 ## Methodology
 
 This analysis will include the following below:
 
-
-Data preparation & wrangling<br>
-↓<br>
-Event Log Analysis<br>
-↓<br>
-Network Construction<br>
-↓<br>
-Baseline System Behaviour<br>
-↓<br>
-Anomalous Chain Reconstruction<br>
-↓<br>
-Content Origin Analysis<br>
-↓<br>
-Historical Comparison<br>
-↓<br>
-Intervention Analysis
+Data preparation & wrangling<br> ↓<br> Event Log Analysis<br> ↓<br> Network Construction<br> ↓<br> Baseline System Behaviour<br> ↓<br> Anomalous Chain Reconstruction<br> ↓<br> Content Origin Analysis<br> ↓<br> Historical Comparison<br> ↓<br> Intervention Analysis
 
 # Setup
 
@@ -61,6 +46,7 @@ pacman::p_load(
   ggraph,
 
   DT,
+  plotly,
   patchwork,
   ggrepel,
 
@@ -72,7 +58,6 @@ pacman::p_load(
 )
 
 ```
-
 
 ## Loading data
 
@@ -94,18 +79,44 @@ org_raw <- fromJSON(
 )
 ```
 
-
 # Data wrangling
 
 ## Preparing Event data
 
+::: panel-tabset
+## The plot
+
 ```{r}
+#| echo: false
+
 events <- tibble(
   event = mc2_raw$events
 ) |>
   unnest_wider(event)
 
 glimpse(events)
+```
+
+## The code
+
+```{r}
+#| eval: false
+events <- tibble(
+  event = mc2_raw$events
+) |>
+  unnest_wider(event)
+
+glimpse(events)
+```
+:::
+
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
 
 events <- events |>
   mutate(
@@ -132,13 +143,52 @@ events |>
 
 
 events |> count(n_parties)
-
 ```
 
-
-## Preparing actor information 
+## The code
 
 ```{r}
+#| eval: false
+events <- events |>
+  mutate(
+    datetime = as.POSIXct(
+      when,
+      origin = "1970-01-01",
+      tz = "UTC"
+    ),
+    date = as.Date(datetime),
+    hour = hour(datetime),
+    n_parties = map_int(parties, length)
+  ) |>
+  arrange(datetime)
+
+events |>
+  summarise(
+    total_events = n(),
+    earliest_event = min(datetime),
+    latest_event = max(datetime)
+  )
+
+events |>
+  count(short_name, sort = TRUE)
+
+
+events |> count(n_parties)
+```
+:::
+
+The event data was transformed into a structured tibble format. Additional variables such as date and hour were derived from raw data. The data was then sorted to preserve the sequence of events. 
+
+The event log spans multiple days and contains numerous event types such as filer operations and email access. While most events involve a small number of participants, a small portion involve larger number of people (4 and 5). This shows that only sometimes, there is coordination involving multiple actors. This system operates mostly through targeted interactions. 
+
+## Preparing actor information
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
 event_parties <- events |>
   select(id,
          datetime,
@@ -167,14 +217,55 @@ event_parties |>
   count(party,
         sort = TRUE) |>
   slice_head(n = 20)
-
-
 ```
+
+## The code
+
+```{r}
+#| eval: false
+event_parties <- events |>
+  select(id,
+         datetime,
+         short_name,
+         parties) |>
+  unnest_longer(parties,
+                values_to = "party")
+
+event_parties <- event_parties |>
+  mutate(
+    actor_type = case_when(
+      str_detect(party, "^person:") ~ "Person",
+      str_detect(party, "^Agent/") ~ "Agent",
+      str_detect(party, "^world:") ~ "System",
+      str_detect(party, "^team:") ~ "Team",
+      str_detect(party, "^company:") ~ "Company",
+      TRUE ~ "Other"
+    )
+  )
+
+event_parties |>
+  count(actor_type,
+        sort = TRUE)
+
+event_parties |>
+  count(party,
+        sort = TRUE) |>
+  slice_head(n = 20)
+```
+:::
+
+
+Each person is categorised into a actor category such as Person, Agent, System and other. The event log contains a mixture of human users, autonomous agents and system level entities. The most commonly occurring actors represent highly active participants in the organisation's workflows and most likely play central roles in communication, task delegation and interactions. 
 
 
 ## Preparing organisation data
 
+::: panel-tabset
+## The plot
+
 ```{r}
+#| echo: false
+
 org_nodes <- as_tibble(org_raw$nodes)
 
 glimpse(org_nodes)
@@ -188,13 +279,33 @@ glimpse(org_edges)
 
 org_edges |>
   count(relation)
-
-
-
 ```
 
-## Viewing the 4 tables made earlier
+## The code
 
+```{r}
+#| eval: false
+org_nodes <- as_tibble(org_raw$nodes)
+
+glimpse(org_nodes)
+
+org_nodes |>
+  count(type)
+
+org_edges <- as_tibble(org_raw$edges)
+
+glimpse(org_edges)
+
+org_edges |>
+  count(relation)
+```
+:::
+
+Here, the organisation chart is converted into 2 tidy tables based on edges and nodes. The nodes are for entities such as company, department, person and team. The edges are for organisational relationships such as "contains" or "led by", to indicate how these entities are connected to each other.   
+
+
+
+## Viewing the 4 tables made earlier
 
 ::: panel-tabset
 ## The plot
@@ -244,7 +355,7 @@ org_edges |>
 
 ## Network construction
 
-Not all events have clear from and to information. Therefore, only events with explicit or clear inferable interactions are included into the directed network edges. 
+Not all events have clear from and to information. Therefore, only events with explicit or clear inferable interactions are included into the directed network edges.
 
 ### Create event edges
 
@@ -427,8 +538,11 @@ event_edges |>
 ```
 :::
 
-### Check edge types
+This step creates directed edges indicating interaction edges from event records by extracting "from" and "to" relationships. Only events with clear source-target relationships are included in the network. 
+The resulting event_edges table captures interactions such as emails sent, meetings proposed etc. This helps to create the network to trace how the different actors in the system interacted and connected. 
 
+
+### Check edge types
 
 ::: panel-tabset
 ## The plot
@@ -451,11 +565,11 @@ event_edges |>
 ```
 :::
 
+After filtering out edges that have clear "from" and "to" , this table summarises the number of network edges by each type. It helps assess which activities are most responsible for generating connections within the network. Information exchange is the most common interaction, indicating that the system is highly dependent on information exchange and coordination rather than isolated tasks.   
 
 
 ### Creating event nodes
 
-
 ::: panel-tabset
 ## The plot
 
@@ -528,6 +642,9 @@ event_nodes |>
   kable(caption = "First 10 records of event_nodes")
 ```
 :::
+
+This step creates the node list for the interaction network. Each node is classified into a type. The table contains all unique sources and targets. The network contains people and agents.
+
 
 
 ### Check node types
@@ -552,6 +669,10 @@ event_nodes |>
   kable(caption = "Number of nodes by node type")
 ```
 :::
+
+This table represents the composition of the interaction network. It counts the number of nodes in each category. The network consists of a diverse set of entities. The top 2 node types are person and team. 
+
+
 
 
 ### Creating event graph
@@ -585,6 +706,7 @@ event_graph
 ```
 :::
 
+This step combines the node and edges into a directed graph object, whih has 3315 nodes and 38007 edges. Each node represents an entity in the system, while each directed edge represents an interaction. 
 
 ### Graph summary
 
@@ -614,6 +736,9 @@ tibble(
   kable(caption = "Summary of constructed event interaction graph")
 ```
 :::
+
+Directed graph preserved flow of interactions.
+
 
 ## Creating organisation network
 
@@ -674,6 +799,9 @@ tibble(
 
 ```
 :::
+
+Here we convert the organisational structure into a directed network. The organisational entities represent the nodes and relationships as edges. This graph represents the organisational structure and chain of responsibility.  
+
 
 ## Integrating organisation structure
 
@@ -747,7 +875,7 @@ event_people_org |>
 ```
 :::
 
-
+Here, we link people found in the event logs to their respective records in the organisation chart. This is to check whether those who appear in the event logs can be matched to formal organisational identities and titles. We find that there is only 1 person who does not appear in the organisation chart. 
 
 # System overview
 
@@ -755,7 +883,7 @@ The purpose is to provide context to understand where anomalous event occurred. 
 
 ## Event log analysis
 
-Summarising what we learnt from the event log. 
+Summarising what we learnt from the event log.
 
 ::: panel-tabset
 ## The plot
@@ -787,6 +915,7 @@ events |>
 ```
 :::
 
+
 ::: panel-tabset
 ## The plot
 
@@ -809,6 +938,9 @@ events |>
 ```
 :::
 
+This shows the frequency of each event type.
+
+
 ::: panel-tabset
 ## The plot
 
@@ -830,6 +962,8 @@ events |>
 ```
 :::
 
+This shows the number of participants involved per event.
+
 ::: panel-tabset
 ## The plot
 
@@ -850,6 +984,8 @@ event_parties |>
 
 ```
 :::
+
+
 
 ## Event log summary table:
 
@@ -903,6 +1039,9 @@ event_summary |>
 ```
 :::
 
+The table provides high level overview of the event log by summarising the total number of recorded events and  the diversity of it. 24 unique event types indicate a highly active and diverse environment. The large number of events indicate that the different actors interact frequently. 
+
+
 ## Event participant composition:
 
 ::: panel-tabset
@@ -954,6 +1093,10 @@ event_parties |>
 ```
 :::
 
+This visual shows the composition of actors participating in the event log. People and agent make up the majority, indicating that the system relies heavily on human-agent interactions to execute tasks. 
+The dominance of People and agents indicates that the anomalous post is more likely to have emerged from human-agent interacts and workflows rather than sn isolated system process. 
+
+
 ## Events by number of parties:
 
 ::: panel-tabset
@@ -1003,8 +1146,12 @@ events |>
 ```
 :::
 
+This visual displays the number of participants involved in each event. Majority of events are involving 1 or 2 participants. The system operates mostly through individuals or targteted interactions rather than large scale group interactions. This trend indicates that the anomalous post is most likely to be associated with a focused interaction chain involving a small number of actors rather than a complax one with many actors.  
+
+
 
 ## Event type distribution visual
+
 Here we aim to find what activities dominate the system.
 
 ::: panel-tabset
@@ -1063,6 +1210,8 @@ event_type_counts |>
 ```
 :::
 
+The most common activities are check_email, assign_agent_task and read_file. The SaidIt-related activities (saidit_post_check,saidit_post, post_saidit) indicate that the anomalous post represents an unusual behaviour. 
+
 
 ## Daily system activity visual
 
@@ -1096,7 +1245,9 @@ events |>
 ```
 :::
 
-This shows there are 70 records, 70 distinct days, therefore we can do a daily activity line chart.
+This shows there are 70 distinct days, therefore we can do a daily activity line chart.
+
+
 
 ::: panel-tabset
 ## The plot
@@ -1106,11 +1257,15 @@ This shows there are 70 records, 70 distinct days, therefore we can do a daily a
 daily_activity <- events |>
   count(date)
 
-daily_activity |>
+p_daily_activity <- daily_activity |>
   ggplot(
     aes(
       x = date,
-      y = n
+      y = n,
+      text = paste(
+        "Date:", date,
+        "<br>Number of Events:", n
+      )
     )
   ) +
   geom_line(linewidth = 1) +
@@ -1122,6 +1277,11 @@ daily_activity |>
     y = "Number of Events"
   ) +
   theme_minimal()
+
+ggplotly(
+  p_daily_activity,
+  tooltip = "text"
+)
 
 
 ```
@@ -1134,11 +1294,15 @@ daily_activity |>
 daily_activity <- events |>
   count(date)
 
-daily_activity |>
+p_daily_activity <- daily_activity |>
   ggplot(
     aes(
       x = date,
-      y = n
+      y = n,
+      text = paste(
+        "Date:", date,
+        "<br>Number of Events:", n
+      )
     )
   ) +
   geom_line(linewidth = 1) +
@@ -1151,12 +1315,22 @@ daily_activity |>
   ) +
   theme_minimal()
 
+ggplotly(
+  p_daily_activity,
+  tooltip = "text"
+)
+
 ```
 :::
+
+This interactive visual shows how overall activity in the system changes over time by plotting the number of events recorded each day. Most records have around 1000 and 2000 events throughout the period. However, there are spikes on 10, 11 and 12 May. 
+Since the anomalous post occurred during a period of relatively normal system activity, it may indicate the the incident is linked to a specific interaction chain rather than a system-wide surge in activity. 
+
+
 
 ## Most common interaction paths
 
-Here, it would be necessary to discover which interactions occur most frequently within the multi-agent system.  
+Here, it would be necessary to discover which interactions occur most frequently within the multi-agent system.
 
 ::: panel-tabset
 ## The plot
@@ -1222,6 +1396,7 @@ common_paths |>
 ```
 :::
 
+This visual identifies the most frequently occurring interaction paths in the event network. The most common interaction paths are agents repeatedly accessing certain files which are irrigation, manure and harvest related. 
 
 ## system interaction network visual
 
@@ -1284,6 +1459,7 @@ ggraph(event_graph,
 ```
 :::
 
+The network consists of a single large densely connected component containing the majority of entities, indicating extensive interaction and information exchange across the system. There are 2 other smaller disconnected clusters which are also visible. These suggest specialised or isolated workflows and/or actors that interact less frequently with the rest of the broader network. 
 
 ## Organisation structure visual
 
@@ -1420,12 +1596,15 @@ ggraph(customer_support_graph, layout = "tree") +
 ```
 :::
 
+John is in the customer support department. This shows that the anomalous poost is connected to a customer facing organisational area rather than a purely technical or back end part of the organisation. The post could possibly have implications for customer-facing workflows.
+
+
 
 # Extracting the anomalous chain
 
 The purpose is to reconstruct the exact sequence of events leading to the anomalous post.
 
-## Locating  the target event
+## Locating the target event
 
 ::: panel-tabset
 ## The plot
@@ -1482,6 +1661,9 @@ target_candidates |>
 
 ```
 :::
+
+The filtered table isolates events containing references to john_windward or SaidIT, making the anomaly investigation more targeted. 
+
 
 ## event window extraction
 
@@ -1534,6 +1716,9 @@ incident_window_events |>
 ```
 :::
 
+This narrows the event log to a specific period( 24 hours before and 1 hour after the anomalous post incident) most likely to contain relevant information. 
+
+
 ## Incident timeline visual
 
 ::: panel-tabset
@@ -1543,38 +1728,123 @@ incident_window_events |>
 #| echo: false
 incident_timeline <- incident_window_events |>
   mutate(
-    is_target = abs(as.numeric(difftime(datetime, target_time, units = "mins"))) <= 1,
-    related_to_john = str_detect(details_text, regex("john_windward", ignore_case = TRUE)) |
-      map_lgl(parties, ~ any(str_detect(.x, regex("john_windward", ignore_case = TRUE))))
+    is_target =
+      abs(as.numeric(
+        difftime(datetime,
+                 target_time,
+                 units = "mins")
+      )) <= 1,
+
+    related_to_john =
+      str_detect(
+        details_text,
+        regex("john_windward",
+              ignore_case = TRUE)
+      ) |
+      map_lgl(
+        parties,
+        ~ any(
+          str_detect(
+            .x,
+            regex(
+              "john_windward",
+              ignore_case = TRUE
+            )
+          )
+        )
+      ),
+
+    event_category = case_when(
+      is_target & related_to_john ~
+        "Target + John",
+
+      is_target ~
+        "Target Event",
+
+      related_to_john ~
+        "John Related",
+
+      TRUE ~
+        "Other Events"
+    ),
+
+    tooltip_text = paste(
+      "Datetime:", datetime,
+      "<br>Event Type:", short_name,
+      "<br>Related to John:", related_to_john,
+      "<br>Target Time:", is_target,
+      "<br>Details:", str_trunc(details_text, 150)
+    )
   )
 
-incident_timeline |>
+p_incident_timeline <- incident_timeline |>
   ggplot(
     aes(
       x = datetime,
-      y = short_name
+      y = short_name,
+      text = tooltip_text
     )
   ) +
+
   geom_point(
     aes(
-      shape = related_to_john,
-      size = is_target
+      colour = event_category,
+      size = event_category
     ),
-    alpha = 0.8
+    alpha = 0.85
   ) +
+
   geom_vline(
     xintercept = target_time,
-    linetype = "dashed"
+    linetype = "dashed",
+    linewidth = 0.8
   ) +
+
+  scale_colour_manual(
+    values = c(
+      "Other Events" = "grey50",
+      "John Related" = "blue",
+      "Target Event" = "red",
+      "Target + John" = "goldenrod"
+    )
+  ) +
+
+  scale_size_manual(
+    values = c(
+      "Other Events" = 2,
+      "John Related" = 3,
+      "Target Event" = 5,
+      "Target + John" = 6
+    )
+  ) +
+
+  scale_x_datetime(
+    date_breaks = "6 hours",
+    date_labels = "%b %d\n%H:%M"
+  ) +
+
   labs(
-    title = "Incident Timeline Around the Anomalous SaidIT Post",
+    title = "Timeline Around Anomalous Post",
     subtitle = "Events within 24 hours before and 1 hour after 17 May 2046, 04:21",
     x = "Datetime",
     y = "Event Type",
-    shape = "Related to John Windward",
-    size = "Target Time"
+    colour = "Event Category",
+    size = "Event Category"
   ) +
-  theme_minimal()
+
+  theme_minimal() +
+
+  theme(
+    axis.text.x = element_text(
+      angle = 45,
+      hjust = 1
+    )
+  )
+
+ggplotly(
+  p_incident_timeline,
+  tooltip = "text"
+)
 
 ```
 
@@ -1585,41 +1855,178 @@ incident_timeline |>
 
 incident_timeline <- incident_window_events |>
   mutate(
-    is_target = abs(as.numeric(difftime(datetime, target_time, units = "mins"))) <= 1,
-    related_to_john = str_detect(details_text, regex("john_windward", ignore_case = TRUE)) |
-      map_lgl(parties, ~ any(str_detect(.x, regex("john_windward", ignore_case = TRUE))))
+    is_target =
+      abs(as.numeric(
+        difftime(datetime,
+                 target_time,
+                 units = "mins")
+      )) <= 1,
+
+    related_to_john =
+      str_detect(
+        details_text,
+        regex("john_windward",
+              ignore_case = TRUE)
+      ) |
+      map_lgl(
+        parties,
+        ~ any(
+          str_detect(
+            .x,
+            regex(
+              "john_windward",
+              ignore_case = TRUE
+            )
+          )
+        )
+      ),
+
+    event_category = case_when(
+      is_target & related_to_john ~
+        "Target + John",
+
+      is_target ~
+        "Target Event",
+
+      related_to_john ~
+        "John Related",
+
+      TRUE ~
+        "Other Events"
+    ),
+
+    tooltip_text = paste(
+      "Datetime:", datetime,
+      "<br>Event Type:", short_name,
+      "<br>Related to John:", related_to_john,
+      "<br>Target Time:", is_target,
+      "<br>Details:", str_trunc(details_text, 150)
+    )
   )
 
-incident_timeline |>
+p_incident_timeline <- incident_timeline |>
   ggplot(
     aes(
       x = datetime,
-      y = short_name
+      y = short_name,
+      text = tooltip_text
     )
   ) +
+
   geom_point(
     aes(
-      shape = related_to_john,
-      size = is_target
+      colour = event_category,
+      size = event_category
     ),
-    alpha = 0.8
+    alpha = 0.85
   ) +
+
   geom_vline(
     xintercept = target_time,
-    linetype = "dashed"
+    linetype = "dashed",
+    linewidth = 0.8
   ) +
+
+  scale_colour_manual(
+    values = c(
+      "Other Events" = "grey50",
+      "John Related" = "blue",
+      "Target Event" = "red",
+      "Target + John" = "goldenrod"
+    )
+  ) +
+
+  scale_size_manual(
+    values = c(
+      "Other Events" = 2,
+      "John Related" = 3,
+      "Target Event" = 5,
+      "Target + John" = 6
+    )
+  ) +
+
+  scale_x_datetime(
+    date_breaks = "6 hours",
+    date_labels = "%b %d\n%H:%M"
+  ) +
+
   labs(
-    title = "Incident Timeline Around the Anomalous SaidIT Post",
+    title = "Timeline Around Anomalous Post",
     subtitle = "Events within 24 hours before and 1 hour after 17 May 2046, 04:21",
     x = "Datetime",
     y = "Event Type",
-    shape = "Related to John Windward",
+    colour = "Event Category",
+    size = "Event Category"
+  ) +
+
+  theme_minimal() +
+
+  theme(
+    axis.text.x = element_text(
+      angle = 45,
+      hjust = 1
+    )
+  )
+
+ggplotly(
+  p_incident_timeline,
+  tooltip = "text"
+)
+
+```
+:::
+
+This interactive visual displays events occurring within the 24 hour period, in chronological order. Most activity in the window consists of check_email, check_access and enter_room events. Only small subset of events are directly associated with John Windward.     
+
+
+
+
+### Focusing on John related events
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+incident_timeline |>
+  filter(related_to_john == TRUE | is_target == TRUE) |>
+  ggplot(aes(x = datetime, y = short_name)) +
+  geom_point(aes(size = is_target), alpha = 0.8) +
+  geom_vline(xintercept = target_time, linetype = "dashed") +
+  labs(
+    title = "John Windward-Related Events Around the Anomalous Post",
+    x = "Datetime",
+    y = "Event Type",
+    size = "Target Time"
+  ) +
+  theme_minimal()
+
+
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+incident_timeline |>
+  filter(related_to_john == TRUE | is_target == TRUE) |>
+  ggplot(aes(x = datetime, y = short_name)) +
+  geom_point(aes(size = is_target), alpha = 0.8) +
+  geom_vline(xintercept = target_time, linetype = "dashed") +
+  labs(
+    title = "John Windward-Related Events Around the Anomalous Post",
+    x = "Datetime",
+    y = "Event Type",
     size = "Target Time"
   ) +
   theme_minimal()
 
 ```
 :::
+
+This removes irrelevant unrelated background activity and keeps only John related events. Only a small number of John related events appear in the incident window.
 
 
 ## Event chain network
@@ -1769,6 +2176,10 @@ ggraph(incident_focus_graph, layout = "fr") +
 ```
 :::
 
+This network isolates the interactions connected to John or SaidIt within the incident window. It transforms the timeline into a network showing source and type of interaction. This is a direct, short chain. This suggests that the clearest extractable edge in the incident window is a particular file reading action associated with John. This indicates that the anomalous post may have originated from content accessed through John's agent or file.
+
+
+
 
 ## key actors involved
 
@@ -1828,6 +2239,7 @@ key_actors |>
 ```
 :::
 
+This table highlights the actors most active during the incident 24 hour window before the anomalous post. The related_to_John separates John-related actors from other active entities, helping to distinguish direct relevance from general system noise. 
 
 ::: panel-tabset
 ## The plot
@@ -1878,6 +2290,9 @@ key_actors |>
   theme_minimal()
 ```
 :::
+
+The top 5 actors most active during the 24 hour incident window are henry_sail,evelyn_dock, layla_channel,charlotte_current and olivia_keel.
+
 
 # Content origin analysis
 
@@ -1955,9 +2370,13 @@ text_sources |>
 ```
 :::
 
+This step is where we extract events containing textual content and classify them into categories. The purpose is to identify potential sources of text that may have contributed to the anomalous SaidIT post. The textual information exists in many various forms within the system(topics, files, agent advice).     
+
+
+
 ## Content Similarity Analysis visual
 
-Locate the anomalous post text, then compute similarity with earlier text sources. 
+Locate the anomalous post text, then compute similarity with earlier text sources.
 
 ::: panel-tabset
 ## The plot
@@ -2000,6 +2419,8 @@ target_post |>
   kable(caption = "Target anomalous post candidate")
 ```
 :::
+
+This portion is to identify the most likely candidate corresponding to the anomalous post. The event log is filtered for records occurring on 17 May 2046, with the closest timestamp and references to John Windward and SaidIT. 
 
 
 ::: panel-tabset
@@ -2076,6 +2497,8 @@ similarity_results |>
   kable(caption = "Top 10 text sources most similar to the anomalous post")
 ```
 :::
+
+This step compares the selected target text against all earlier text-bearing events using Jaro-Wrinkler similarity. The records are ranked by similarity score to identify the possible origins of the anomalous post content. The table lists the top 10 earlier text sources which are most similar to target text. There are events with perfect score of 1.0. This provides evidence for tracing whether the post was generated from earlier messages, files or agent outputs. The output supports the claim that the particular anomalous post may not be random nonsense but rather could have been derived from earlier system records or texts.   
 
 Visual:
 
@@ -2135,7 +2558,6 @@ similarity_results |>
   theme_minimal()
 ```
 :::
-
 
 ## Evidence supporting content origin
 
@@ -2204,6 +2626,9 @@ content_origin_evidence |>
 ```
 :::
 
+The table presents the top candidate sources identified by similarity analysis.  All of the top 5 matches are queue_subordinate_task events classified as File reference.These could explain where and how the anomalous post content was generated.   
+
+It is important to note that similarity does not by itself prove causatio. However, it can help to narrow down our search. 
 
 ## interpretation of post meaning
 
@@ -2237,6 +2662,13 @@ text_sources |>
   kable()
 ```
 :::
+
+This portion is to extract all text bearing events on 17 May 2046 which reference John, SaidIt. This is to gather contextual evidence that may help explain the content and intent of the anomalous post. The prescence of both file access and task delegation activities show that information associated with John was actively being accessed and processed throughout the whole day. This helps to provide contextual information. 
+
+
+
+
+
 
 # Historical behaviour analysis
 
@@ -2318,6 +2750,9 @@ historical_similar_events |>
 :::
 
 
+
+
+
 ## Historical incident timeline
 
 ::: panel-tabset
@@ -2326,13 +2761,23 @@ historical_similar_events |>
 ```{r}
 #| echo: false
 
-historical_similar_events |>
+historical_timeline <- historical_similar_events |>
   count(date, incident_type) |>
+  mutate(
+    tooltip_text = paste(
+      "Date:", date,
+      "<br>Incident Type:", incident_type,
+      "<br>Number of Similar Events:", n
+    )
+  )
+
+p_historical_timeline <- historical_timeline |>
   ggplot(
     aes(
       x = date,
       y = n,
-      colour = incident_type
+      colour = incident_type,
+      text = tooltip_text
     )
   ) +
   geom_line(linewidth = 1) +
@@ -2349,6 +2794,11 @@ historical_similar_events |>
     colour = "Incident Type"
   ) +
   theme_minimal()
+
+ggplotly(
+  p_historical_timeline,
+  tooltip = "text"
+)
 ```
 
 ## The code
@@ -2356,13 +2806,23 @@ historical_similar_events |>
 ```{r}
 #| eval: false
 
-historical_similar_events |>
+historical_timeline <- historical_similar_events |>
   count(date, incident_type) |>
+  mutate(
+    tooltip_text = paste(
+      "Date:", date,
+      "<br>Incident Type:", incident_type,
+      "<br>Number of Similar Events:", n
+    )
+  )
+
+p_historical_timeline <- historical_timeline |>
   ggplot(
     aes(
       x = date,
       y = n,
-      colour = incident_type
+      colour = incident_type,
+      text = tooltip_text
     )
   ) +
   geom_line(linewidth = 1) +
@@ -2380,13 +2840,17 @@ historical_similar_events |>
   ) +
   theme_minimal()
 
+ggplotly(
+  p_historical_timeline,
+  tooltip = "text"
+)
+
 ```
 :::
 
 ## Comparative analysis
 
 Using the comparison table, compare between historical cases and the May 17 incident.
-
 
 ::: panel-tabset
 ## The plot
@@ -2476,8 +2940,6 @@ comparison_table |>
 
 ```
 :::
-
-
 
 ## Historical event chain comparison
 
@@ -2618,7 +3080,6 @@ centrality_nodes |>
   kable(caption = "Top 20 nodes by betweenness centrality")
 ```
 :::
-
 
 ## Critical node analysis visual
 
@@ -2888,15 +3349,12 @@ Based on the centrality analysis, the recommended intervention point is the high
 
 # Mini challenge answers
 
-1. How was the anomalous SaidIT post made?
+1.  How was the anomalous SaidIT post made?
 
-2. What does the post mean?
+2.  What does the post mean?
 
-3. Are there prior occurrences?
+3.  Are there prior occurrences?
 
-4. What intervention should be implemented?
+4.  What intervention should be implemented?
 
 # Conclusion
-
-
-

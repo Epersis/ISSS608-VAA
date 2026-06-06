@@ -11,23 +11,21 @@ execute:
   freeze: true
 ---
 
-This exercise is about learning to model, analyse and visualise network data using R. 
+This exercise is about learning to model, analyse and visualise network data using R.
 
-Learning objectives: 
+Learning objectives:
 
-1. create graph object data frames
+1.  create graph object data frames
 
-2. build network graph visualisation
+2.  build network graph visualisation
 
-3. compute network geometrics
+3.  compute network geometrics
 
-4. build advanced graph visualisation by incorporating the network geometrics
+4.  build advanced graph visualisation by incorporating the network geometrics
 
-5. build interactive network visualisation
-
+5.  build interactive network visualisation
 
 # Getting started
-
 
 ```{r}
 pacman::p_load(igraph, tidygraph, ggraph, 
@@ -37,18 +35,15 @@ pacman::p_load(igraph, tidygraph, ggraph,
 
 ```
 
-
 # Data
 
-2 datasets are being used. One is containing nodes data while other contains edge(aka link) data. 
-
+2 datasets are being used. One is containing nodes data while other contains edge(aka link) data.
 
 ```{r}
 GAStech_nodes <- read_csv("GAStech_email_node.csv")
 GAStech_edges <- read_csv("GAStech_email_edge-v2.csv")
 
 ```
-
 
 # Reviewing imported data
 
@@ -70,9 +65,7 @@ glimpse(GAStech_edges)
 ```
 :::
 
-
 # Wrangling time
-
 
 ```{r}
 GAStech_edges <- GAStech_edges %>%
@@ -83,9 +76,7 @@ GAStech_edges <- GAStech_edges %>%
 
 ```
 
-
 # Wrangling attributes
-
 
 ```{r}
 GAStech_edges_aggregated <- GAStech_edges %>%
@@ -102,30 +93,29 @@ GAStech_edges_aggregated <- GAStech_edges %>%
 
 2 articles for reading:
 
-1. https://www.data-imaginist.com/posts/2017-07-07-introducing-tidygraph/ 
+1.  https://www.data-imaginist.com/posts/2017-07-07-introducing-tidygraph/
 
-2. https://www.data-imaginist.com/posts/2018-02-12-tidygraph-1-1-a-tidy-hope/index.html 
+2.  https://www.data-imaginist.com/posts/2018-02-12-tidygraph-1-1-a-tidy-hope/index.html
 
 Main learning points:
 
-tidygraph is for network/graph analysis in a tidyverse style.
-Instead of treating network data as one messy structure, it represents it as 2 tidy tables.
+tidygraph is for network/graph analysis in a tidyverse style. Instead of treating network data as one messy structure, it represents it as 2 tidy tables.
 
-1. Nodes table. This contains people, entities, items
+1.  Nodes table. This contains people, entities, items
 
-2. Edges table. This represents relationships/connections between them. 
+2.  Edges table. This represents relationships/connections between them.
 
-3. tbl_graph is the main graph object. It is built on top of igraph, so it can use graph algorithms efficiently, but it is displayed and manipulated like tidy data. 
+3.  tbl_graph is the main graph object. It is built on top of igraph, so it can use graph algorithms efficiently, but it is displayed and manipulated like tidy data.
 
-4. activate() switches between nodes and edges. There is a need to tell R whether now it is working on nodes and edges. activate(nodes) means apply subsequent adplyr verbs to node data, whole activate(edges) means they apply to edge data.
+4.  activate() switches between nodes and edges. There is a need to tell R whether now it is working on nodes and edges. activate(nodes) means apply subsequent adplyr verbs to node data, whole activate(edges) means they apply to edge data.
 
-5. tidygraph helps answer network questions, not just draw networks. An important point from the second article is that you do not need to plot a network to understand it. 
+5.  tidygraph helps answer network questions, not just draw networks. An important point from the second article is that you do not need to plot a network to understand it.
 
-6. Centrality identifies important nodes. This can be used to help identify key actors in the communication/event network.
+6.  Centrality identifies important nodes. This can be used to help identify key actors in the communication/event network.
 
-7. Community detection groups related nodes. These detect groups of nodes that are more strongly connected to each other. This is useful for finding clusters of people, departments or suspicious communication groups.
+7.  Community detection groups related nodes. These detect groups of nodes that are more strongly connected to each other. This is useful for finding clusters of people, departments or suspicious communication groups.
 
-8. Morphing allows temporary graph transformation, using functions like morph(), convert().
+8.  Morphing allows temporary graph transformation, using functions like morph(), convert().
 
 Overall, the main lesson is that tidygraph lets you treat network data like tidy data. Therefore, networks can be represented as nodes and edges. More importantly, it helps you perform meaningful network analysis using centrality, community detection, path analysis and graph measures before visualising the results with ggraph.
 
@@ -158,12 +148,9 @@ GAStech_graph
 
 ## Reviewing output of the graph object
 
-The output shows that GAStech_graph is an object representing a directed multigraph consisting of 54 nodes and 1372 edges. Each node represents an employee and contains 4 attributes: id, label, department and job title. The edge data captures interactions between employees, where the from and to columns indicate the source and destination nodes respectively. Each edge has a weekday attribute and weight attribute which represents the frequency or strength of interaction between the 2 employees that day. 
-As the graph is a directed multigraph, multiple directed edges can exist between the same pair of employees, allowing interactions on different weekdays to be represented separately. 
-
+The output shows that GAStech_graph is an object representing a directed multigraph consisting of 54 nodes and 1372 edges. Each node represents an employee and contains 4 attributes: id, label, department and job title. The edge data captures interactions between employees, where the from and to columns indicate the source and destination nodes respectively. Each edge has a weekday attribute and weight attribute which represents the frequency or strength of interaction between the 2 employees that day. As the graph is a directed multigraph, multiple directed edges can exist between the same pair of employees, allowing interactions on different weekdays to be represented separately.
 
 # Changing the active object
-
 
 ::: panel-tabset
 ## The plot
@@ -213,7 +200,6 @@ ggraph(GAStech_graph) +
 
 ```
 :::
-
 
 # Changing default network graph theme
 
@@ -330,9 +316,6 @@ kable(
 
 ```
 
-
-
-
 ## Using the Fruchterman and Reingold layout
 
 ::: panel-tabset
@@ -363,7 +346,6 @@ g + theme_graph()
 
 ```
 :::
-
 
 ## Modifying network nodes
 
@@ -397,7 +379,6 @@ g + theme_graph()
 
 ```
 :::
-
 
 ## Modifying edges
 
@@ -435,32 +416,22 @@ g + theme_graph()
 ```
 :::
 
-
 # Creating facet graphs
 
 Faceting in ggraph is a technique used to split a network visualisation into multiple panels based on node or edge attributes. This helps reduce edge overplotting and makes complex network structures easier to interpret.
 
-The 3 main faceting functions are:
-1. facet_nodes()
-2. facet_edges()
-3. facet_graph()
+The 3 main faceting functions are: 1. facet_nodes() 2. facet_edges() 3. facet_graph()
 
-Why faceting is useful:
-Faceting offers several advantages when analysing network data:
-1. reduces visual clutter
-2. highlights patterns
-3. facilitates comparison
-4. improves interpretability
+Why faceting is useful: Faceting offers several advantages when analysing network data: 1. reduces visual clutter 2. highlights patterns 3. facilitates comparison 4. improves interpretability
 
-A common mistake is to repeatedly filter the network and create separate plots. 
+A common mistake is to repeatedly filter the network and create separate plots.
 
-| Filtering | Faceting |
-|-----------|----------|
-| Produces separate plots | Produces a coordinated set of panels |
-| Layout may change between plots | Layout remains consistent |
-| Harder to compare | Easier to compare |
-| More code required | More concise |
-
+| Filtering                       | Faceting                             |
+|---------------------------------|--------------------------------------|
+| Produces separate plots         | Produces a coordinated set of panels |
+| Layout may change between plots | Layout remains consistent            |
+| Harder to compare               | Easier to compare                    |
+| More code required              | More concise                         |
 
 ## facet_edges()
 
@@ -500,7 +471,6 @@ g <- ggraph(GAStech_graph,
 g + facet_edges(~Weekday)
 ```
 :::
-
 
 ## theme()
 
@@ -633,39 +603,33 @@ g + facet_nodes(~Department)+
 ```
 :::
 
-
 # Network Metrics analysis
 
 What is centrality? Centrality measures are network analysis metrics that quantify how important, influential or strategically positioned a node is within a network. Different measures capture different aspects of importance, so a node that ranks highly on one metric may not highly on another.
 
-1. Degree centrality: Degree centrality measures the number of direct connections a node has.
+1.  Degree centrality: Degree centrality measures the number of direct connections a node has.
 
-2. Betweenness centrality: Betweenness centrality measures how frequently a node lies on the shortest paths between other nodes.
+2.  Betweenness centrality: Betweenness centrality measures how frequently a node lies on the shortest paths between other nodes.
 
-3. Closenes centrality: Closeness centrality measures how close a node is to all other nodes in the network based on shortest path distances.
+3.  Closenes centrality: Closeness centrality measures how close a node is to all other nodes in the network based on shortest path distances.
 
-4. Eigenvector centrality: Eigenvector centrality extends degree centrality by considering not only how many connections a node has, but also how important those connections are.
+4.  Eigenvector centrality: Eigenvector centrality extends degree centrality by considering not only how many connections a node has, but also how important those connections are.
 
+| Measure     | Captures           | High Score Indicates       |
+|-------------|--------------------|----------------------------|
+| Degree      | Direct connections | Highly connected           |
+| Betweenness | Control of paths   | Broker or bridge           |
+| Closeness   | Distance to others | Efficient communicator     |
+| Eigenvector | Connection quality | Influential or prestigious |
 
+Insights: The "most connected" person is not always the most important. A node can have high degree and low betweenness,if it communicates with many people inside a single department. A node can have lower degree and higher betweenness, if it serves as the only bridge between departments.
 
-| Measure       | Captures            | High Score Indicates            |
-|---------------|---------------------|---------------------------------|
-| Degree        | Direct connections  | Highly connected                |
-| Betweenness   | Control of paths    | Broker or bridge                |
-| Closeness     | Distance to others  | Efficient communicator          |
-| Eigenvector   | Connection quality  | Influential or prestigious      |
-
-
-Insights:
-The "most connected" person is not always the most important. A node can have high degree and low betweenness,if it communicates with many people inside a single department. A node can have lower degree and higher betweenness, if it serves as the only bridge between departments. 
-
-
-| Question | Recommended Metric |
-|----------|-------------------|
-| Who talks to the most people? | Degree |
-| Who connects different groups? | Betweenness |
-| Who can spread information fastest? | Closeness |
-| Who is connected to influential people? | Eigenvector |
+| Question                                | Recommended Metric |
+|-----------------------------------------|--------------------|
+| Who talks to the most people?           | Degree             |
+| Who connects different groups?          | Betweenness        |
+| Who can spread information fastest?     | Closeness          |
+| Who is connected to influential people? | Eigenvector        |
 
 ## Computing centrality indices
 
@@ -703,7 +667,6 @@ g + theme_graph()
 ```
 :::
 
-
 ## visualising network metrics
 
 ::: panel-tabset
@@ -737,7 +700,6 @@ g <- GAStech_graph %>%
 g + theme_graph()
 ```
 :::
-
 
 ## Visualising community
 
@@ -793,7 +755,6 @@ g + theme_graph()
 ```
 :::
 
-
 ::: panel-tabset
 ## The plot
 
@@ -859,7 +820,6 @@ g + theme_graph()
 ```
 :::
 
-
 # Building interactive network graph with visNetwork
 
 ## Data preparation
@@ -886,7 +846,6 @@ visNetwork(GAStech_nodes,
            GAStech_edges_aggregated)
 
 ```
-
 
 ## Working with layout
 
@@ -925,7 +884,6 @@ GAStech_nodes <- GAStech_nodes %>%
 
 ## Assigning colours
 
-
 ::: panel-tabset
 ## The plot
 
@@ -954,7 +912,6 @@ visNetwork(GAStech_nodes,
 
 ```
 :::
-
 
 ## visual attributes - edges
 
@@ -994,7 +951,6 @@ visNetwork(GAStech_nodes,
 ```
 :::
 
-
 ## Interactivity
 
 ::: panel-tabset
@@ -1029,7 +985,6 @@ visNetwork(GAStech_nodes,
 
 ```
 :::
-
 
 # Alternatives
 
@@ -1108,7 +1063,6 @@ GAStech_graph %>%
 ```
 :::
 
-
 Communication appears to be highly concentrated around a small number of employees, indicating a hub-and-spoke network structure rather than evenly distributed interactions.
 
 ## Hive plot (ggraph)
@@ -1180,7 +1134,6 @@ GAStech_graph %>%
 
 Communication occurs extensively across departments rather than remaining within specific departments, indicating a highly interconnected organisation.
 
-
 ## Matrix network plot
 
 ::: panel-tabset
@@ -1236,8 +1189,7 @@ GAStech_graph %>%
 ```
 :::
 
-
-The communication network exhibits  distinct clusters of densely connected employees. This shows the presence of communities that interact more frequently within the group than with the rest of the organisation.
+The communication network exhibits distinct clusters of densely connected employees. This shows the presence of communities that interact more frequently within the group than with the rest of the organisation.
 
 ## Community bubble network
 
@@ -1327,4 +1279,3 @@ GAStech_graph %>%
 :::
 
 The organisation contains several distinct communication communities, but a small number of highly connected employees act as bridges linking these communities together.
-
