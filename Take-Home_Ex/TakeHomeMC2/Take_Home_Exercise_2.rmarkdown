@@ -1,0 +1,3469 @@
+---
+title: "Take Home Exercise 2"
+format: html
+author: "Persis Evangeline"
+date: "June 2, 2026"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+# Overview
+
+## Background
+
+We investigate an anomalous SaidIT post made by John Windward on 17 May 2046 at 4:21 am. The post appears to have been published in an unrelated forum, suggesting malfunctioning behaviour. The objective is to reconstruct the sequence of events leading to the post, determine the origin and meaning of its contents, identify if similar incidents have occurred before and recommend an intervention to reduce the likelihood of its recurrence.
+
+## Questions to address
+
+1.  How was the anomalous SaidIT post created?
+
+2.  What is the origin and meaning of the post contents?
+
+3.  Have similar incidents occurred before?
+
+4.  What intervention point would most effectively prevent future occurrences?
+
+## Methodology
+
+This analysis will include the following below:
+
+Data preparation & wrangling<br> ↓<br> Event Log Analysis<br> ↓<br> Network Construction<br> ↓<br> Baseline System Behaviour<br> ↓<br> Anomalous Chain Reconstruction<br> ↓<br> Content Origin Analysis<br> ↓<br> Historical Comparison<br> ↓<br> Intervention Analysis
+
+# Setup
+
+```{r}
+pacman::p_load(
+  tidyverse,
+  jsonlite,
+  lubridate,
+
+  igraph,
+  tidygraph,
+  ggraph,
+
+  DT,
+  plotly,
+  patchwork,
+  ggrepel,
+
+  stringdist,
+  tidytext,
+
+  knitr,
+  kableExtra
+)
+
+```
+
+## Loading data
+
+### Event log
+
+```{r}
+mc2_raw <- fromJSON(
+  "MC2 data/VAST_Challenge_2026_MC2/MC2_data.json",
+  simplifyVector = FALSE
+)
+
+```
+
+### Organisation chart
+
+```{r}
+org_raw <- fromJSON(
+  "MC2 data/VAST_Challenge_2026_MC2/org_chart.json"
+)
+```
+
+# Data wrangling
+
+## Preparing Event data
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+events <- tibble(
+  event = mc2_raw$events
+) |>
+  unnest_wider(event)
+
+glimpse(events)
+```
+
+## The code
+
+```{r}
+#| eval: false
+events <- tibble(
+  event = mc2_raw$events
+) |>
+  unnest_wider(event)
+
+glimpse(events)
+```
+:::
+
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+events <- events |>
+  mutate(
+    datetime = as.POSIXct(
+      when,
+      origin = "1970-01-01",
+      tz = "UTC"
+    ),
+    date = as.Date(datetime),
+    hour = hour(datetime),
+    n_parties = map_int(parties, length)
+  ) |>
+  arrange(datetime)
+
+events |>
+  summarise(
+    total_events = n(),
+    earliest_event = min(datetime),
+    latest_event = max(datetime)
+  )
+
+events |>
+  count(short_name, sort = TRUE)
+
+
+events |> count(n_parties)
+```
+
+## The code
+
+```{r}
+#| eval: false
+events <- events |>
+  mutate(
+    datetime = as.POSIXct(
+      when,
+      origin = "1970-01-01",
+      tz = "UTC"
+    ),
+    date = as.Date(datetime),
+    hour = hour(datetime),
+    n_parties = map_int(parties, length)
+  ) |>
+  arrange(datetime)
+
+events |>
+  summarise(
+    total_events = n(),
+    earliest_event = min(datetime),
+    latest_event = max(datetime)
+  )
+
+events |>
+  count(short_name, sort = TRUE)
+
+
+events |> count(n_parties)
+```
+:::
+
+The event data was transformed into a structured tibble format. Additional variables such as date and hour were derived from raw data. The data was then sorted to preserve the sequence of events. 
+
+The event log spans multiple days and contains numerous event types such as filer operations and email access. While most events involve a small number of participants, a small portion involve larger number of people (4 and 5). This shows that only sometimes, there is coordination involving multiple actors. This system operates mostly through targeted interactions. 
+
+## Preparing actor information
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+event_parties <- events |>
+  select(id,
+         datetime,
+         short_name,
+         parties) |>
+  unnest_longer(parties,
+                values_to = "party")
+
+event_parties <- event_parties |>
+  mutate(
+    actor_type = case_when(
+      str_detect(party, "^person:") ~ "Person",
+      str_detect(party, "^Agent/") ~ "Agent",
+      str_detect(party, "^world:") ~ "System",
+      str_detect(party, "^team:") ~ "Team",
+      str_detect(party, "^company:") ~ "Company",
+      TRUE ~ "Other"
+    )
+  )
+
+event_parties |>
+  count(actor_type,
+        sort = TRUE)
+
+event_parties |>
+  count(party,
+        sort = TRUE) |>
+  slice_head(n = 20)
+```
+
+## The code
+
+```{r}
+#| eval: false
+event_parties <- events |>
+  select(id,
+         datetime,
+         short_name,
+         parties) |>
+  unnest_longer(parties,
+                values_to = "party")
+
+event_parties <- event_parties |>
+  mutate(
+    actor_type = case_when(
+      str_detect(party, "^person:") ~ "Person",
+      str_detect(party, "^Agent/") ~ "Agent",
+      str_detect(party, "^world:") ~ "System",
+      str_detect(party, "^team:") ~ "Team",
+      str_detect(party, "^company:") ~ "Company",
+      TRUE ~ "Other"
+    )
+  )
+
+event_parties |>
+  count(actor_type,
+        sort = TRUE)
+
+event_parties |>
+  count(party,
+        sort = TRUE) |>
+  slice_head(n = 20)
+```
+:::
+
+
+Each person is categorised into a actor category such as Person, Agent, System and other. The event log contains a mixture of human users, autonomous agents and system level entities. The most commonly occurring actors represent highly active participants in the organisation's workflows and most likely play central roles in communication, task delegation and interactions. 
+
+
+## Preparing organisation data
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+org_nodes <- as_tibble(org_raw$nodes)
+
+glimpse(org_nodes)
+
+org_nodes |>
+  count(type)
+
+org_edges <- as_tibble(org_raw$edges)
+
+glimpse(org_edges)
+
+org_edges |>
+  count(relation)
+```
+
+## The code
+
+```{r}
+#| eval: false
+org_nodes <- as_tibble(org_raw$nodes)
+
+glimpse(org_nodes)
+
+org_nodes |>
+  count(type)
+
+org_edges <- as_tibble(org_raw$edges)
+
+glimpse(org_edges)
+
+org_edges |>
+  count(relation)
+```
+:::
+
+Here, the organisation chart is converted into 2 tidy tables based on edges and nodes. The nodes are for entities such as company, department, person and team. The edges are for organisational relationships such as "contains" or "led by", to indicate how these entities are connected to each other.   
+
+
+
+## Viewing the 4 tables made earlier
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+events |>
+  slice_head(n = 5) |>
+  kable(caption = "First 5 records of events")
+
+event_parties |>
+  slice_head(n = 5) |>
+  kable(caption = "First 5 records of event_parties")
+
+org_nodes |>
+  slice_head(n = 5) |>
+  kable(caption = "First 5 records of org_nodes")
+
+org_edges |>
+  slice_head(n = 5) |>
+  kable(caption = "First 5 records of org_edges")
+```
+
+## The code
+
+```{r}
+#| eval: false
+events |>
+  slice_head(n = 5) |>
+  kable(caption = "First 5 records of events")
+
+event_parties |>
+  slice_head(n = 5) |>
+  kable(caption = "First 5 records of event_parties")
+
+org_nodes |>
+  slice_head(n = 5) |>
+  kable(caption = "First 5 records of org_nodes")
+
+org_edges |>
+  slice_head(n = 5) |>
+  kable(caption = "First 5 records of org_edges")
+```
+:::
+
+
+## Network construction
+
+Not all events have clear from and to information. Therefore, only events with explicit or clear inferable interactions are included into the directed network edges.
+
+### Create event edges
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+get_detail <- function(x, path) {
+  out <- purrr::pluck(x, !!!path, .default = NA_character_)
+  
+  if (length(out) == 0 || is.null(out) || all(is.na(out))) {
+    NA_character_
+  } else {
+    as.character(out[1])
+  }
+}
+
+get_party <- function(x, position) {
+  if (length(x) >= position) {
+    as.character(x[position])
+  } else {
+    NA_character_
+  }
+}
+
+get_contacts <- function(x) {
+  contacts <- purrr::pluck(x, "contacts", .default = NA_character_)
+  
+  if (length(contacts) == 0 || all(is.na(contacts))) {
+    NA_character_
+  } else {
+    paste(unlist(contacts), collapse = "; ")
+  }
+}
+
+event_edges <- events |>
+  mutate(
+    from = case_when(
+      short_name == "sent" ~ map_chr(details, ~ get_detail(.x, c("from"))),
+      
+      short_name == "propose_meeting" ~ map_chr(details, ~ get_detail(.x, c("a2a", "from"))),
+      
+      short_name == "queue_subordinate_task" ~ map_chr(parties, ~ get_party(.x, 1)),
+      
+      short_name %in% c("read_file", "list_files", "access_files") ~ map_chr(parties, ~ get_party(.x, 1)),
+      
+      short_name == "suggest_contacts" ~ map_chr(parties, ~ get_party(.x, 1)),
+      
+      TRUE ~ NA_character_
+    ),
+    
+    to = case_when(
+      short_name == "sent" ~ map_chr(details, ~ get_detail(.x, c("to"))),
+      
+      short_name == "propose_meeting" ~ map_chr(details, ~ get_detail(.x, c("a2a", "to"))),
+      
+      short_name == "queue_subordinate_task" ~ map_chr(parties, ~ get_party(.x, 2)),
+      
+      short_name %in% c("read_file", "list_files") ~ map_chr(details, ~ get_detail(.x, c("target"))),
+      
+      short_name == "access_files" ~ map_chr(details, ~ get_detail(.x, c("file"))),
+      
+      short_name == "suggest_contacts" ~ map_chr(details, get_contacts),
+      
+      TRUE ~ NA_character_
+    ),
+    
+    edge_type = short_name
+  ) |>
+  filter(
+    !is.na(from),
+    !is.na(to),
+    from != "",
+    to != "",
+    to != "NA"
+  ) |>
+  select(
+    event_id = id,
+    datetime,
+    short_name,
+    from,
+    to,
+    edge_type
+  )
+
+event_edges |>
+  slice_head(n = 10) |>
+  kable(caption = "First 10 records of event_edges")
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+get_detail <- function(x, path) {
+  out <- purrr::pluck(x, !!!path, .default = NA_character_)
+  
+  if (length(out) == 0 || is.null(out) || all(is.na(out))) {
+    NA_character_
+  } else {
+    as.character(out[1])
+  }
+}
+
+get_party <- function(x, position) {
+  if (length(x) >= position) {
+    as.character(x[position])
+  } else {
+    NA_character_
+  }
+}
+
+get_contacts <- function(x) {
+  contacts <- purrr::pluck(x, "contacts", .default = NA_character_)
+  
+  if (length(contacts) == 0 || all(is.na(contacts))) {
+    NA_character_
+  } else {
+    paste(unlist(contacts), collapse = "; ")
+  }
+}
+
+event_edges <- events |>
+  mutate(
+    from = case_when(
+      short_name == "sent" ~ map_chr(details, ~ get_detail(.x, c("from"))),
+      
+      short_name == "propose_meeting" ~ map_chr(details, ~ get_detail(.x, c("a2a", "from"))),
+      
+      short_name == "queue_subordinate_task" ~ map_chr(parties, ~ get_party(.x, 1)),
+      
+      short_name %in% c("read_file", "list_files", "access_files") ~ map_chr(parties, ~ get_party(.x, 1)),
+      
+      short_name == "suggest_contacts" ~ map_chr(parties, ~ get_party(.x, 1)),
+      
+      TRUE ~ NA_character_
+    ),
+    
+    to = case_when(
+      short_name == "sent" ~ map_chr(details, ~ get_detail(.x, c("to"))),
+      
+      short_name == "propose_meeting" ~ map_chr(details, ~ get_detail(.x, c("a2a", "to"))),
+      
+      short_name == "queue_subordinate_task" ~ map_chr(parties, ~ get_party(.x, 2)),
+      
+      short_name %in% c("read_file", "list_files") ~ map_chr(details, ~ get_detail(.x, c("target"))),
+      
+      short_name == "access_files" ~ map_chr(details, ~ get_detail(.x, c("file"))),
+      
+      short_name == "suggest_contacts" ~ map_chr(details, get_contacts),
+      
+      TRUE ~ NA_character_
+    ),
+    
+    edge_type = short_name
+  ) |>
+  filter(
+    !is.na(from),
+    !is.na(to),
+    from != "",
+    to != "",
+    to != "NA"
+  ) |>
+  select(
+    event_id = id,
+    datetime,
+    short_name,
+    from,
+    to,
+    edge_type
+  )
+
+event_edges |>
+  slice_head(n = 10) |>
+  kable(caption = "First 10 records of event_edges")
+
+```
+:::
+
+This step creates directed edges indicating interaction edges from event records by extracting "from" and "to" relationships. Only events with clear source-target relationships are included in the network. 
+The resulting event_edges table captures interactions such as emails sent, meetings proposed etc. This helps to create the network to trace how the different actors in the system interacted and connected. 
+
+
+### Check edge types
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+event_edges |>
+  count(edge_type, sort = TRUE) |>
+  kable(caption = "Number of edges created by event type")
+```
+
+## The code
+
+```{r}
+#| eval: false
+event_edges |>
+  count(edge_type, sort = TRUE) |>
+  kable(caption = "Number of edges created by event type")
+```
+:::
+
+After filtering out edges that have clear "from" and "to" , this table summarises the number of network edges by each type. It helps assess which activities are most responsible for generating connections within the network. Information exchange is the most common interaction, indicating that the system is highly dependent on information exchange and coordination rather than isolated tasks.   
+
+
+### Creating event nodes
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+event_nodes <- tibble(
+  name = unique(c(event_edges$from, event_edges$to))
+) |>
+  mutate(
+    node_type = case_when(
+      str_detect(name, "^person:") ~ "Person",
+      str_detect(name, "^Agent/") ~ "Agent",
+      str_detect(name, "^agent:") ~ "Agent",
+      str_detect(name, "^world:") ~ "System",
+      str_detect(name, "^team:") ~ "Team",
+      str_detect(name, "^company:") ~ "Company",
+      str_detect(name, "\\.json$") ~ "File",
+      name == "/" ~ "File System",
+      TRUE ~ "Other"
+    ),
+    
+    label = name |>
+      str_remove("^person:") |>
+      str_remove("^Agent/person:") |>
+      str_remove("^agent:person:") |>
+      str_remove("^world:") |>
+      str_replace_all("_", " ") |>
+      str_replace_all(":", " ") |>
+      str_to_title()
+  )
+
+event_nodes |>
+  slice_head(n = 10) |>
+  kable(caption = "First 10 records of event_nodes")
+```
+
+## The code
+
+```{r}
+#| eval: false
+event_nodes <- tibble(
+  name = unique(c(event_edges$from, event_edges$to))
+) |>
+  mutate(
+    node_type = case_when(
+      str_detect(name, "^person:") ~ "Person",
+      str_detect(name, "^Agent/") ~ "Agent",
+      str_detect(name, "^agent:") ~ "Agent",
+      str_detect(name, "^world:") ~ "System",
+      str_detect(name, "^team:") ~ "Team",
+      str_detect(name, "^company:") ~ "Company",
+      str_detect(name, "\\.json$") ~ "File",
+      name == "/" ~ "File System",
+      TRUE ~ "Other"
+    ),
+    
+    label = name |>
+      str_remove("^person:") |>
+      str_remove("^Agent/person:") |>
+      str_remove("^agent:person:") |>
+      str_remove("^world:") |>
+      str_replace_all("_", " ") |>
+      str_replace_all(":", " ") |>
+      str_to_title()
+  )
+
+event_nodes |>
+  slice_head(n = 10) |>
+  kable(caption = "First 10 records of event_nodes")
+```
+:::
+
+This step creates the node list for the interaction network. Each node is classified into a type. The table contains all unique sources and targets. The network contains people and agents.
+
+
+
+### Check node types
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+event_nodes |>
+  count(node_type, sort = TRUE) |>
+  kable(caption = "Number of nodes by node type")
+```
+
+## The code
+
+```{r}
+#| eval: false
+event_nodes |>
+  count(node_type, sort = TRUE) |>
+  kable(caption = "Number of nodes by node type")
+```
+:::
+
+This table represents the composition of the interaction network. It counts the number of nodes in each category. The network consists of a diverse set of entities. The top 2 node types are person and team. 
+
+
+
+
+### Creating event graph
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+event_graph <- tbl_graph(
+  nodes = event_nodes,
+  edges = event_edges,
+  directed = TRUE
+)
+
+event_graph
+```
+
+## The code
+
+```{r}
+#| eval: false
+event_graph <- tbl_graph(
+  nodes = event_nodes,
+  edges = event_edges,
+  directed = TRUE
+)
+
+event_graph
+```
+:::
+
+This step combines the node and edges into a directed graph object, whih has 3315 nodes and 38007 edges. Each node represents an entity in the system, while each directed edge represents an interaction. 
+
+### Graph summary
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+tibble(
+  total_nodes = gorder(event_graph),
+  total_edges = gsize(event_graph),
+  directed = is_directed(event_graph)
+) |>
+  kable(caption = "Summary of constructed event interaction graph")
+```
+
+## The code
+
+```{r}
+#| eval: false
+tibble(
+  total_nodes = gorder(event_graph),
+  total_edges = gsize(event_graph),
+  directed = is_directed(event_graph)
+) |>
+  kable(caption = "Summary of constructed event interaction graph")
+```
+:::
+
+Directed graph preserved flow of interactions.
+
+
+## Creating organisation network
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+org_graph <- tbl_graph(
+  nodes = org_nodes,
+  edges = org_edges,
+  directed = TRUE
+)
+
+org_graph
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+org_graph <- tbl_graph(
+  nodes = org_nodes,
+  edges = org_edges,
+  directed = TRUE
+)
+
+org_graph
+
+```
+:::
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+tibble(
+  total_org_nodes = gorder(org_graph),
+  total_org_edges = gsize(org_graph),
+  directed = is_directed(org_graph)
+) |>
+  kable(caption = "Summary of constructed organisation graph")
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+tibble(
+  total_org_nodes = gorder(org_graph),
+  total_org_edges = gsize(org_graph),
+  directed = is_directed(org_graph)
+) |>
+  kable(caption = "Summary of constructed organisation graph")
+
+```
+:::
+
+Here we convert the organisational structure into a directed network. The organisational entities represent the nodes and relationships as edges. This graph represents the organisational structure and chain of responsibility.  
+
+
+## Integrating organisation structure
+
+This is to link employees appearing in the event logs to their organisational context from the organisational chart.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+event_people <- event_parties |>
+  filter(actor_type == "Person") |>
+  distinct(party)
+
+people_org_lookup <- org_nodes |>
+  filter(type == "person") |>
+  select(
+    party = id,
+    person_label = label,
+    title
+  )
+
+event_people_org <- event_people |>
+  left_join(
+    people_org_lookup,
+    by = "party"
+  )
+
+event_people_org |>
+  slice_head(n = 10) |>
+  kable(caption = "First 10 event actors linked with organisation chart")
+
+event_people_org |>
+  filter(is.na(person_label)) |>
+  kable(caption = "People appearing in event logs but not found in organisation chart")
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+event_people <- event_parties |>
+  filter(actor_type == "Person") |>
+  distinct(party)
+
+people_org_lookup <- org_nodes |>
+  filter(type == "person") |>
+  select(
+    party = id,
+    person_label = label,
+    title
+  )
+
+event_people_org <- event_people |>
+  left_join(
+    people_org_lookup,
+    by = "party"
+  )
+
+event_people_org |>
+  slice_head(n = 10) |>
+  kable(caption = "First 10 event actors linked with organisation chart")
+
+event_people_org |>
+  filter(is.na(person_label)) |>
+  kable(caption = "People appearing in event logs but not found in organisation chart")
+
+```
+:::
+
+Here, we link people found in the event logs to their respective records in the organisation chart. This is to check whether those who appear in the event logs can be matched to formal organisational identities and titles. We find that there is only 1 person who does not appear in the organisation chart. 
+
+# System overview
+
+The purpose is to provide context to understand where anomalous event occurred. There is a need to understand what "normal" activity looks like before investigating the anomaly.
+
+## Event log analysis
+
+Summarising what we learnt from the event log.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+events |>
+  summarise(
+    total_events = n(),
+    earliest_event = min(datetime),
+    latest_event = max(datetime)
+  )
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+events |>
+  summarise(
+    total_events = n(),
+    earliest_event = min(datetime),
+    latest_event = max(datetime)
+  )
+
+```
+:::
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+events |>
+  count(short_name, sort = TRUE)
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+events |>
+  count(short_name, sort = TRUE)
+
+```
+:::
+
+This shows the frequency of each event type.
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+events |>
+  count(n_parties)
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+events |>
+  count(n_parties)
+
+```
+:::
+
+This shows the number of participants involved per event.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+event_parties |>
+  count(actor_type)
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+event_parties |>
+  count(actor_type)
+
+```
+:::
+
+
+
+## Event log summary table:
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+event_summary <- tibble(
+  Metric = c(
+    "Total Events",
+    "Unique Event Types",
+    "Earliest Event",
+    "Latest Event"
+  ),
+  Value = c(
+    nrow(events),
+    n_distinct(events$short_name),
+    min(events$datetime),
+    max(events$datetime)
+  )
+)
+
+event_summary |>
+  kable(caption = "Summary of Event Log")
+```
+
+## The code
+
+```{r}
+#| eval: false
+event_summary <- tibble(
+  Metric = c(
+    "Total Events",
+    "Unique Event Types",
+    "Earliest Event",
+    "Latest Event"
+  ),
+  Value = c(
+    nrow(events),
+    n_distinct(events$short_name),
+    min(events$datetime),
+    max(events$datetime)
+  )
+)
+
+event_summary |>
+  kable(caption = "Summary of Event Log")
+
+```
+:::
+
+The table provides high level overview of the event log by summarising the total number of recorded events and  the diversity of it. 24 unique event types indicate a highly active and diverse environment. The large number of events indicate that the different actors interact frequently. 
+
+
+## Event participant composition:
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+event_parties |>
+  count(actor_type) |>
+  ggplot(
+    aes(
+      x = reorder(actor_type, n),
+      y = n
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Composition of Actors Appearing in Event Logs",
+    x = "Actor Type",
+    y = "Number of Appearances"
+  ) +
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+event_parties |>
+  count(actor_type) |>
+  ggplot(
+    aes(
+      x = reorder(actor_type, n),
+      y = n
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Composition of Actors Appearing in Event Logs",
+    x = "Actor Type",
+    y = "Number of Appearances"
+  ) +
+  theme_minimal()
+
+```
+:::
+
+This visual shows the composition of actors participating in the event log. People and agent make up the majority, indicating that the system relies heavily on human-agent interactions to execute tasks. 
+The dominance of People and agents indicates that the anomalous post is more likely to have emerged from human-agent interacts and workflows rather than sn isolated system process. 
+
+
+## Events by number of parties:
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+events |>
+  count(n_parties) |>
+  ggplot(
+    aes(
+      x = factor(n_parties),
+      y = n
+    )
+  ) +
+  geom_col() +
+  labs(
+    title = "Number of Participants per Event",
+    x = "Number of Parties",
+    y = "Number of Events"
+  ) +
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+events |>
+  count(n_parties) |>
+  ggplot(
+    aes(
+      x = factor(n_parties),
+      y = n
+    )
+  ) +
+  geom_col() +
+  labs(
+    title = "Number of Participants per Event",
+    x = "Number of Parties",
+    y = "Number of Events"
+  ) +
+  theme_minimal()
+
+```
+:::
+
+This visual displays the number of participants involved in each event. Majority of events are involving 1 or 2 participants. The system operates mostly through individuals or targteted interactions rather than large scale group interactions. This trend indicates that the anomalous post is most likely to be associated with a focused interaction chain involving a small number of actors rather than a complax one with many actors.  
+
+
+
+## Event type distribution visual
+
+Here we aim to find what activities dominate the system.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+event_type_counts <- events |>
+  count(short_name, sort = TRUE)
+
+event_type_counts |>
+  ggplot(
+    aes(
+      x = reorder(short_name, n),
+      y = n
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Distribution of Event Types in Tenant Thread Activity Logs",
+    subtitle = "This shows which activities dominate the multi-agent system.",
+    x = "Event Type",
+    y = "Number of Events"
+  ) +
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+event_type_counts <- events |>
+  count(short_name, sort = TRUE)
+
+event_type_counts |>
+  ggplot(
+    aes(
+      x = reorder(short_name, n),
+      y = n
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Distribution of Event Types in Tenant Thread Activity Logs",
+    subtitle = "This shows which activities dominate the multi-agent system.",
+    x = "Event Type",
+    y = "Number of Events"
+  ) +
+  theme_minimal()
+
+```
+:::
+
+The most common activities are check_email, assign_agent_task and read_file. The SaidIt-related activities (saidit_post_check,saidit_post, post_saidit) indicate that the anomalous post represents an unusual behaviour. 
+
+
+## Daily system activity visual
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+events |>
+  summarise(
+    min_date = min(date),
+    max_date = max(date),
+    n_days = n_distinct(date)
+  )
+
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+events |>
+  summarise(
+    min_date = min(date),
+    max_date = max(date),
+    n_days = n_distinct(date)
+  )
+
+```
+:::
+
+This shows there are 70 distinct days, therefore we can do a daily activity line chart.
+
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+daily_activity <- events |>
+  count(date)
+
+p_daily_activity <- daily_activity |>
+  ggplot(
+    aes(
+      x = date,
+      y = n,
+      text = paste(
+        "Date:", date,
+        "<br>Number of Events:", n
+      )
+    )
+  ) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Daily System Activity Over Time",
+    subtitle = "Number of events recorded per day",
+    x = "Date",
+    y = "Number of Events"
+  ) +
+  theme_minimal()
+
+ggplotly(
+  p_daily_activity,
+  tooltip = "text"
+)
+
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+daily_activity <- events |>
+  count(date)
+
+p_daily_activity <- daily_activity |>
+  ggplot(
+    aes(
+      x = date,
+      y = n,
+      text = paste(
+        "Date:", date,
+        "<br>Number of Events:", n
+      )
+    )
+  ) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Daily System Activity Over Time",
+    subtitle = "Number of events recorded per day",
+    x = "Date",
+    y = "Number of Events"
+  ) +
+  theme_minimal()
+
+ggplotly(
+  p_daily_activity,
+  tooltip = "text"
+)
+
+```
+:::
+
+This interactive visual shows how overall activity in the system changes over time by plotting the number of events recorded each day. Most records have around 1000 and 2000 events throughout the period. However, there are spikes on 10, 11 and 12 May. 
+Since the anomalous post occurred during a period of relatively normal system activity, it may indicate the the incident is linked to a specific interaction chain rather than a system-wide surge in activity. 
+
+
+
+## Most common interaction paths
+
+Here, it would be necessary to discover which interactions occur most frequently within the multi-agent system.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+common_paths <- event_edges |>
+  count(from, to, sort = TRUE) |>
+  slice_head(n = 15) |>
+  mutate(
+    interaction_path = paste(from, "→", to)
+  )
+
+common_paths |>
+  ggplot(
+    aes(
+      x = reorder(interaction_path, n),
+      y = n
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Most Common Interaction Paths",
+    subtitle = "Top 15 interaction paths observed in the system",
+    x = "Interaction Path",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+common_paths <- event_edges |>
+  count(from, to, sort = TRUE) |>
+  slice_head(n = 15) |>
+  mutate(
+    interaction_path = paste(from, "→", to)
+  )
+
+common_paths |>
+  ggplot(
+    aes(
+      x = reorder(interaction_path, n),
+      y = n
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Most Common Interaction Paths",
+    subtitle = "Top 15 interaction paths observed in the system",
+    x = "Interaction Path",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+
+```
+:::
+
+This visual identifies the most frequently occurring interaction paths in the event network. The most common interaction paths are agents repeatedly accessing certain files which are irrigation, manure and harvest related. 
+
+## system interaction network visual
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+set.seed(123)
+
+ggraph(event_graph,
+       layout = "fr") +
+
+  geom_edge_link(
+    alpha = 0.15,
+    colour = "grey70"
+  ) +
+
+  geom_node_point(
+    aes(colour = node_type),
+    size = 3
+  ) +
+
+  labs(
+    title = "System Interaction Network",
+    subtitle = "Interactions between people, agents, systems and files"
+  ) +
+
+  theme_graph()
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+set.seed(123)
+
+ggraph(event_graph,
+       layout = "fr") +
+
+  geom_edge_link(
+    alpha = 0.15,
+    colour = "grey70"
+  ) +
+
+  geom_node_point(
+    aes(colour = node_type),
+    size = 3
+  ) +
+
+  labs(
+    title = "System Interaction Network",
+    subtitle = "Interactions between people, agents, systems and files"
+  ) +
+
+  theme_graph()
+
+```
+:::
+
+The network consists of a single large densely connected component containing the majority of entities, indicating extensive interaction and information exchange across the system. There are 2 other smaller disconnected clusters which are also visible. These suggest specialised or isolated workflows and/or actors that interact less frequently with the rest of the broader network. 
+
+## Organisation structure visual
+
+The purpose is to show where John Winward sits in the company, which gives organisational context. This will help give context and insight when looking into this event chain containing the anomaly post by John.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+john_org_nodes <- c(
+  "company:tenant_thread",
+  "department:customer_support",
+  "team:phone_center",
+  "team:billing",
+  "team:concierge",
+  "team:public_relations",
+  "person:john_windward"
+)
+
+customer_support_nodes <- org_nodes |>
+  filter(id %in% john_org_nodes) |>
+  mutate(
+    highlight = id == "person:john_windward"
+  )
+
+customer_support_edges <- org_edges |>
+  filter(
+    source %in% john_org_nodes,
+    target %in% john_org_nodes
+  )
+
+customer_support_graph <- tbl_graph(
+  nodes = customer_support_nodes,
+  edges = customer_support_edges,
+  directed = TRUE
+)
+
+set.seed(123)
+
+ggraph(customer_support_graph, layout = "tree") +
+  geom_edge_link(
+    arrow = arrow(length = unit(2, "mm")),
+    end_cap = circle(2, "mm"),
+    colour = "grey70"
+  ) +
+  geom_node_point(
+    aes(
+      colour = type,
+      size = highlight
+    )
+  ) +
+  geom_node_text(
+    aes(label = label),
+    repel = TRUE,
+    size = 3
+  ) +
+  scale_size_manual(
+    values = c("FALSE" = 3, "TRUE" = 6),
+    guide = "none"
+  ) +
+  labs(
+    title = "Organisation Structure Around John Windward",
+    subtitle = "John Windward is highlighted within the Customer Support department",
+    colour = "Node Type"
+  ) +
+  theme_graph()
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+john_org_nodes <- c(
+  "company:tenant_thread",
+  "department:customer_support",
+  "team:phone_center",
+  "team:billing",
+  "team:concierge",
+  "team:public_relations",
+  "person:john_windward"
+)
+
+customer_support_nodes <- org_nodes |>
+  filter(id %in% john_org_nodes) |>
+  mutate(
+    highlight = id == "person:john_windward"
+  )
+
+customer_support_edges <- org_edges |>
+  filter(
+    source %in% john_org_nodes,
+    target %in% john_org_nodes
+  )
+
+customer_support_graph <- tbl_graph(
+  nodes = customer_support_nodes,
+  edges = customer_support_edges,
+  directed = TRUE
+)
+
+set.seed(123)
+
+ggraph(customer_support_graph, layout = "tree") +
+  geom_edge_link(
+    arrow = arrow(length = unit(2, "mm")),
+    end_cap = circle(2, "mm"),
+    colour = "grey70"
+  ) +
+  geom_node_point(
+    aes(
+      colour = type,
+      size = highlight
+    )
+  ) +
+  geom_node_text(
+    aes(label = label),
+    repel = TRUE,
+    size = 3
+  ) +
+  scale_size_manual(
+    values = c("FALSE" = 3, "TRUE" = 6),
+    guide = "none"
+  ) +
+  labs(
+    title = "Organisation Structure Around John Windward",
+    subtitle = "John Windward is highlighted within the Customer Support department",
+    colour = "Node Type"
+  ) +
+  theme_graph()
+
+```
+:::
+
+John is in the customer support department. This shows that the anomalous poost is connected to a customer facing organisational area rather than a purely technical or back end part of the organisation. The post could possibly have implications for customer-facing workflows.
+
+
+
+# Extracting the anomalous chain
+
+The purpose is to reconstruct the exact sequence of events leading to the anomalous post.
+
+## Locating the target event
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+events_text <- events |>
+  mutate(
+    details_text = map_chr(
+      details,
+      ~ paste(unlist(.x), collapse = " | ")
+    )
+  )
+
+target_candidates <- events_text |>
+  filter(
+    date == as.Date("2046-05-17"),
+    str_detect(details_text, regex("john_windward|saidit|said_it|said it", ignore_case = TRUE)) |
+      map_lgl(parties, ~ any(str_detect(.x, regex("john_windward", ignore_case = TRUE))))
+  ) |>
+  arrange(datetime)
+
+target_candidates |>
+  select(id, datetime, short_name, n_parties, details_text) |>
+  kable(caption = "Candidate events related to John Windward or SaidIT on 17 May 2046")
+
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+events_text <- events |>
+  mutate(
+    details_text = map_chr(
+      details,
+      ~ paste(unlist(.x), collapse = " | ")
+    )
+  )
+
+target_candidates <- events_text |>
+  filter(
+    date == as.Date("2046-05-17"),
+    str_detect(details_text, regex("john_windward|saidit|said_it|said it", ignore_case = TRUE)) |
+      map_lgl(parties, ~ any(str_detect(.x, regex("john_windward", ignore_case = TRUE))))
+  ) |>
+  arrange(datetime)
+
+target_candidates |>
+  select(id, datetime, short_name, n_parties, details_text) |>
+  kable(caption = "Candidate events related to John Windward or SaidIT on 17 May 2046")
+
+```
+:::
+
+The filtered table isolates events containing references to john_windward or SaidIT, making the anomaly investigation more targeted. 
+
+
+## event window extraction
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+target_time <- as.POSIXct(
+  "2046-05-17 04:21:00",
+  tz = "UTC"
+)
+
+incident_window_events <- events_text |>
+  filter(
+    datetime >= target_time - hours(24),
+    datetime <= target_time + hours(1)
+  ) |>
+  arrange(datetime)
+
+incident_window_events |>
+  select(id, datetime, short_name, n_parties, details_text) |>
+  slice_head(n = 30) |>
+  kable(caption = "First 30 events in the 24-hour window before the anomalous post")
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+target_time <- as.POSIXct(
+  "2046-05-17 04:21:00",
+  tz = "UTC"
+)
+
+incident_window_events <- events_text |>
+  filter(
+    datetime >= target_time - hours(24),
+    datetime <= target_time + hours(1)
+  ) |>
+  arrange(datetime)
+
+incident_window_events |>
+  select(id, datetime, short_name, n_parties, details_text) |>
+  slice_head(n = 30) |>
+  kable(caption = "First 30 events in the 24-hour window before the anomalous post")
+
+```
+:::
+
+This narrows the event log to a specific period( 24 hours before and 1 hour after the anomalous post incident) most likely to contain relevant information. 
+
+
+## Incident timeline visual
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+incident_timeline <- incident_window_events |>
+  mutate(
+    is_target =
+      abs(as.numeric(
+        difftime(datetime,
+                 target_time,
+                 units = "mins")
+      )) <= 1,
+
+    related_to_john =
+      str_detect(
+        details_text,
+        regex("john_windward",
+              ignore_case = TRUE)
+      ) |
+      map_lgl(
+        parties,
+        ~ any(
+          str_detect(
+            .x,
+            regex(
+              "john_windward",
+              ignore_case = TRUE
+            )
+          )
+        )
+      ),
+
+    event_category = case_when(
+      is_target & related_to_john ~
+        "Target + John",
+
+      is_target ~
+        "Target Event",
+
+      related_to_john ~
+        "John Related",
+
+      TRUE ~
+        "Other Events"
+    ),
+
+    tooltip_text = paste(
+      "Datetime:", datetime,
+      "<br>Event Type:", short_name,
+      "<br>Related to John:", related_to_john,
+      "<br>Target Time:", is_target,
+      "<br>Details:", str_trunc(details_text, 150)
+    )
+  )
+
+p_incident_timeline <- incident_timeline |>
+  ggplot(
+    aes(
+      x = datetime,
+      y = short_name,
+      text = tooltip_text
+    )
+  ) +
+
+  geom_point(
+    aes(
+      colour = event_category,
+      size = event_category
+    ),
+    alpha = 0.85
+  ) +
+
+  geom_vline(
+    xintercept = target_time,
+    linetype = "dashed",
+    linewidth = 0.8
+  ) +
+
+  scale_colour_manual(
+    values = c(
+      "Other Events" = "grey50",
+      "John Related" = "blue",
+      "Target Event" = "red",
+      "Target + John" = "goldenrod"
+    )
+  ) +
+
+  scale_size_manual(
+    values = c(
+      "Other Events" = 2,
+      "John Related" = 3,
+      "Target Event" = 5,
+      "Target + John" = 6
+    )
+  ) +
+
+  scale_x_datetime(
+    date_breaks = "6 hours",
+    date_labels = "%b %d\n%H:%M"
+  ) +
+
+  labs(
+    title = "Timeline Around Anomalous Post",
+    subtitle = "Events within 24 hours before and 1 hour after 17 May 2046, 04:21",
+    x = "Datetime",
+    y = "Event Type",
+    colour = "Event Category",
+    size = "Event Category"
+  ) +
+
+  theme_minimal() +
+
+  theme(
+    axis.text.x = element_text(
+      angle = 45,
+      hjust = 1
+    )
+  )
+
+ggplotly(
+  p_incident_timeline,
+  tooltip = "text"
+)
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+incident_timeline <- incident_window_events |>
+  mutate(
+    is_target =
+      abs(as.numeric(
+        difftime(datetime,
+                 target_time,
+                 units = "mins")
+      )) <= 1,
+
+    related_to_john =
+      str_detect(
+        details_text,
+        regex("john_windward",
+              ignore_case = TRUE)
+      ) |
+      map_lgl(
+        parties,
+        ~ any(
+          str_detect(
+            .x,
+            regex(
+              "john_windward",
+              ignore_case = TRUE
+            )
+          )
+        )
+      ),
+
+    event_category = case_when(
+      is_target & related_to_john ~
+        "Target + John",
+
+      is_target ~
+        "Target Event",
+
+      related_to_john ~
+        "John Related",
+
+      TRUE ~
+        "Other Events"
+    ),
+
+    tooltip_text = paste(
+      "Datetime:", datetime,
+      "<br>Event Type:", short_name,
+      "<br>Related to John:", related_to_john,
+      "<br>Target Time:", is_target,
+      "<br>Details:", str_trunc(details_text, 150)
+    )
+  )
+
+p_incident_timeline <- incident_timeline |>
+  ggplot(
+    aes(
+      x = datetime,
+      y = short_name,
+      text = tooltip_text
+    )
+  ) +
+
+  geom_point(
+    aes(
+      colour = event_category,
+      size = event_category
+    ),
+    alpha = 0.85
+  ) +
+
+  geom_vline(
+    xintercept = target_time,
+    linetype = "dashed",
+    linewidth = 0.8
+  ) +
+
+  scale_colour_manual(
+    values = c(
+      "Other Events" = "grey50",
+      "John Related" = "blue",
+      "Target Event" = "red",
+      "Target + John" = "goldenrod"
+    )
+  ) +
+
+  scale_size_manual(
+    values = c(
+      "Other Events" = 2,
+      "John Related" = 3,
+      "Target Event" = 5,
+      "Target + John" = 6
+    )
+  ) +
+
+  scale_x_datetime(
+    date_breaks = "6 hours",
+    date_labels = "%b %d\n%H:%M"
+  ) +
+
+  labs(
+    title = "Timeline Around Anomalous Post",
+    subtitle = "Events within 24 hours before and 1 hour after 17 May 2046, 04:21",
+    x = "Datetime",
+    y = "Event Type",
+    colour = "Event Category",
+    size = "Event Category"
+  ) +
+
+  theme_minimal() +
+
+  theme(
+    axis.text.x = element_text(
+      angle = 45,
+      hjust = 1
+    )
+  )
+
+ggplotly(
+  p_incident_timeline,
+  tooltip = "text"
+)
+
+```
+:::
+
+This interactive visual displays events occurring within the 24 hour period, in chronological order. Most activity in the window consists of check_email, check_access and enter_room events. Only small subset of events are directly associated with John Windward.     
+
+
+
+
+### Focusing on John related events
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+incident_timeline |>
+  filter(related_to_john == TRUE | is_target == TRUE) |>
+  ggplot(aes(x = datetime, y = short_name)) +
+  geom_point(aes(size = is_target), alpha = 0.8) +
+  geom_vline(xintercept = target_time, linetype = "dashed") +
+  labs(
+    title = "John Windward-Related Events Around the Anomalous Post",
+    x = "Datetime",
+    y = "Event Type",
+    size = "Target Time"
+  ) +
+  theme_minimal()
+
+
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+incident_timeline |>
+  filter(related_to_john == TRUE | is_target == TRUE) |>
+  ggplot(aes(x = datetime, y = short_name)) +
+  geom_point(aes(size = is_target), alpha = 0.8) +
+  geom_vline(xintercept = target_time, linetype = "dashed") +
+  labs(
+    title = "John Windward-Related Events Around the Anomalous Post",
+    x = "Datetime",
+    y = "Event Type",
+    size = "Target Time"
+  ) +
+  theme_minimal()
+
+```
+:::
+
+This removes irrelevant unrelated background activity and keeps only John related events. Only a small number of John related events appear in the incident window.
+
+
+## Event chain network
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+incident_event_ids <- incident_window_events$id
+
+incident_edges <- event_edges |>
+  filter(event_id %in% incident_event_ids)
+
+john_nodes <- c(
+  "person:john_windward",
+  "Agent/person:john_windward",
+  "agent:person:john_windward"
+)
+
+incident_focus_edges <- incident_edges |>
+  filter(
+    str_detect(from, regex("john_windward|saidit|said_it|said it", ignore_case = TRUE)) |
+      str_detect(to, regex("john_windward|saidit|said_it|said it", ignore_case = TRUE))
+  )
+
+incident_focus_nodes <- tibble(
+  name = unique(c(incident_focus_edges$from, incident_focus_edges$to))
+) |>
+  left_join(event_nodes, by = "name") |>
+  mutate(
+    highlight = case_when(
+      str_detect(name, regex("john_windward", ignore_case = TRUE)) ~ "John Windward",
+      str_detect(name, regex("saidit|said_it|said it", ignore_case = TRUE)) ~ "SaidIT",
+      TRUE ~ "Related Node"
+    )
+  )
+
+incident_focus_graph <- tbl_graph(
+  nodes = incident_focus_nodes,
+  edges = incident_focus_edges,
+  directed = TRUE
+)
+
+set.seed(123)
+
+ggraph(incident_focus_graph, layout = "fr") +
+  geom_edge_link(
+    aes(label = edge_type),
+    alpha = 0.45,
+    colour = "grey60",
+    arrow = arrow(length = unit(2, "mm")),
+    end_cap = circle(2, "mm")
+  ) +
+  geom_node_point(
+    aes(
+      colour = highlight,
+      shape = node_type
+    ),
+    size = 4
+  ) +
+  geom_node_text(
+    aes(label = label),
+    repel = TRUE,
+    size = 3
+  ) +
+  labs(
+    title = "Focused Event Chain Network",
+    subtitle = "Interactions connected to John Windward or SaidIT within the incident window",
+    colour = "Node Role",
+    shape = "Node Type"
+  ) +
+  theme_graph()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+incident_event_ids <- incident_window_events$id
+
+incident_edges <- event_edges |>
+  filter(event_id %in% incident_event_ids)
+
+john_nodes <- c(
+  "person:john_windward",
+  "Agent/person:john_windward",
+  "agent:person:john_windward"
+)
+
+incident_focus_edges <- incident_edges |>
+  filter(
+    str_detect(from, regex("john_windward|saidit|said_it|said it", ignore_case = TRUE)) |
+      str_detect(to, regex("john_windward|saidit|said_it|said it", ignore_case = TRUE))
+  )
+
+incident_focus_nodes <- tibble(
+  name = unique(c(incident_focus_edges$from, incident_focus_edges$to))
+) |>
+  left_join(event_nodes, by = "name") |>
+  mutate(
+    highlight = case_when(
+      str_detect(name, regex("john_windward", ignore_case = TRUE)) ~ "John Windward",
+      str_detect(name, regex("saidit|said_it|said it", ignore_case = TRUE)) ~ "SaidIT",
+      TRUE ~ "Related Node"
+    )
+  )
+
+incident_focus_graph <- tbl_graph(
+  nodes = incident_focus_nodes,
+  edges = incident_focus_edges,
+  directed = TRUE
+)
+
+set.seed(123)
+
+ggraph(incident_focus_graph, layout = "fr") +
+  geom_edge_link(
+    aes(label = edge_type),
+    alpha = 0.45,
+    colour = "grey60",
+    arrow = arrow(length = unit(2, "mm")),
+    end_cap = circle(2, "mm")
+  ) +
+  geom_node_point(
+    aes(
+      colour = highlight,
+      shape = node_type
+    ),
+    size = 4
+  ) +
+  geom_node_text(
+    aes(label = label),
+    repel = TRUE,
+    size = 3
+  ) +
+  labs(
+    title = "Focused Event Chain Network",
+    subtitle = "Interactions connected to John Windward or SaidIT within the incident window",
+    colour = "Node Role",
+    shape = "Node Type"
+  ) +
+  theme_graph()
+
+```
+:::
+
+This network isolates the interactions connected to John or SaidIt within the incident window. It transforms the timeline into a network showing source and type of interaction. This is a direct, short chain. This suggests that the clearest extractable edge in the incident window is a particular file reading action associated with John. This indicates that the anomalous post may have originated from content accessed through John's agent or file.
+
+
+
+
+## key actors involved
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+key_actors <- incident_window_events |>
+  select(id, datetime, short_name, parties) |>
+  unnest_longer(parties, values_to = "party") |>
+  mutate(
+    actor_type = case_when(
+      str_detect(party, "^person:") ~ "Person",
+      str_detect(party, "^Agent/") ~ "Agent",
+      str_detect(party, "^agent:") ~ "Agent",
+      str_detect(party, "^world:") ~ "System",
+      str_detect(party, "^team:") ~ "Team",
+      str_detect(party, "^company:") ~ "Company",
+      TRUE ~ "Other"
+    ),
+    related_to_john = str_detect(party, regex("john_windward", ignore_case = TRUE))
+  ) |>
+  count(party, actor_type, related_to_john, sort = TRUE)
+
+key_actors |>
+  slice_head(n = 20) |>
+  kable(caption = "Most frequent actors in the incident window")
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+key_actors <- incident_window_events |>
+  select(id, datetime, short_name, parties) |>
+  unnest_longer(parties, values_to = "party") |>
+  mutate(
+    actor_type = case_when(
+      str_detect(party, "^person:") ~ "Person",
+      str_detect(party, "^Agent/") ~ "Agent",
+      str_detect(party, "^agent:") ~ "Agent",
+      str_detect(party, "^world:") ~ "System",
+      str_detect(party, "^team:") ~ "Team",
+      str_detect(party, "^company:") ~ "Company",
+      TRUE ~ "Other"
+    ),
+    related_to_john = str_detect(party, regex("john_windward", ignore_case = TRUE))
+  ) |>
+  count(party, actor_type, related_to_john, sort = TRUE)
+
+key_actors |>
+  slice_head(n = 20) |>
+  kable(caption = "Most frequent actors in the incident window")
+```
+:::
+
+This table highlights the actors most active during the incident 24 hour window before the anomalous post. The related_to_John separates John-related actors from other active entities, helping to distinguish direct relevance from general system noise. 
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+key_actors |>
+  slice_head(n = 15) |>
+  ggplot(
+    aes(
+      x = reorder(party, n),
+      y = n
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Key Actors in the Incident Window",
+    subtitle = "Top actors appearing in events around the anomalous post",
+    x = "Actor",
+    y = "Number of Event Appearances"
+  ) +
+  theme_minimal()
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+key_actors |>
+  slice_head(n = 15) |>
+  ggplot(
+    aes(
+      x = reorder(party, n),
+      y = n
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Key Actors in the Incident Window",
+    subtitle = "Top actors appearing in events around the anomalous post",
+    x = "Actor",
+    y = "Number of Event Appearances"
+  ) +
+  theme_minimal()
+```
+:::
+
+The top 5 actors most active during the 24 hour incident window are henry_sail,evelyn_dock, layla_channel,charlotte_current and olivia_keel.
+
+
+# Content origin analysis
+
+The purpose is to determine what the post means and where its contents originated.
+
+## Extract text sources
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+text_sources <- events_text |>
+  mutate(
+    text_source = case_when(
+      str_detect(details_text, regex("subject", ignore_case = TRUE)) ~ "Subject / message metadata",
+      str_detect(details_text, regex("advice", ignore_case = TRUE)) ~ "Agent advice",
+      str_detect(details_text, regex("topic", ignore_case = TRUE)) ~ "Topic",
+      str_detect(details_text, regex("post|saidit|forum", ignore_case = TRUE)) ~ "Post / forum content",
+      str_detect(details_text, regex("file|target", ignore_case = TRUE)) ~ "File reference",
+      TRUE ~ "Other text"
+    )
+  ) |>
+  filter(
+    !is.na(details_text),
+    details_text != ""
+  ) |>
+  select(
+    id,
+    datetime,
+    date,
+    short_name,
+    text_source,
+    details_text
+  )
+
+text_sources |>
+  slice_head(n = 10) |>
+  kable(caption = "First 10 extracted text-bearing events")
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+text_sources <- events_text |>
+  mutate(
+    text_source = case_when(
+      str_detect(details_text, regex("subject", ignore_case = TRUE)) ~ "Subject / message metadata",
+      str_detect(details_text, regex("advice", ignore_case = TRUE)) ~ "Agent advice",
+      str_detect(details_text, regex("topic", ignore_case = TRUE)) ~ "Topic",
+      str_detect(details_text, regex("post|saidit|forum", ignore_case = TRUE)) ~ "Post / forum content",
+      str_detect(details_text, regex("file|target", ignore_case = TRUE)) ~ "File reference",
+      TRUE ~ "Other text"
+    )
+  ) |>
+  filter(
+    !is.na(details_text),
+    details_text != ""
+  ) |>
+  select(
+    id,
+    datetime,
+    date,
+    short_name,
+    text_source,
+    details_text
+  )
+
+text_sources |>
+  slice_head(n = 10) |>
+  kable(caption = "First 10 extracted text-bearing events")
+```
+:::
+
+This step is where we extract events containing textual content and classify them into categories. The purpose is to identify potential sources of text that may have contributed to the anomalous SaidIT post. The textual information exists in many various forms within the system(topics, files, agent advice).     
+
+
+
+## Content Similarity Analysis visual
+
+Locate the anomalous post text, then compute similarity with earlier text sources.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+target_post <- text_sources |>
+  filter(
+    date == as.Date("2046-05-17"),
+    str_detect(details_text, regex("john_windward|saidit|said_it|said it|forum|post", ignore_case = TRUE))
+  ) |>
+  arrange(
+    abs(as.numeric(difftime(datetime, target_time, units = "mins")))
+  ) |>
+  slice_head(n = 1)
+
+target_post |>
+  select(id, datetime, short_name, details_text) |>
+  kable(caption = "Target anomalous post candidate")
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+target_post <- text_sources |>
+  filter(
+    date == as.Date("2046-05-17"),
+    str_detect(details_text, regex("john_windward|saidit|said_it|said it|forum|post", ignore_case = TRUE))
+  ) |>
+  arrange(
+    abs(as.numeric(difftime(datetime, target_time, units = "mins")))
+  ) |>
+  slice_head(n = 1)
+
+target_post |>
+  select(id, datetime, short_name, details_text) |>
+  kable(caption = "Target anomalous post candidate")
+```
+:::
+
+This portion is to identify the most likely candidate corresponding to the anomalous post. The event log is filtered for records occurring on 17 May 2046, with the closest timestamp and references to John Windward and SaidIT. 
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+target_text <- target_post$details_text[1]
+
+similarity_results <- text_sources |>
+  filter(
+    datetime < target_post$datetime[1],
+    id != target_post$id[1],
+    !is.na(details_text),
+    details_text != ""
+  ) |>
+  mutate(
+    similarity_score = stringdist::stringsim(
+      details_text,
+      target_text,
+      method = "jw"
+    )
+  ) |>
+  arrange(desc(similarity_score))
+
+similarity_results |>
+  select(
+    id,
+    datetime,
+    short_name,
+    text_source,
+    similarity_score,
+    details_text
+  ) |>
+  slice_head(n = 10) |>
+  kable(caption = "Top 10 text sources most similar to the anomalous post")
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+
+target_text <- target_post$details_text[1]
+
+similarity_results <- text_sources |>
+  filter(
+    datetime < target_post$datetime[1],
+    id != target_post$id[1],
+    !is.na(details_text),
+    details_text != ""
+  ) |>
+  mutate(
+    similarity_score = stringdist::stringsim(
+      details_text,
+      target_text,
+      method = "jw"
+    )
+  ) |>
+  arrange(desc(similarity_score))
+
+similarity_results |>
+  select(
+    id,
+    datetime,
+    short_name,
+    text_source,
+    similarity_score,
+    details_text
+  ) |>
+  slice_head(n = 10) |>
+  kable(caption = "Top 10 text sources most similar to the anomalous post")
+```
+:::
+
+This step compares the selected target text against all earlier text-bearing events using Jaro-Wrinkler similarity. The records are ranked by similarity score to identify the possible origins of the anomalous post content. The table lists the top 10 earlier text sources which are most similar to target text. There are events with perfect score of 1.0. This provides evidence for tracing whether the post was generated from earlier messages, files or agent outputs. The output supports the claim that the particular anomalous post may not be random nonsense but rather could have been derived from earlier system records or texts.   
+
+Visual:
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+similarity_results |>
+  slice_head(n = 10) |>
+  mutate(
+    source_label = paste0(short_name, " | ", id)
+  ) |>
+  ggplot(
+    aes(
+      x = reorder(source_label, similarity_score),
+      y = similarity_score
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Most Similar Prior Text Sources",
+    subtitle = "Text similarity between prior system content and the anomalous SaidIT post",
+    x = "Prior Text Source",
+    y = "Similarity Score"
+  ) +
+  theme_minimal()
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+
+similarity_results |>
+  slice_head(n = 10) |>
+  mutate(
+    source_label = paste0(short_name, " | ", id)
+  ) |>
+  ggplot(
+    aes(
+      x = reorder(source_label, similarity_score),
+      y = similarity_score
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Most Similar Prior Text Sources",
+    subtitle = "Text similarity between prior system content and the anomalous SaidIT post",
+    x = "Prior Text Source",
+    y = "Similarity Score"
+  ) +
+  theme_minimal()
+```
+:::
+
+## Evidence supporting content origin
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+content_origin_evidence <- similarity_results |>
+  slice_head(n = 5) |>
+  select(
+    id,
+    datetime,
+    short_name,
+    text_source,
+    similarity_score,
+    details_text
+  )
+
+content_origin_evidence |>
+  mutate(
+    details_preview = str_trunc(details_text, width = 120)
+  ) |>
+  select(
+    id,
+    datetime,
+    short_name,
+    text_source,
+    similarity_score,
+    details_preview
+  ) |>
+  kable(caption = "Top evidence for probable content origin")
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+
+content_origin_evidence <- similarity_results |>
+  slice_head(n = 5) |>
+  select(
+    id,
+    datetime,
+    short_name,
+    text_source,
+    similarity_score,
+    details_text
+  )
+
+content_origin_evidence |>
+  mutate(
+    details_preview = str_trunc(details_text, width = 120)
+  ) |>
+  select(
+    id,
+    datetime,
+    short_name,
+    text_source,
+    similarity_score,
+    details_preview
+  ) |>
+  kable(caption = "Top evidence for probable content origin")
+```
+:::
+
+The table presents the top candidate sources identified by similarity analysis.  All of the top 5 matches are queue_subordinate_task events classified as File reference.These could explain where and how the anomalous post content was generated.   
+
+It is important to note that similarity does not by itself prove causatio. However, it can help to narrow down our search. 
+
+## interpretation of post meaning
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+text_sources |>
+  filter(
+    date == as.Date("2046-05-17"),
+    str_detect(details_text, regex("said|post|forum|john|windward", ignore_case = TRUE))
+  ) |>
+  select(id, datetime, short_name, details_text) |>
+  kable()
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+
+text_sources |>
+  filter(
+    date == as.Date("2046-05-17"),
+    str_detect(details_text, regex("said|post|forum|john|windward", ignore_case = TRUE))
+  ) |>
+  select(id, datetime, short_name, details_text) |>
+  kable()
+```
+:::
+
+This portion is to extract all text bearing events on 17 May 2046 which reference John, SaidIt. This is to gather contextual evidence that may help explain the content and intent of the anomalous post. The prescence of both file access and task delegation activities show that information associated with John was actively being accessed and processed throughout the whole day. This helps to provide contextual information. 
+
+
+
+
+
+
+# Historical behaviour analysis
+
+The purpose is to determine where the incident is isolated. Also, to determine whether similar incidents occurred previously.
+
+## Identifying similar events
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+similarity_threshold <- 0.75
+
+historical_similar_events <- similarity_results |>
+  filter(
+    similarity_score >= similarity_threshold,
+    datetime < target_time
+  ) |>
+  mutate(
+    incident_type = case_when(
+      str_detect(details_text, regex("saidit|said_it|post|forum", ignore_case = TRUE)) ~ "Possible external post",
+      str_detect(details_text, regex("advice|topic", ignore_case = TRUE)) ~ "Agent-generated text",
+      str_detect(details_text, regex("subject|calendar|meeting", ignore_case = TRUE)) ~ "Message / meeting text",
+      str_detect(details_text, regex("file|target", ignore_case = TRUE)) ~ "File-related text",
+      TRUE ~ "Other similar text"
+    )
+  )
+
+historical_similar_events |>
+  select(
+    id,
+    datetime,
+    short_name,
+    incident_type,
+    similarity_score,
+    details_text
+  ) |>
+  slice_head(n = 20) |>
+  kable(caption = "Historical events with similar content to the anomalous post")
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+
+similarity_threshold <- 0.75
+
+historical_similar_events <- similarity_results |>
+  filter(
+    similarity_score >= similarity_threshold,
+    datetime < target_time
+  ) |>
+  mutate(
+    incident_type = case_when(
+      str_detect(details_text, regex("saidit|said_it|post|forum", ignore_case = TRUE)) ~ "Possible external post",
+      str_detect(details_text, regex("advice|topic", ignore_case = TRUE)) ~ "Agent-generated text",
+      str_detect(details_text, regex("subject|calendar|meeting", ignore_case = TRUE)) ~ "Message / meeting text",
+      str_detect(details_text, regex("file|target", ignore_case = TRUE)) ~ "File-related text",
+      TRUE ~ "Other similar text"
+    )
+  )
+
+historical_similar_events |>
+  select(
+    id,
+    datetime,
+    short_name,
+    incident_type,
+    similarity_score,
+    details_text
+  ) |>
+  slice_head(n = 20) |>
+  kable(caption = "Historical events with similar content to the anomalous post")
+```
+:::
+
+Here, we identify historical events that are textually similar to the anomalous post. These records in the table prove that similar content existed before the 17 May post. This will give us greater insight into whether the anomalous post was an isolated event or part of a broader repeated behaviour pattern.    
+
+
+
+
+## Historical incident timeline
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+historical_timeline <- historical_similar_events |>
+  count(date, incident_type) |>
+  mutate(
+    tooltip_text = paste(
+      "Date:", date,
+      "<br>Incident Type:", incident_type,
+      "<br>Number of Similar Events:", n
+    )
+  )
+
+p_historical_timeline <- historical_timeline |>
+  ggplot(
+    aes(
+      x = date,
+      y = n,
+      colour = incident_type,
+      text = tooltip_text
+    )
+  ) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  geom_vline(
+    xintercept = as.Date("2046-05-17"),
+    linetype = "dashed"
+  ) +
+  labs(
+    title = "Historical Timeline of Similar Events",
+    subtitle = "Events with similar text before the anomalous May 17 post",
+    x = "Date",
+    y = "Number of Similar Events",
+    colour = "Incident Type"
+  ) +
+  theme_minimal()
+
+ggplotly(
+  p_historical_timeline,
+  tooltip = "text"
+)
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+historical_timeline <- historical_similar_events |>
+  count(date, incident_type) |>
+  mutate(
+    tooltip_text = paste(
+      "Date:", date,
+      "<br>Incident Type:", incident_type,
+      "<br>Number of Similar Events:", n
+    )
+  )
+
+p_historical_timeline <- historical_timeline |>
+  ggplot(
+    aes(
+      x = date,
+      y = n,
+      colour = incident_type,
+      text = tooltip_text
+    )
+  ) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  geom_vline(
+    xintercept = as.Date("2046-05-17"),
+    linetype = "dashed"
+  ) +
+  labs(
+    title = "Historical Timeline of Similar Events",
+    subtitle = "Events with similar text before the anomalous May 17 post",
+    x = "Date",
+    y = "Number of Similar Events",
+    colour = "Incident Type"
+  ) +
+  theme_minimal()
+
+ggplotly(
+  p_historical_timeline,
+  tooltip = "text"
+)
+
+```
+:::
+
+This interactive visual displays whether historically similar events occurred before the anomalous post on 17 May 2046. The timeline shows that similar events was already occurring several days before the anomaly, from 8 May to 16 May, all of which are file-related text. On average, there were about 25 incidents during the window, with a peak of 44 on 10 May. 
+This shows that the anomalous post is associated with an existing pattern of file-related content within the system.
+
+
+## Comparative analysis
+
+Using the comparison table, compare between historical cases and the May 17 incident.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+may17_case <- tibble(
+  case_date_or_label = "2046-05-17",
+  case_type = "May 17 Incident",
+  event_count = nrow(incident_window_events),
+  first_event = min(incident_window_events$datetime),
+  last_event = max(incident_window_events$datetime),
+  involved_actors = incident_window_events |>
+    select(parties) |>
+    unnest_longer(parties) |>
+    distinct(parties) |>
+    nrow(),
+  text_similarity_max = max(similarity_results$similarity_score, na.rm = TRUE)
+)
+
+historical_case_summary <- historical_similar_events |>
+  mutate(case_date_or_label = as.character(as.Date(datetime))) |>
+  group_by(case_date_or_label) |>
+  summarise(
+    case_type = "Historical Similar Event",
+    event_count = n(),
+    first_event = min(datetime),
+    last_event = max(datetime),
+    involved_actors = NA_integer_,
+    text_similarity_max = max(similarity_score, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  arrange(desc(text_similarity_max)) |>
+  slice_head(n = 5)
+
+comparison_table <- bind_rows(
+  historical_case_summary,
+  may17_case
+)
+
+comparison_table |>
+  kable(caption = "Comparison of historical similar cases with the May 17 incident")
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+may17_case <- tibble(
+  case_date_or_label = "2046-05-17",
+  case_type = "May 17 Incident",
+  event_count = nrow(incident_window_events),
+  first_event = min(incident_window_events$datetime),
+  last_event = max(incident_window_events$datetime),
+  involved_actors = incident_window_events |>
+    select(parties) |>
+    unnest_longer(parties) |>
+    distinct(parties) |>
+    nrow(),
+  text_similarity_max = max(similarity_results$similarity_score, na.rm = TRUE)
+)
+
+historical_case_summary <- historical_similar_events |>
+  mutate(case_date_or_label = as.character(as.Date(datetime))) |>
+  group_by(case_date_or_label) |>
+  summarise(
+    case_type = "Historical Similar Event",
+    event_count = n(),
+    first_event = min(datetime),
+    last_event = max(datetime),
+    involved_actors = NA_integer_,
+    text_similarity_max = max(similarity_score, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  arrange(desc(text_similarity_max)) |>
+  slice_head(n = 5)
+
+comparison_table <- bind_rows(
+  historical_case_summary,
+  may17_case
+)
+
+comparison_table |>
+  kable(caption = "Comparison of historical similar cases with the May 17 incident")
+
+```
+:::
+
+The May 17 anomalous incident differs from the historical cases. The past events typically involved 22 to 44 events, while the May 17 incident contained 1272 events. The scale is much greater. This could suggest that this was an escalation of existing system behaviour, rather than a completely new failure/incident. 
+
+
+
+
+## Historical event chain comparison
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+historical_case_dates <- historical_similar_events |>
+  mutate(case_date = as.Date(datetime)) |>
+  count(case_date, sort = TRUE) |>
+  slice_head(n = 3) |>
+  pull(case_date)
+
+historical_chain_events <- events_text |>
+  filter(date %in% historical_case_dates) |>
+  mutate(case_label = paste("Historical case:", date))
+
+current_chain_events <- incident_window_events |>
+  mutate(case_label = "May 17 incident")
+
+chain_comparison_events <- bind_rows(
+  historical_chain_events,
+  current_chain_events
+)
+
+chain_comparison_top10 <- chain_comparison_events |>
+  count(case_label, short_name) |>
+  group_by(case_label) |>
+  slice_max(
+    order_by = n,
+    n = 10,
+    with_ties = FALSE
+  ) |>
+  ungroup() |>
+  mutate(
+    event_type_clean = str_replace_all(short_name, "_", " "),
+    event_type_clean = str_trunc(event_type_clean, width = 28),
+    tooltip_text = paste(
+      "Case:", case_label,
+      "<br>Event Type:", str_replace_all(short_name, "_", " "),
+      "<br>Number of Events:", n
+    )
+  )
+
+p_chain_comparison <- chain_comparison_top10 |>
+  ggplot(
+    aes(
+      x = reorder(event_type_clean, n),
+      y = n,
+      text = tooltip_text
+    )
+  ) +
+  geom_col() +
+  coord_flip(clip = "off") +
+  facet_wrap(
+    ~ case_label,
+    scales = "free_y",
+    ncol = 1
+  ) +
+  labs(
+    title = "Historical Event Chain Comparison",
+    subtitle = "Top 10 event types within each historical case and the May 17 incident",
+    x = "Event Type",
+    y = "Number of Events"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.margin = margin(10, 20, 10, 80),
+    axis.text.y = element_text(size = 8),
+    strip.text = element_text(size = 9)
+  )
+
+ggplotly(
+  p_chain_comparison,
+  tooltip = "text"
+)
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+historical_case_dates <- historical_similar_events |>
+  mutate(case_date = as.Date(datetime)) |>
+  count(case_date, sort = TRUE) |>
+  slice_head(n = 3) |>
+  pull(case_date)
+
+historical_chain_events <- events_text |>
+  filter(date %in% historical_case_dates) |>
+  mutate(case_label = paste("Historical case:", date))
+
+current_chain_events <- incident_window_events |>
+  mutate(case_label = "May 17 incident")
+
+chain_comparison_events <- bind_rows(
+  historical_chain_events,
+  current_chain_events
+)
+
+chain_comparison_top10 <- chain_comparison_events |>
+  count(case_label, short_name) |>
+  group_by(case_label) |>
+  slice_max(
+    order_by = n,
+    n = 10,
+    with_ties = FALSE
+  ) |>
+  ungroup() |>
+  mutate(
+    event_type_clean = str_replace_all(short_name, "_", " "),
+    event_type_clean = str_trunc(event_type_clean, width = 28),
+    tooltip_text = paste(
+      "Case:", case_label,
+      "<br>Event Type:", str_replace_all(short_name, "_", " "),
+      "<br>Number of Events:", n
+    )
+  )
+
+p_chain_comparison <- chain_comparison_top10 |>
+  ggplot(
+    aes(
+      x = reorder(event_type_clean, n),
+      y = n,
+      text = tooltip_text
+    )
+  ) +
+  geom_col() +
+  coord_flip(clip = "off") +
+  facet_wrap(
+    ~ case_label,
+    scales = "free_y",
+    ncol = 1
+  ) +
+  labs(
+    title = "Historical Event Chain Comparison",
+    subtitle = "Top 10 event types within each historical case and the May 17 incident",
+    x = "Event Type",
+    y = "Number of Events"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.margin = margin(10, 20, 10, 80),
+    axis.text.y = element_text(size = 8),
+    strip.text = element_text(size = 9)
+  )
+
+ggplotly(
+  p_chain_comparison,
+  tooltip = "text"
+)
+```
+:::
+
+The earlier similar cases were dominated by task-related events and file-related events mostly. However, on the May 17 incident, there were much lesser number of events. Also, check email was the dominant one.This suggests that while similar historical cases were mainly file-operation heavy, the May 17 incident involved a more targeted sequence of access, email and SaidIT-checking events. 
+
+
+
+# Intervention analysis
+
+## Centrality analysis
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+centrality_nodes <- event_graph |>
+  activate(nodes) |>
+  mutate(
+    degree = centrality_degree(mode = "all"),
+    in_degree = centrality_degree(mode = "in"),
+    out_degree = centrality_degree(mode = "out"),
+    betweenness = centrality_betweenness()
+  ) |>
+  as_tibble() |>
+  arrange(desc(betweenness))
+
+centrality_nodes |>
+  select(name, label, node_type, degree, in_degree, out_degree, betweenness) |>
+  slice_head(n = 20) |>
+  kable(caption = "Top 20 nodes by betweenness centrality")
+```
+
+## The code
+
+```{r}
+#| eval: false
+centrality_nodes <- event_graph |>
+  activate(nodes) |>
+  mutate(
+    degree = centrality_degree(mode = "all"),
+    in_degree = centrality_degree(mode = "in"),
+    out_degree = centrality_degree(mode = "out"),
+    betweenness = centrality_betweenness()
+  ) |>
+  as_tibble() |>
+  arrange(desc(betweenness))
+
+centrality_nodes |>
+  select(name, label, node_type, degree, in_degree, out_degree, betweenness) |>
+  slice_head(n = 20) |>
+  kable(caption = "Top 20 nodes by betweenness centrality")
+```
+:::
+
+The code above calculates degree, in-degree, out-degree measure and betweenness centrality. The results are ranked by betweenness. Betweenness centrality identifies nodes that act as bridges between different parts of the multi-agent system. Betweenness centrality measures how often a node lies on the shortest path between other nodes. The top ranked nodes by betweenness are important as many paths pass through them. High betweenness nodes are useful for identifying control points in the system.
+Centrality analysis helps identify where an intervention would be most effective.  
+
+
+## Critical node analysis visual
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+critical_nodes <- centrality_nodes |>
+  slice_head(n = 30) |>
+  pull(name)
+
+critical_graph <- event_graph |>
+  activate(nodes) |>
+  mutate(
+    degree = centrality_degree(mode = "all"),
+    betweenness = centrality_betweenness(),
+    critical = name %in% critical_nodes
+  ) |>
+  filter(critical)
+
+set.seed(123)
+
+ggraph(critical_graph, layout = "fr") +
+  geom_edge_link(
+    alpha = 0.35,
+    colour = "grey70",
+    arrow = arrow(length = unit(2, "mm")),
+    end_cap = circle(2, "mm")
+  ) +
+  geom_node_point(
+    aes(
+      colour = node_type,
+      size = betweenness
+    )
+  ) +
+  geom_node_text(
+    aes(label = label),
+    repel = TRUE,
+    size = 3
+  ) +
+  labs(
+    title = "Critical Nodes in the Multi-Agent System",
+    subtitle = "Node size represents betweenness centrality",
+    colour = "Node Type",
+    size = "Betweenness"
+  ) +
+  theme_graph()
+```
+
+## The code
+
+```{r}
+#| eval: false
+critical_nodes <- centrality_nodes |>
+  slice_head(n = 30) |>
+  pull(name)
+
+critical_graph <- event_graph |>
+  activate(nodes) |>
+  mutate(
+    degree = centrality_degree(mode = "all"),
+    betweenness = centrality_betweenness(),
+    critical = name %in% critical_nodes
+  ) |>
+  filter(critical)
+
+set.seed(123)
+
+ggraph(critical_graph, layout = "fr") +
+  geom_edge_link(
+    alpha = 0.35,
+    colour = "grey70",
+    arrow = arrow(length = unit(2, "mm")),
+    end_cap = circle(2, "mm")
+  ) +
+  geom_node_point(
+    aes(
+      colour = node_type,
+      size = betweenness
+    )
+  ) +
+  geom_node_text(
+    aes(label = label),
+    repel = TRUE,
+    size = 3
+  ) +
+  labs(
+    title = "Critical Nodes in the Multi-Agent System",
+    subtitle = "Node size represents betweenness centrality",
+    colour = "Node Type",
+    size = "Betweenness"
+  ) +
+  theme_graph()
+```
+:::
+
+This visual shows the top 30 nodes with the highest betweenness centrality in the multi agent interaction network. The node size represents betweenness centrality value. The node size represnts how strongly each actor acts as a bridge between different parts of the system. The most critical nodes are mainly agents with larger nodes such as Chloe Ballast, Victoria Rigging, Zoey Drydock etc. These nodes are strong potential candidates for monitoring or validation controls to prevent anomalous content from spreading.   
+
+
+
+## Candidate intervention points
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+candidate_interventions <- centrality_nodes |>
+  filter(
+    node_type %in% c("Agent", "System", "File System", "File")
+  ) |>
+  arrange(desc(betweenness)) |>
+  slice_head(n = 10) |>
+  mutate(
+    intervention_reason = case_when(
+      node_type == "System" ~ "System-level control point",
+      node_type == "Agent" ~ "Agent-level behaviour control point",
+      node_type %in% c("File", "File System") ~ "Content-access control point",
+      TRUE ~ "Potential control point"
+    )
+  )
+
+candidate_interventions |>
+  select(
+    name,
+    label,
+    node_type,
+    degree,
+    in_degree,
+    out_degree,
+    betweenness,
+    intervention_reason
+  ) |>
+  kable(caption = "Candidate intervention points ranked by centrality")
+```
+
+## The code
+
+```{r}
+#| eval: false
+candidate_interventions <- centrality_nodes |>
+  filter(
+    node_type %in% c("Agent", "System", "File System", "File")
+  ) |>
+  arrange(desc(betweenness)) |>
+  slice_head(n = 10) |>
+  mutate(
+    intervention_reason = case_when(
+      node_type == "System" ~ "System-level control point",
+      node_type == "Agent" ~ "Agent-level behaviour control point",
+      node_type %in% c("File", "File System") ~ "Content-access control point",
+      TRUE ~ "Potential control point"
+    )
+  )
+
+candidate_interventions |>
+  select(
+    name,
+    label,
+    node_type,
+    degree,
+    in_degree,
+    out_degree,
+    betweenness,
+    intervention_reason
+  ) |>
+  kable(caption = "Candidate intervention points ranked by centrality")
+```
+:::
+
+This analysis identifies the most suitable intervention points in the system by selecting highly central nodes that are heavily involved in information flow. Based on Betweenness centrality score, the top agents include Chloe Ballast, Zoey Drydock, Victoria Rigging, Mia Fender and Liam Anchor. Large number of interactions and paths pass through them. Among these Zoey Drydock shows the highest degree score of 6289. Degree score refers to how many direct connections a node has. 
+
+
+
+
+
+Optional Visual:
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+candidate_interventions |>
+  ggplot(
+    aes(
+      x = reorder(label, betweenness),
+      y = betweenness
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Candidate Intervention Points",
+    subtitle = "Ranked by betweenness centrality",
+    x = "Candidate Node",
+    y = "Betweenness Centrality"
+  ) +
+  theme_minimal()
+```
+
+## The code
+
+```{r}
+#| eval: false
+candidate_interventions |>
+  ggplot(
+    aes(
+      x = reorder(label, betweenness),
+      y = betweenness
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Candidate Intervention Points",
+    subtitle = "Ranked by betweenness centrality",
+    x = "Candidate Node",
+    y = "Betweenness Centrality"
+  ) +
+  theme_minimal()
+```
+:::
+
+## Recommended intervention
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+recommended_intervention <- candidate_interventions |>
+  slice_head(n = 1)
+
+recommended_intervention |>
+  select(
+    name,
+    label,
+    node_type,
+    degree,
+    in_degree,
+    out_degree,
+    betweenness,
+    intervention_reason
+  ) |>
+  kable(caption = "Recommended intervention point")
+```
+
+## The code
+
+```{r}
+#| eval: false
+recommended_intervention <- candidate_interventions |>
+  slice_head(n = 1)
+
+recommended_intervention |>
+  select(
+    name,
+    label,
+    node_type,
+    degree,
+    in_degree,
+    out_degree,
+    betweenness,
+    intervention_reason
+  ) |>
+  kable(caption = "Recommended intervention point")
+```
+:::
+
+Based on the centrality analysis, the recommended intervention point is the highest-ranked non-human control node. This is selected because it occupies an important position in the interaction network and is more practical to control than individual human users.Human users can be prone to human error or misjudgement. Placing validation, logging, or approval checks at this point would reduce the likelihood of anomalous content being posted and spread through the system again.
+
+For intervention analysis, we need to pick the node that controls the flow of information the most. This is measured by betweeness not degree. Therefore, we pick the node with the highest betweenness node score. 
+
+Chloe Ballast is the main intervention point as she exhibits highest betweenness centrality in the network. She would be the best opportunity to detect anamalous content before it propogates through the rest of the system. 
+
+# Mini challenge answers
+
+1.  How was the anomalous SaidIT post made?
+
+The anamalous post seems to have resulted from a chain of activity linked to John Windward. The incident timeline visual displayed earlier shows repeated access, email checking and enter_room events nearing target time. The event chain network also suggests that the clearest extractable connection was a file-reading action associated with John Windward.  This indicates that the post was likely produced through agent activity using previously accessed file or prompt content, rather than through a manual posting process.
+
+2.  What does the post mean?
+
+The post is not pure gibberish. It has high content similarity to previous text records, including perfect scores of 1.0. By looking at content similarity analysis visual, the records with highest similarity  are all of "queue_subordinate_task" events. The details of the previous records are "SwiftWren_further_instructions.md".   
+
+3.  Are there prior occurrences?
+
+Yes. Similar events have occurred prior to the May 17 incident. Under the historical incident timeline, we can see the visual timeline of past similar events. These similar events have appeared from 8 May to 16 May 2046, with a peak of 44 events on 10 May 2046. May 17 was not an entirely new incident but was an existing behaviour pattern.    
+
+
+4.  What intervention should be implemented?
+
+The recommended intervention point is Chlow Ballast's agent pathway. Reason being, she has the highest betweenness centrality. This makes her the strongest connecting point in the interaction network. Validation, checks and approvals need to be implemented at this pathway to detect anamalous or odd content before it spreads througout the rest of the wider system.
+
+# Conclusion
+
+Based on a wide range of analysis ranging from timeline, network and similarity we cna tell that this anamalous incident was part of an already existing pattern. To reduce and even prevent such incidents from happening again, monitoring and checks should be implemented at Chloe Ballast's agent pathway, as she has the highest betweenness centrality. 
+
