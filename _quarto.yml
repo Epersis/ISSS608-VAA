@@ -47,11 +47,14 @@ website:
           href: "Take-Home_Ex/presentation.html"
         - text: "Take Home Exercise 2"
           href: "Take-Home_Ex/TakeHomeMC2/Take_Home_Exercise_2.html"
+    - text: "Proposal"
+      menu: 
+        - text: "MC1 proposal"
+          href: "MC1_proposal.html"
           
     right: 
       - href: index.qmd
         text: Home
-      - about.qmd
 
 format:
   html:
