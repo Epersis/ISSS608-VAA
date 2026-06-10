@@ -83,6 +83,53 @@ Start off with data preparation and EDA. This is to understand overall data and 
 | Visual Analytics Dashboard Development | Integrate timeline, network, behavioural, and anomaly analyses into an interactive system for investigation and exploration. | An interactive visual analytics platform supporting evidence-based decision making. |
 
 
+# Timeline
+
+<table style="width:100%; border-collapse:collapse;" border="1">
+  <thead>
+    <tr>
+      <th style="border:1px solid #4b006e; padding:10px;">Period</th>
+      <th style="border:1px solid #4b006e; padding:10px;">Key Activities</th>
+      <th style="border:1px solid #4b006e; padding:10px;">Deliverables</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border:1px solid #4b006e; padding:10px;">15 – 17 Jun 2026</td>
+      <td style="border:1px solid #4b006e; padding:10px;">Data Preparation and Exploration</td>
+      <td style="border:1px solid #4b006e; padding:10px;">Cleaned dataset, identified key entities, communication channels, and events</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #4b006e; padding:10px;">18 – 20 Jun 2026</td>
+      <td style="border:1px solid #4b006e; padding:10px;">Network Analysis and Event Reconstruction</td>
+      <td style="border:1px solid #4b006e; padding:10px;">Communication network models and preliminary event timeline</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #4b006e; padding:10px;">21 – 24 Jun 2026</td>
+      <td style="border:1px solid #4b006e; padding:10px;">Agent Relationship Analysis and Behavioural Analysis</td>
+      <td style="border:1px solid #4b006e; padding:10px;">Agent interaction findings and behavioural comparison results</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #4b006e; padding:10px;">25 – 27 Jun 2026</td>
+      <td style="border:1px solid #4b006e; padding:10px;">Anomaly Detection and Leading Indicator Analysis</td>
+      <td style="border:1px solid #4b006e; padding:10px;">Identified anomalies, behavioural deviations, and early warning indicators</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #4b006e; padding:10px;">28 – 30 Jun 2026</td>
+      <td style="border:1px solid #4b006e; padding:10px;">Shiny Application Development, Dashboard Integration, and Testing</td>
+      <td style="border:1px solid #4b006e; padding:10px;">Completed visual analytics dashboard and validated application</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #4b006e; padding:10px;">1 Jul 2026</td>
+      <td style="border:1px solid #4b006e; padding:10px;">Poster Preparation, Repository Deployment, Final Review and Submission</td>
+      <td style="border:1px solid #4b006e; padding:10px;">Project poster, deployed Shiny application, and final deliverables submitted</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
 
 
 # Conclusion
