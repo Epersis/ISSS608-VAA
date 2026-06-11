@@ -340,6 +340,114 @@ ggplot() +
 ```
 :::
 
+As the x axis is hard to read, lets modify the code.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+ggplot() +
+  geom_line(
+    data = Vietnam,
+    aes(
+      x = year,
+      y = Vietnam,
+      group = month
+    ),
+    colour = "black",
+    linewidth = 0.6
+  ) +
+  
+  geom_hline(
+    data = hline.data,
+    aes(yintercept = avgvalue),
+    linetype = "dashed",
+    colour = "red",
+    linewidth = 0.5
+  ) +
+  
+  facet_grid(~month) +
+  
+  labs(
+    title = "Visitor arrivals from Vietnam by air, Jan 2010–Dec 2019",
+    x = NULL,
+    y = "No. of Visitors"
+  ) +
+  
+  theme_tufte(base_family = "Helvetica") +
+  
+  theme(
+    plot.title = element_text(
+      size = 16,
+      face = "bold",
+      hjust = 0.5
+    ),
+    strip.text = element_text(
+      size = 11,
+      face = "bold"
+    ),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    panel.spacing = unit(0.8, "lines")
+  )
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+ggplot() +
+  geom_line(
+    data = Vietnam,
+    aes(
+      x = year,
+      y = Vietnam,
+      group = month
+    ),
+    colour = "black",
+    linewidth = 0.6
+  ) +
+  
+  geom_hline(
+    data = hline.data,
+    aes(yintercept = avgvalue),
+    linetype = "dashed",
+    colour = "red",
+    linewidth = 0.5
+  ) +
+  
+  facet_grid(~month) +
+  
+  labs(
+    title = "Visitor arrivals from Vietnam by air, Jan 2010–Dec 2019",
+    x = NULL,
+    y = "No. of Visitors"
+  ) +
+  
+  theme_tufte(base_family = "Helvetica") +
+  
+  theme(
+    plot.title = element_text(
+      size = 16,
+      face = "bold",
+      hjust = 0.5
+    ),
+    strip.text = element_text(
+      size = 11,
+      face = "bold"
+    ),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    panel.spacing = unit(0.8, "lines")
+  )
+
+```
+:::
+
+
 # Plotting Slopegraph
 
 ## Import data
@@ -496,6 +604,8 @@ ggplotly(p1, tooltip = "text")
 ```
 :::
 
+Attack activity is concentrated on Wednesdays and Fridays. 
+
 ## top attacking countries
 
 ::: panel-tabset
@@ -540,6 +650,9 @@ attacks_by_country %>%
 ```
 :::
 
+Attack activity is highly concentrated in few countries, with China and United States dominating the attack sources. 
+
+
 
 ## ridge plot of attacks
 
@@ -549,21 +662,126 @@ attacks_by_country %>%
 ```{r}
 #| echo: false
 
+library(ggridges)
+library(ggrepel)
+
+ridge_data <- attacks %>%
+  count(wkday, hour) %>%
+  mutate(
+    hour_num = as.numeric(as.character(hour)),
+    wkday = factor(wkday,
+                   levels = c("Monday", "Tuesday", "Wednesday",
+                              "Thursday", "Friday", "Saturday", "Sunday"))
+  )
+
+ggplot(ridge_data,
+       aes(x = hour_num,
+           y = wkday,
+           height = n,
+           group = wkday,
+           fill = wkday)) +
+  geom_ridgeline(
+    alpha = 0.7,
+    scale = 0.08
+  ) +
+  geom_text(
+    data = ridge_data %>% group_by(wkday) %>% slice_min(hour_num, n = 1),
+    aes(x = -0.8, y = wkday, label = wkday),
+    inherit.aes = FALSE,
+    hjust = 1,
+    size = 3.5
+  ) +
+  scale_x_continuous(breaks = 0:23, limits = c(-2, 23)) +
+  labs(
+    title = "Hourly Attack Pattern by Weekday",
+    x = "Hour of Day",
+    y = NULL
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+library(ggridges)
+library(ggrepel)
+
+ridge_data <- attacks %>%
+  count(wkday, hour) %>%
+  mutate(
+    hour_num = as.numeric(as.character(hour)),
+    wkday = factor(wkday,
+                   levels = c("Monday", "Tuesday", "Wednesday",
+                              "Thursday", "Friday", "Saturday", "Sunday"))
+  )
+
+ggplot(ridge_data,
+       aes(x = hour_num,
+           y = wkday,
+           height = n,
+           group = wkday,
+           fill = wkday)) +
+  geom_ridgeline(
+    alpha = 0.7,
+    scale = 0.08
+  ) +
+  geom_text(
+    data = ridge_data %>% group_by(wkday) %>% slice_min(hour_num, n = 1),
+    aes(x = -0.8, y = wkday, label = wkday),
+    inherit.aes = FALSE,
+    hjust = 1,
+    size = 3.5
+  ) +
+  scale_x_continuous(breaks = 0:23, limits = c(-2, 23)) +
+  labs(
+    title = "Hourly Attack Pattern by Weekday",
+    x = "Hour of Day",
+    y = NULL
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+```
+:::
+
+Here, the y axis labels are not clear. Reason being the attack counts are too large and ridges overlap.
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
 attacks %>%
   count(wkday, hour) %>%
-  mutate(hour_num = as.numeric(as.character(hour))) %>%
-  ggplot(aes(x = hour_num, 
-             y = wkday, 
-             height = n,
-             group = wkday,
-             fill = wkday)) +
-  geom_ridgeline(alpha = 0.7) +
-  labs(title = "Hourly Attack Pattern by Weekday",
-       x = "Hour of Day",
-       y = "Weekday") +
-  theme_minimal() +
-  theme(legend.position = "none")
-
+  mutate(
+    hour = as.numeric(as.character(hour)),
+    wkday = factor(wkday,
+                   levels = c("Monday", "Tuesday", "Wednesday",
+                              "Thursday", "Friday", "Saturday", "Sunday"))
+  ) %>%
+  ggplot(aes(x = hour, y = n, colour = wkday, group = wkday)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 1.5) +
+  scale_x_continuous(breaks = 0:23) +
+  labs(
+    title = "Hourly Attack Pattern by Weekday",
+    x = "Hour of Day",
+    y = "Number of Attacks",
+    colour = "Weekday"
+  ) +
+  theme_minimal()
 
 ```
 
@@ -574,20 +792,30 @@ attacks %>%
 
 attacks %>%
   count(wkday, hour) %>%
-  mutate(hour_num = as.numeric(as.character(hour))) %>%
-  ggplot(aes(x = hour_num, 
-             y = wkday, 
-             height = n,
-             group = wkday,
-             fill = wkday)) +
-  geom_ridgeline(alpha = 0.7) +
-  labs(title = "Hourly Attack Pattern by Weekday",
-       x = "Hour of Day",
-       y = "Weekday") +
-  theme_minimal() +
-  theme(legend.position = "none")
+  mutate(
+    hour = as.numeric(as.character(hour)),
+    wkday = factor(wkday,
+                   levels = c("Monday", "Tuesday", "Wednesday",
+                              "Thursday", "Friday", "Saturday", "Sunday"))
+  ) %>%
+  ggplot(aes(x = hour, y = n, colour = wkday, group = wkday)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 1.5) +
+  scale_x_continuous(breaks = 0:23) +
+  labs(
+    title = "Hourly Attack Pattern by Weekday",
+    x = "Hour of Day",
+    y = "Number of Attacks",
+    colour = "Weekday"
+  ) +
+  theme_minimal()
 ```
 :::
+
+
+Friday and Wednesday consistently experience the highest attack activity, especially during the morning hours.  
+
+
 
 
 ## interactive slopegraph
@@ -658,6 +886,8 @@ p2 <- ggplot(rice_slope2,
 girafe(ggobj = p2)
 ```
 :::
+
+All countries experienced an increase in rice yield from 1961 to 1980. However the amount of increase varies significanlty between countries. 
 
 
 ## table for summary
