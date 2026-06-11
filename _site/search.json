@@ -1524,5 +1524,145 @@
     "title": "MC1_proposal",
     "section": "",
     "text": "Project title\nInvestigating the Tenant Thread Embargo Breach: Visual Analytics Approach\n\n\nIntroduction\nTenantThread is a property technology company that provides software solutions for landlords and multifamily operators. 1 of its key products, the Retention Optimiser, analyses tenant behaviours and generates scores that influences operational decisions.\nTenantThread entered into a confidential merger agreement with CivivLoom Realty Partners. This merger announcement was protected by strict embargo until 6:00 PM on 5 June 2046 and monitored by a system known as “The Judge”. Despite these safegaurds, the embargoed information appeared publicly on FleX before the official announcement time.\n\n\nProject objectives and aims\nThe aim of the project is to develop visual analytics system to reconstruct the events leading to the release and determine whether this was caused on purpose, behavioural drift among agents within the system, or a flaw/breakdown within the system.\nThe analysis will look into communications, agent deliberations, decision making records and public posts generated during the 2 weeks before the breach.\nObjectives:\n\nReconstruct sequence of events\nIdentify key actors, communication channels, decision points that contribute to the release of information\nExamine relationships between agents\nDetermine flow of information\nMake comparisons during normal operations against during crisis period\nDetect and determine which are the leading indicators that signal the embargo violation\nIdentify if similar patterns have existed before\n\n\n\nMotivation\nThe use of AI in organisation is becoming more common and prevalant. Understanding how autonomous systems behave under pressure is important.\nThis TenantThread case is a chance to study and analyse how information propagates through a network of agents and small behavioural changes may lead to major organisational failures. Visual Analytics can give us a clearer understanding of the communication flows, dynamics, identify vulnerabilities in the system and develop stronger frameworks for future use cases.\n\n\nChallenges\n\nDataset has several layers of communication: public posts, private posts, compliance related interactions. There is a need to be able to differentiate and derive meaningful insights from these.\nThe chain of events leading to the breach may not be so direct and explicit. There is a need to derive this through further analysis.\nAgent behaviour not so straightforward. For instance, was it an accident or done deliberately?\nLarge volume of interactions could lead to unecessary noise which needs to be filtered out.\n\n\n\nProposed Approach\nStart off with data preparation and EDA. This is to understand overall data and get generic trends. Next, create a chronological view of events leading to the breach. This timeline will help identify key moments, series of events and identify developments. Next we would carry out Network analysis and then followed by behavioural analysis. In network analysis, we can view, analyse and deduce the communication pathways and identify the important ones. Behavioural analysis such as communication frequency, interaction diversity and trends can be observed. There is also a need to find anomalies which could help determine cause of breach.\n\n\nScope of work\n\n\n\n\n\n\n\n\nComponent\nDescription\nExpected Outcome\n\n\n\n\nData Preparation and Exploration\nUnderstand dataset structure, clean and transform communication records, categorise communication channels and interaction types, and identify key entities, events, and timestamps.\nA structured dataset ready for subsequent analysis.\n\n\nNetwork Analysis\nConstruct communication networks among agents, communication channels, and key entities. Compute network metrics such as degree centrality, betweenness centrality, and community structures to identify influential actors and information bottlenecks.\nIdentification of key agents, influential decision-makers, communication clusters, and critical pathways through which information propagated.\n\n\nEvent Reconstruction\nDevelop a chronological timeline of significant events, highlight critical decisions and escalation points, and identify events directly related to the merger embargo.\nA clear reconstruction of the sequence of events leading to the embargo breach.\n\n\nAgent Relationship Analysis\nAnalyse communication flows among agents, identify collaboration patterns, and examine how interactions evolved throughout the crisis period.\nBetter understanding of relationships between agents and how their interactions contributed to the embargo breach.\n\n\nBehavioural Analysis\nEstablish baseline behaviour for each agent, compare normal and crisis-period activities, and identify changes in communication frequency, content, and interaction patterns.\nIdentification of behavioural shifts associated with the crisis.\n\n\nAnomaly Detection\nDetect unusual behaviours and deviations from expected roles, investigate prior irregularities, and compare historical anomalies with those observed during the breach.\nDiscovery of abnormal behaviours that may have contributed to the embargo violation.\n\n\nLeading Indicator Analysis\nIdentify early warning signs preceding the breach, examine recurring risk patterns, and evaluate whether warning signals were visible before the incident occurred.\nInsights into indicators that could predict future compliance failures.\n\n\nVisual Analytics Dashboard Development\nIntegrate timeline, network, behavioural, and anomaly analyses into an interactive system for investigation and exploration.\nAn interactive visual analytics platform supporting evidence-based decision making.\n\n\n\n\n\nTimeline\n\n\n\n\nPeriod\n\n\nKey Activities\n\n\nDeliverables\n\n\n\n\n\n\n15 – 17 Jun 2026\n\n\nData Preparation and Exploration\n\n\nCleaned dataset, identified key entities, communication channels, and events\n\n\n\n\n18 – 20 Jun 2026\n\n\nNetwork Analysis and Event Reconstruction\n\n\nCommunication network models and preliminary event timeline\n\n\n\n\n21 – 24 Jun 2026\n\n\nAgent Relationship Analysis and Behavioural Analysis\n\n\nAgent interaction findings and behavioural comparison results\n\n\n\n\n25 – 27 Jun 2026\n\n\nAnomaly Detection and Leading Indicator Analysis\n\n\nIdentified anomalies, behavioural deviations, and early warning indicators\n\n\n\n\n28 – 30 Jun 2026\n\n\nShiny Application Development, Dashboard Integration, and Testing\n\n\nCompleted visual analytics dashboard and validated application\n\n\n\n\n1 Jul 2026\n\n\nPoster Preparation, Repository Deployment, Final Review and Submission\n\n\nProject poster, deployed Shiny application, and final deliverables submitted\n\n\n\n\n\n\nConclusion\nThis project aims to develop a visual analytics system to investigate the breach which occurred at TenantThread. This will be done through various types of analysis such as network analysis, behavioural analysis, agent interactions, reconstructing events and more. This will provide insights into how information propagated through the system and whether the breach was an accident or done intentionally. The findings will provide a deeper understanding of AI-agent behaviour and contribute to more effective governance and risk management in complex organisational behaviours."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html",
+    "title": "Hands-on_Ex08",
+    "section": "",
+    "text": "pacman::p_load(scales, viridis, lubridate, ggthemes,\n               gridExtra, readxl, knitr, data.table,\n               ggHoriPlot, tidyverse)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#deriving-weekday-and-hour-of-day-fields",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#deriving-weekday-and-hour-of-day-fields",
+    "title": "Hands-on_Ex08",
+    "section": "Deriving weekday and hour of day fields",
+    "text": "Deriving weekday and hour of day fields\n\nmake_hr_wkday &lt;- function(ts, sc, tz) {\n  real_times &lt;- ymd_hms(ts, \n                        tz = tz[1], \n                        quiet = TRUE)\n  dt &lt;- data.table(source_country = sc,\n                   wkday = weekdays(real_times),\n                   hour = hour(real_times))\n  return(dt)\n  }"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#deriving-the-attacks-kibble-data-frame",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#deriving-the-attacks-kibble-data-frame",
+    "title": "Hands-on_Ex08",
+    "section": "Deriving the attacks kibble data frame",
+    "text": "Deriving the attacks kibble data frame\n\nwkday_levels &lt;- c('Saturday', 'Friday', \n                  'Thursday', 'Wednesday', \n                  'Tuesday', 'Monday', \n                  'Sunday')\n\nattacks &lt;- attacks %&gt;%\n  group_by(tz) %&gt;%\n  do(make_hr_wkday(.$timestamp, \n                   .$source_country, \n                   .$tz)) %&gt;% \n  ungroup() %&gt;% \n  mutate(wkday = factor(\n    wkday, levels = wkday_levels),\n    hour  = factor(\n      hour, levels = 0:23))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#display-the-table-after-processing",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#display-the-table-after-processing",
+    "title": "Hands-on_Ex08",
+    "section": "display the table after processing",
+    "text": "display the table after processing\n\nThe plotThe code\n\n\n\n\n\n\n\ntz\nsource_country\nwkday\nhour\n\n\n\n\nAfrica/Cairo\nBG\nSaturday\n20\n\n\nAfrica/Cairo\nTW\nSunday\n6\n\n\nAfrica/Cairo\nTW\nSunday\n8\n\n\nAfrica/Cairo\nCN\nSunday\n11\n\n\nAfrica/Cairo\nUS\nSunday\n15\n\n\nAfrica/Cairo\nCA\nMonday\n11\n\n\n\n\n\n\n\n\nkable(head(attacks))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#derive-attack-by-country-object",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#derive-attack-by-country-object",
+    "title": "Hands-on_Ex08",
+    "section": "Derive attack by country object",
+    "text": "Derive attack by country object\n\nattacks_by_country &lt;- count(\n  attacks, source_country) %&gt;%\n  mutate(percent = percent(n/sum(n))) %&gt;%\n  arrange(desc(n))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#preparing-the-data-frame",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#preparing-the-data-frame",
+    "title": "Hands-on_Ex08",
+    "section": "Preparing the data frame",
+    "text": "Preparing the data frame\n\ntop4 &lt;- attacks_by_country$source_country[1:4]\ntop4_attacks &lt;- attacks %&gt;%\n  filter(source_country %in% top4) %&gt;%\n  count(source_country, wkday, hour) %&gt;%\n  ungroup() %&gt;%\n  mutate(source_country = factor(\n    source_country, levels = top4)) %&gt;%\n  na.omit()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#plotting",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#plotting",
+    "title": "Hands-on_Ex08",
+    "section": "Plotting",
+    "text": "Plotting\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(top4_attacks, \n       aes(hour, \n           wkday, \n           fill = n)) + \n  geom_tile(color = \"white\", \n          size = 0.1) + \n  theme_tufte(base_family = \"Helvetica\") + \n  coord_equal() +\n  scale_fill_gradient(name = \"# of attacks\",\n                    low = \"sky blue\", \n                    high = \"dark blue\") +\n  facet_wrap(~source_country, ncol = 2) +\n  labs(x = NULL, y = NULL, \n     title = \"Attacks on top 4 countries by weekday and time of day\") +\n  theme(axis.ticks = element_blank(),\n        axis.text.x = element_text(size = 7),\n        plot.title = element_text(hjust = 0.5),\n        legend.title = element_text(size = 8),\n        legend.text = element_text(size = 6) )"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#import-data",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#import-data",
+    "title": "Hands-on_Ex08",
+    "section": "Import data",
+    "text": "Import data\n\nair &lt;- read_excel(\"arrivals_by_air.xlsx\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#deriving-month-and-year",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#deriving-month-and-year",
+    "title": "Hands-on_Ex08",
+    "section": "Deriving month and year",
+    "text": "Deriving month and year\n\nair$month &lt;- factor(month(air$`Month-Year`), \n                    levels=1:12, \n                    labels=month.abb, \n                    ordered=TRUE) \nair$year &lt;- year(ymd(air$`Month-Year`))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#extracting-target-country",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#extracting-target-country",
+    "title": "Hands-on_Ex08",
+    "section": "Extracting target country",
+    "text": "Extracting target country\n\nVietnam &lt;- air %&gt;% \n  select(`Vietnam`, \n         month, \n         year) %&gt;%\n  filter(year &gt;= 2010)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#computing-year-average-arrivals-by-month",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#computing-year-average-arrivals-by-month",
+    "title": "Hands-on_Ex08",
+    "section": "Computing year average arrivals by month",
+    "text": "Computing year average arrivals by month\n\nhline.data &lt;- Vietnam %&gt;% \n  group_by(month) %&gt;%\n  summarise(avgvalue = mean(`Vietnam`))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#plot",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#plot",
+    "title": "Hands-on_Ex08",
+    "section": "Plot",
+    "text": "Plot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot() + \n  geom_line(data=Vietnam,\n            aes(x=year, \n                y=`Vietnam`, \n                group=month), \n            colour=\"black\") +\n  geom_hline(aes(yintercept=avgvalue), \n             data=hline.data, \n             linetype=6, \n             colour=\"red\", \n             size=0.5) + \n  facet_grid(~month) +\n  labs(axis.text.x = element_blank(),\n       title = \"Visitor arrivals from Vietnam by air, Jan 2010-Dec 2019\") +\n  xlab(\"\") +\n  ylab(\"No. of Visitors\") +\n  theme_tufte(base_family = \"Helvetica\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#import-data-1",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#import-data-1",
+    "title": "Hands-on_Ex08",
+    "section": "Import data",
+    "text": "Import data\n\nrice &lt;- read_csv(\"rice.csv\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#plot-1",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#plot-1",
+    "title": "Hands-on_Ex08",
+    "section": "Plot",
+    "text": "Plot\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nrice_slope &lt;- rice %&gt;% \n  mutate(Year = factor(Year)) %&gt;%\n  filter(Year %in% c(1961, 1980))\n\nggplot(rice_slope,\n       aes(x = Year,\n           y = Yield,\n           group = Country,\n           colour = Country)) +\n  geom_line(linewidth = 0.8) +\n  geom_point(size = 2) +\n  geom_text(\n    data = rice_slope %&gt;% filter(Year == 1961),\n    aes(label = Country),\n    hjust = 1.1,\n    size = 3\n  ) +\n  geom_text(\n    data = rice_slope %&gt;% filter(Year == 1980),\n    aes(label = Country),\n    hjust = -0.1,\n    size = 3\n  ) +\n  labs(\n    title = \"Rice Yield of Top 11 Asian Countries\",\n    subtitle = \"1961-1980\",\n    x = NULL,\n    y = \"Yield\"\n  ) +\n  theme_tufte(base_family = \"Helvetica\") +\n  theme(\n    legend.position = \"none\",\n    plot.title = element_text(hjust = 0.5),\n    plot.subtitle = element_text(hjust = 0.5))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#loading-packages",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#loading-packages",
+    "title": "Hands-on_Ex08",
+    "section": "loading packages",
+    "text": "loading packages\n\npacman::p_load(plotly, DT, ggridges, ggiraph, patchwork)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#interactive-heatmap",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#interactive-heatmap",
+    "title": "Hands-on_Ex08",
+    "section": "Interactive heatmap",
+    "text": "Interactive heatmap\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\np1 &lt;- ggplot(grouped, \n             aes(x = hour, y = wkday, fill = n,\n                 text = paste(\"Weekday:\", wkday,\n                              \"&lt;br&gt;Hour:\", hour,\n                              \"&lt;br&gt;Attacks:\", n))) +\n  geom_tile(color = \"white\") +\n  scale_fill_gradient(low = \"sky blue\", high = \"dark blue\") +\n  labs(title = \"Interactive Calendar Heatmap\",\n       x = \"Hour of Day\",\n       y = \"Weekday\",\n       fill = \"# Attacks\") +\n  theme_minimal()\n\nggplotly(p1, tooltip = \"text\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#top-attacking-countries",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#top-attacking-countries",
+    "title": "Hands-on_Ex08",
+    "section": "top attacking countries",
+    "text": "top attacking countries\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nattacks_by_country %&gt;%\n  slice_max(n, n = 10) %&gt;%\n  ggplot(aes(x = reorder(source_country, n), \n             y = n,\n             fill = n)) +\n  geom_col() +\n  coord_flip() +\n  scale_fill_viridis_c() +\n  labs(title = \"Top 10 Source Countries by Number of Attacks\",\n       x = \"Source Country\",\n       y = \"Number of Attacks\") +\n  theme_minimal()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#ridge-plot-of-attacks",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#ridge-plot-of-attacks",
+    "title": "Hands-on_Ex08",
+    "section": "ridge plot of attacks",
+    "text": "ridge plot of attacks\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nattacks %&gt;%\n  count(wkday, hour) %&gt;%\n  mutate(hour_num = as.numeric(as.character(hour))) %&gt;%\n  ggplot(aes(x = hour_num, \n             y = wkday, \n             height = n,\n             group = wkday,\n             fill = wkday)) +\n  geom_ridgeline(alpha = 0.7) +\n  labs(title = \"Hourly Attack Pattern by Weekday\",\n       x = \"Hour of Day\",\n       y = \"Weekday\") +\n  theme_minimal() +\n  theme(legend.position = \"none\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#interactive-slopegraph",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#interactive-slopegraph",
+    "title": "Hands-on_Ex08",
+    "section": "interactive slopegraph",
+    "text": "interactive slopegraph\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nrice_slope2 &lt;- rice %&gt;% \n  mutate(Year = factor(Year)) %&gt;%\n  filter(Year %in% c(1961, 1980))\n\np2 &lt;- ggplot(rice_slope2,\n             aes(x = Year,\n                 y = Yield,\n                 group = Country,\n                 colour = Country)) +\n  geom_line_interactive(\n    aes(tooltip = Country),\n    linewidth = 0.8\n  ) +\n  geom_point_interactive(\n    aes(tooltip = paste(Country, Year, Yield)),\n    size = 2\n  ) +\n  labs(title = \"Interactive Rice Yield Slopegraph\",\n       subtitle = \"1961-1980\",\n       x = NULL,\n       y = \"Yield\") +\n  theme_minimal() +\n  theme(legend.position = \"none\")\n\ngirafe(ggobj = p2)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#table-for-summary",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html#table-for-summary",
+    "title": "Hands-on_Ex08",
+    "section": "table for summary",
+    "text": "table for summary\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nattack_summary &lt;- attacks %&gt;%\n  count(source_country, wkday, hour) %&gt;%\n  arrange(desc(n))\n\ndatatable(\n  attack_summary,\n  options = list(pageLength = 10),\n  caption = \"Attack Frequency by Country, Weekday and Hour\"\n)"
   }
 ]

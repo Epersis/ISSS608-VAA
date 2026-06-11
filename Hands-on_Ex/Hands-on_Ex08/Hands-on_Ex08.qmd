@@ -1,0 +1,721 @@
+---
+title: "Hands-on_Ex08"
+format: html
+date: "11 June, 2026"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+# Getting started
+
+```{r}
+pacman::p_load(scales, viridis, lubridate, ggthemes,
+               gridExtra, readxl, knitr, data.table,
+               ggHoriPlot, tidyverse)
+```
+
+
+# Importing data
+
+```{r}
+
+attacks <- read_csv("eventlog.csv")
+```
+
+# Examining data
+
+```{r}
+kable(head(attacks))
+```
+
+# Data preparation
+
+## Deriving weekday and hour of day fields
+
+```{r}
+
+make_hr_wkday <- function(ts, sc, tz) {
+  real_times <- ymd_hms(ts, 
+                        tz = tz[1], 
+                        quiet = TRUE)
+  dt <- data.table(source_country = sc,
+                   wkday = weekdays(real_times),
+                   hour = hour(real_times))
+  return(dt)
+  }
+
+
+```
+
+
+## Deriving the attacks kibble data frame
+
+```{r}
+wkday_levels <- c('Saturday', 'Friday', 
+                  'Thursday', 'Wednesday', 
+                  'Tuesday', 'Monday', 
+                  'Sunday')
+
+attacks <- attacks %>%
+  group_by(tz) %>%
+  do(make_hr_wkday(.$timestamp, 
+                   .$source_country, 
+                   .$tz)) %>% 
+  ungroup() %>% 
+  mutate(wkday = factor(
+    wkday, levels = wkday_levels),
+    hour  = factor(
+      hour, levels = 0:23))
+
+
+```
+
+## display the table after processing
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+kable(head(attacks))
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+kable(head(attacks))
+
+```
+:::
+
+# Building calendar heatmap
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+grouped <- attacks %>% 
+  count(wkday, hour) %>% 
+  ungroup() %>%
+  na.omit()
+
+ggplot(grouped, 
+       aes(hour, 
+           wkday, 
+           fill = n)) + 
+geom_tile(color = "white", 
+          size = 0.1) + 
+theme_tufte(base_family = "Helvetica") + 
+coord_equal() +
+scale_fill_gradient(name = "# of attacks",
+                    low = "sky blue", 
+                    high = "dark blue") +
+labs(x = NULL, 
+     y = NULL, 
+     title = "Attacks by weekday and time of day") +
+theme(axis.ticks = element_blank(),
+      plot.title = element_text(hjust = 0.5),
+      legend.title = element_text(size = 8),
+      legend.text = element_text(size = 6) )
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+grouped <- attacks %>% 
+  count(wkday, hour) %>% 
+  ungroup() %>%
+  na.omit()
+
+ggplot(grouped, 
+       aes(hour, 
+           wkday, 
+           fill = n)) + 
+geom_tile(color = "white", 
+          size = 0.1) + 
+theme_tufte(base_family = "Helvetica") + 
+coord_equal() +
+scale_fill_gradient(name = "# of attacks",
+                    low = "sky blue", 
+                    high = "dark blue") +
+labs(x = NULL, 
+     y = NULL, 
+     title = "Attacks by weekday and time of day") +
+theme(axis.ticks = element_blank(),
+      plot.title = element_text(hjust = 0.5),
+      legend.title = element_text(size = 8),
+      legend.text = element_text(size = 6) )
+
+```
+:::
+
+# Plotting multiple calendar heatmaps
+
+## Derive attack by country object
+
+```{r}
+attacks_by_country <- count(
+  attacks, source_country) %>%
+  mutate(percent = percent(n/sum(n))) %>%
+  arrange(desc(n))
+```
+
+
+## Preparing the data frame
+
+```{r}
+top4 <- attacks_by_country$source_country[1:4]
+top4_attacks <- attacks %>%
+  filter(source_country %in% top4) %>%
+  count(source_country, wkday, hour) %>%
+  ungroup() %>%
+  mutate(source_country = factor(
+    source_country, levels = top4)) %>%
+  na.omit()
+
+```
+
+## Plotting
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+ggplot(top4_attacks, 
+       aes(hour, 
+           wkday, 
+           fill = n)) + 
+  geom_tile(color = "white", 
+          size = 0.1) + 
+  theme_tufte(base_family = "Helvetica") + 
+  coord_equal() +
+  scale_fill_gradient(name = "# of attacks",
+                    low = "sky blue", 
+                    high = "dark blue") +
+  facet_wrap(~source_country, ncol = 2) +
+  labs(x = NULL, y = NULL, 
+     title = "Attacks on top 4 countries by weekday and time of day") +
+  theme(axis.ticks = element_blank(),
+        axis.text.x = element_text(size = 7),
+        plot.title = element_text(hjust = 0.5),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6) )
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+ggplot(top4_attacks, 
+       aes(hour, 
+           wkday, 
+           fill = n)) + 
+  geom_tile(color = "white", 
+          size = 0.1) + 
+  theme_tufte(base_family = "Helvetica") + 
+  coord_equal() +
+  scale_fill_gradient(name = "# of attacks",
+                    low = "sky blue", 
+                    high = "dark blue") +
+  facet_wrap(~source_country, ncol = 2) +
+  labs(x = NULL, y = NULL, 
+     title = "Attacks on top 4 countries by weekday and time of day") +
+  theme(axis.ticks = element_blank(),
+        axis.text.x = element_text(size = 7),
+        plot.title = element_text(hjust = 0.5),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6) )
+
+```
+:::
+
+# Plotting cycle plot
+
+## Import data
+
+```{r}
+air <- read_excel("arrivals_by_air.xlsx")
+
+```
+
+
+# Deriving data
+
+## Deriving month and year
+
+```{r}
+air$month <- factor(month(air$`Month-Year`), 
+                    levels=1:12, 
+                    labels=month.abb, 
+                    ordered=TRUE) 
+air$year <- year(ymd(air$`Month-Year`))
+
+```
+
+## Extracting target country
+
+```{r}
+Vietnam <- air %>% 
+  select(`Vietnam`, 
+         month, 
+         year) %>%
+  filter(year >= 2010)
+
+```
+
+## Computing year average arrivals by month
+
+```{r}
+hline.data <- Vietnam %>% 
+  group_by(month) %>%
+  summarise(avgvalue = mean(`Vietnam`))
+
+```
+
+## Plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+ggplot() + 
+  geom_line(data=Vietnam,
+            aes(x=year, 
+                y=`Vietnam`, 
+                group=month), 
+            colour="black") +
+  geom_hline(aes(yintercept=avgvalue), 
+             data=hline.data, 
+             linetype=6, 
+             colour="red", 
+             size=0.5) + 
+  facet_grid(~month) +
+  labs(axis.text.x = element_blank(),
+       title = "Visitor arrivals from Vietnam by air, Jan 2010-Dec 2019") +
+  xlab("") +
+  ylab("No. of Visitors") +
+  theme_tufte(base_family = "Helvetica")
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+ggplot() + 
+  geom_line(data=Vietnam,
+            aes(x=year, 
+                y=`Vietnam`, 
+                group=month), 
+            colour="black") +
+  geom_hline(aes(yintercept=avgvalue), 
+             data=hline.data, 
+             linetype=6, 
+             colour="red", 
+             size=0.5) + 
+  facet_grid(~month) +
+  labs(axis.text.x = element_blank(),
+       title = "Visitor arrivals from Vietnam by air, Jan 2010-Dec 2019") +
+  xlab("") +
+  ylab("No. of Visitors") +
+  theme_tufte(base_family = "Helvetica")
+
+```
+:::
+
+# Plotting Slopegraph
+
+## Import data
+
+```{r}
+rice <- read_csv("rice.csv")
+
+```
+
+## Plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+rice_slope <- rice %>% 
+  mutate(Year = factor(Year)) %>%
+  filter(Year %in% c(1961, 1980))
+
+ggplot(rice_slope,
+       aes(x = Year,
+           y = Yield,
+           group = Country,
+           colour = Country)) +
+  geom_line(linewidth = 0.8) +
+  geom_point(size = 2) +
+  geom_text(
+    data = rice_slope %>% filter(Year == 1961),
+    aes(label = Country),
+    hjust = 1.1,
+    size = 3
+  ) +
+  geom_text(
+    data = rice_slope %>% filter(Year == 1980),
+    aes(label = Country),
+    hjust = -0.1,
+    size = 3
+  ) +
+  labs(
+    title = "Rice Yield of Top 11 Asian Countries",
+    subtitle = "1961-1980",
+    x = NULL,
+    y = "Yield"
+  ) +
+  theme_tufte(base_family = "Helvetica") +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5))
+
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+rice_slope <- rice %>% 
+  mutate(Year = factor(Year)) %>%
+  filter(Year %in% c(1961, 1980))
+
+ggplot(rice_slope,
+       aes(x = Year,
+           y = Yield,
+           group = Country,
+           colour = Country)) +
+  geom_line(linewidth = 0.8) +
+  geom_point(size = 2) +
+  geom_text(
+    data = rice_slope %>% filter(Year == 1961),
+    aes(label = Country),
+    hjust = 1.1,
+    size = 3
+  ) +
+  geom_text(
+    data = rice_slope %>% filter(Year == 1980),
+    aes(label = Country),
+    hjust = -0.1,
+    size = 3
+  ) +
+  labs(
+    title = "Rice Yield of Top 11 Asian Countries",
+    subtitle = "1961-1980",
+    x = NULL,
+    y = "Yield"
+  ) +
+  theme_tufte(base_family = "Helvetica") +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5))
+
+```
+:::
+
+
+# Alternatives
+
+## loading packages
+
+```{r}
+
+pacman::p_load(plotly, DT, ggridges, ggiraph, patchwork)
+```
+
+## Interactive heatmap
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+p1 <- ggplot(grouped, 
+             aes(x = hour, y = wkday, fill = n,
+                 text = paste("Weekday:", wkday,
+                              "<br>Hour:", hour,
+                              "<br>Attacks:", n))) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "sky blue", high = "dark blue") +
+  labs(title = "Interactive Calendar Heatmap",
+       x = "Hour of Day",
+       y = "Weekday",
+       fill = "# Attacks") +
+  theme_minimal()
+
+ggplotly(p1, tooltip = "text")
+
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+p1 <- ggplot(grouped, 
+             aes(x = hour, y = wkday, fill = n,
+                 text = paste("Weekday:", wkday,
+                              "<br>Hour:", hour,
+                              "<br>Attacks:", n))) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "sky blue", high = "dark blue") +
+  labs(title = "Interactive Calendar Heatmap",
+       x = "Hour of Day",
+       y = "Weekday",
+       fill = "# Attacks") +
+  theme_minimal()
+
+ggplotly(p1, tooltip = "text")
+```
+:::
+
+## top attacking countries
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+attacks_by_country %>%
+  slice_max(n, n = 10) %>%
+  ggplot(aes(x = reorder(source_country, n), 
+             y = n,
+             fill = n)) +
+  geom_col() +
+  coord_flip() +
+  scale_fill_viridis_c() +
+  labs(title = "Top 10 Source Countries by Number of Attacks",
+       x = "Source Country",
+       y = "Number of Attacks") +
+  theme_minimal()
+
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+attacks_by_country %>%
+  slice_max(n, n = 10) %>%
+  ggplot(aes(x = reorder(source_country, n), 
+             y = n,
+             fill = n)) +
+  geom_col() +
+  coord_flip() +
+  scale_fill_viridis_c() +
+  labs(title = "Top 10 Source Countries by Number of Attacks",
+       x = "Source Country",
+       y = "Number of Attacks") +
+  theme_minimal()
+```
+:::
+
+
+## ridge plot of attacks
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+attacks %>%
+  count(wkday, hour) %>%
+  mutate(hour_num = as.numeric(as.character(hour))) %>%
+  ggplot(aes(x = hour_num, 
+             y = wkday, 
+             height = n,
+             group = wkday,
+             fill = wkday)) +
+  geom_ridgeline(alpha = 0.7) +
+  labs(title = "Hourly Attack Pattern by Weekday",
+       x = "Hour of Day",
+       y = "Weekday") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+attacks %>%
+  count(wkday, hour) %>%
+  mutate(hour_num = as.numeric(as.character(hour))) %>%
+  ggplot(aes(x = hour_num, 
+             y = wkday, 
+             height = n,
+             group = wkday,
+             fill = wkday)) +
+  geom_ridgeline(alpha = 0.7) +
+  labs(title = "Hourly Attack Pattern by Weekday",
+       x = "Hour of Day",
+       y = "Weekday") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+:::
+
+
+## interactive slopegraph
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+rice_slope2 <- rice %>% 
+  mutate(Year = factor(Year)) %>%
+  filter(Year %in% c(1961, 1980))
+
+p2 <- ggplot(rice_slope2,
+             aes(x = Year,
+                 y = Yield,
+                 group = Country,
+                 colour = Country)) +
+  geom_line_interactive(
+    aes(tooltip = Country),
+    linewidth = 0.8
+  ) +
+  geom_point_interactive(
+    aes(tooltip = paste(Country, Year, Yield)),
+    size = 2
+  ) +
+  labs(title = "Interactive Rice Yield Slopegraph",
+       subtitle = "1961-1980",
+       x = NULL,
+       y = "Yield") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+girafe(ggobj = p2)
+
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+rice_slope2 <- rice %>% 
+  mutate(Year = factor(Year)) %>%
+  filter(Year %in% c(1961, 1980))
+
+p2 <- ggplot(rice_slope2,
+             aes(x = Year,
+                 y = Yield,
+                 group = Country,
+                 colour = Country)) +
+  geom_line_interactive(
+    aes(tooltip = Country),
+    linewidth = 0.8
+  ) +
+  geom_point_interactive(
+    aes(tooltip = paste(Country, Year, Yield)),
+    size = 2
+  ) +
+  labs(title = "Interactive Rice Yield Slopegraph",
+       subtitle = "1961-1980",
+       x = NULL,
+       y = "Yield") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+girafe(ggobj = p2)
+```
+:::
+
+
+## table for summary
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+attack_summary <- attacks %>%
+  count(source_country, wkday, hour) %>%
+  arrange(desc(n))
+
+datatable(
+  attack_summary,
+  options = list(pageLength = 10),
+  caption = "Attack Frequency by Country, Weekday and Hour"
+)
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+attack_summary <- attacks %>%
+  count(source_country, wkday, hour) %>%
+  arrange(desc(n))
+
+datatable(
+  attack_summary,
+  options = list(pageLength = 10),
+  caption = "Attack Frequency by Country, Weekday and Hour"
+)
+```
+:::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
