@@ -1,0 +1,460 @@
+---
+title: "Hands-on_Ex09B"
+author: "Persis Evangeline"
+date: "19 June, 2026"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+# Getting started
+
+Proportional symbol maps use symbol size to represent the magnitude of point-based data, such as counts or frequencies.
+They can be graduated (classed) or proportional (unclassed), with proportional symbols scaled directly to the data values.
+This exercise uses tmap to create a proportional symbol map of the number of wins at Singapore Pools outlets.
+
+```{r}
+pacman::p_load(sf, tmap, tidyverse)
+
+
+```
+
+# Geospatial data wrangling
+
+```{r}
+sgpools <- read_csv("data/SGPools_svy21.csv")
+
+```
+
+```{r}
+list(sgpools) 
+
+
+```
+
+## Creating a sf data frame from an aspatial data frame
+
+The code chunk below converts sgpools data frame into a simple feature data frame by using st_as_sf() of sf packages
+
+
+```{r}
+sgpools_sf <- st_as_sf(sgpools, 
+                       coords = c("XCOORD", "YCOORD"),
+                       crs= 3414)
+
+```
+
+
+Learning pointers:
+
+1. The coords argument requires you to provide the column name of the x-coordinates first then followed by the column name of the y-coordinates.
+
+2. The crs argument required you to provide the coordinates system in epsg format. EPSG: 3414 is Singapore SVY21 Projected Coordinate System. You can search for other country’s epsg code by refering to epsg.io.
+
+```{r}
+
+list(sgpools_sf)
+
+```
+
+The output shows that sgppols_sf is in point feature class. It’s epsg ID is 3414. The bbox provides information of the extend of the geospatial data.
+
+
+
+# Drawing Proportional Symbol Map
+
+
+```{r}
+tmap_mode("view")
+
+```
+
+
+## interactive point symbol map
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+tm_shape(sgpools_sf) + 
+  tm_bubbles(fill = "red",
+           size = 1,
+           col = "black",
+           lwd = 1)
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+tm_shape(sgpools_sf) + 
+  tm_bubbles(fill = "red",
+           size = 1,
+           col = "black",
+           lwd = 1)
+
+```
+:::
+
+## make it proportional
+
+
+## interactive point symbol map
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+tm_shape(sgpools_sf) + 
+  tm_bubbles(fill = "red",
+             size = "Gp1Gp2 Winnings",
+             col = "black",
+             lwd = 1)
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+tm_shape(sgpools_sf) + 
+  tm_bubbles(fill = "red",
+             size = "Gp1Gp2 Winnings",
+             col = "black",
+             lwd = 1)
+
+```
+:::
+
+## change colour
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+tm_shape(sgpools_sf) + 
+  tm_bubbles(fill = "OUTLET TYPE", 
+             size = "Gp1Gp2 Winnings",
+             col = "black",
+             lwd = 1)
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+tm_shape(sgpools_sf) + 
+  tm_bubbles(fill = "OUTLET TYPE", 
+             size = "Gp1Gp2 Winnings",
+             col = "black",
+             lwd = 1)
+
+```
+:::
+
+## Faceted plot
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+tm_shape(sgpools_sf) + 
+  tm_bubbles(fill = "OUTLET TYPE", 
+             size = "Gp1Gp2 Winnings",
+             col = "black",
+             lwd = 1) + 
+  tm_facets(by= "OUTLET TYPE",
+            nrow = 1,
+            sync = TRUE)
+```
+
+## The code
+
+```{r}
+#| eval: false
+tm_shape(sgpools_sf) + 
+  tm_bubbles(fill = "OUTLET TYPE", 
+             size = "Gp1Gp2 Winnings",
+             col = "black",
+             lwd = 1) + 
+  tm_facets(by= "OUTLET TYPE",
+            nrow = 1,
+            sync = TRUE)
+
+```
+:::
+
+
+
+```{r}
+tmap_mode("plot")
+
+```
+
+# Alternatives
+
+## opebStreetMap Basemap
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+tmap_mode("view")
+
+tm_shape(sgpools_sf) +
+  tm_basemap("OpenStreetMap") +
+  tm_bubbles(
+    fill = "red",
+    size = "Gp1Gp2 Winnings",
+    col = "black",
+    lwd = 1
+  )
+```
+
+## The code
+
+```{r}
+#| eval: false
+tmap_mode("view")
+
+tm_shape(sgpools_sf) +
+  tm_basemap("OpenStreetMap") +
+  tm_bubbles(
+    fill = "red",
+    size = "Gp1Gp2 Winnings",
+    col = "black",
+    lwd = 1
+  )
+
+```
+:::
+
+## Use different colours by outlet type
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+tm_shape(sgpools_sf) +
+  tm_bubbles(
+    fill = "OUTLET TYPE",
+    size = "Gp1Gp2 Winnings",
+    palette = "Set2",
+    col = "grey30",
+    lwd = 0.8
+  )
+```
+
+## The code
+
+```{r}
+#| eval: false
+tm_shape(sgpools_sf) +
+  tm_bubbles(
+    fill = "OUTLET TYPE",
+    size = "Gp1Gp2 Winnings",
+    palette = "Set2",
+    col = "grey30",
+    lwd = 0.8
+  )
+
+```
+:::
+
+## Add transparency to overlapping bubbles
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+tm_shape(sgpools_sf) +
+  tm_bubbles(
+    fill = "blue",
+    size = "Gp1Gp2 Winnings",
+    fill_alpha = 0.5,
+    col = "black",
+    lwd = 0.5
+  )
+```
+
+## The code
+
+```{r}
+#| eval: false
+tm_shape(sgpools_sf) +
+  tm_bubbles(
+    fill = "blue",
+    size = "Gp1Gp2 Winnings",
+    fill_alpha = 0.5,
+    col = "black",
+    lwd = 0.5
+  )
+
+```
+:::
+
+## Static proportional symbol map
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+tmap_mode("plot")
+
+tm_shape(sgpools_sf) +
+  tm_bubbles(
+    fill = "orange",
+    size = "Gp1Gp2 Winnings",
+    col = "black",
+    lwd = 0.8
+  ) +
+  tm_layout(
+    title = "Singapore Pools Outlets by Winnings",
+    frame = FALSE
+  )
+```
+
+## The code
+
+```{r}
+#| eval: false
+tmap_mode("plot")
+
+tm_shape(sgpools_sf) +
+  tm_bubbles(
+    fill = "orange",
+    size = "Gp1Gp2 Winnings",
+    col = "black",
+    lwd = 0.8
+  ) +
+  tm_layout(
+    title = "Singapore Pools Outlets by Winnings",
+    frame = FALSE
+  )
+
+```
+:::
+
+## Bubble map with labels
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+tm_shape(sgpools_sf) +
+  tm_bubbles(
+    fill = "OUTLET TYPE",
+    size = "Gp1Gp2 Winnings",
+    col = "black",
+    lwd = 0.8
+  ) +
+  tm_text(
+    text = "NAME",
+    size = 0.6
+  )
+```
+
+## The code
+
+```{r}
+#| eval: false
+tm_shape(sgpools_sf) +
+  tm_bubbles(
+    fill = "OUTLET TYPE",
+    size = "Gp1Gp2 Winnings",
+    col = "black",
+    lwd = 0.8
+  ) +
+  tm_text(
+    text = "NAME",
+    size = 0.6
+  )
+
+```
+:::
+
+As the labels make the figure look too overcrowded, lets modify it. 
+
+### Show labels only when zoomed in
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+tmap_mode("view")
+
+tm_shape(sgpools_sf) +
+  tm_bubbles(
+    fill = "OUTLET TYPE",
+    size = "Gp1Gp2 Winnings",
+    col = "black",
+    lwd = 0.8,
+    popup.vars = c(
+      "Outlet" = "NAME",
+      "Winnings" = "Gp1Gp2 Winnings"
+    )
+  )
+```
+
+## The code
+
+```{r}
+#| eval: false
+tmap_mode("view")
+
+tm_shape(sgpools_sf) +
+  tm_bubbles(
+    fill = "OUTLET TYPE",
+    size = "Gp1Gp2 Winnings",
+    col = "black",
+    lwd = 0.8,
+    popup.vars = c(
+      "Outlet" = "NAME",
+      "Winnings" = "Gp1Gp2 Winnings"
+    )
+  )
+
+```
+:::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
