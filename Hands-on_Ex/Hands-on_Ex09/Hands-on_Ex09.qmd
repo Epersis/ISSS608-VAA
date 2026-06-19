@@ -1038,6 +1038,9 @@ tm_shape(mpsz_pop2020) +
 ```
 :::
 
+The dependency ratio is highest in several central and southern planning subzones, indicating a larger proportion of dependents (young and elderly) relative to the working-age population in these areas.
+
+
 ## Jenks classification map
 
 ::: panel-tabset
@@ -1078,6 +1081,9 @@ tm_shape(mpsz_pop2020) +
 ```
 :::
 
+The Jenks classification map reveals that most planning subzones have moderate dependency ratios, while only a few distinct subzones exhibit exceptionally high dependency burdens compared to the rest of Singapore.
+
+
 ## Custom chloropleth map
 
 ::: panel-tabset
@@ -1115,6 +1121,8 @@ tm_shape(mpsz_pop2020) +
   tm_title("Dependency Ratio with Custom Breaks")
 ```
 :::
+
+The custom-breaks map shows that many planning subzones fall within the 0.70–0.89 dependency ratio range, with clusters of very high dependency ratios (0.90–1.00) concentrated in central and southern Singapore.
 
 
 ## Comparing population groups
@@ -1154,6 +1162,9 @@ tm_shape(mpsz_pop2020) +
   tm_title("Population Groups by Planning Subzone")
 ```
 :::
+
+The maps show that young, economically active, and aged populations are all concentrated in major residential planning subzones, with the economically active group consistently forming the largest population segment across Singapore.
+
 
 ## Regional facet chloropleth map
 
@@ -1199,72 +1210,7 @@ tm_shape(mpsz_pop2020) +
 ```
 :::
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+The Central Region exhibits the greatest variation in dependency ratios across subzones, while the other regions generally show more moderate and spatially clustered dependency patterns.
 
 
 
