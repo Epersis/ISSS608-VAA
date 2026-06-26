@@ -837,6 +837,8 @@ reactable(
 ```
 :::
 
+Each sparkline summarises a product's monthly sales trend, while the first and last values highlight overall changes throughout the year.
+
 
 ## Alternative 2: Sparkline with min and max points
 
@@ -889,54 +891,10 @@ reactable(
 ```
 :::
 
+The highlighted minimum (red) and maximum (blue) points make it easy to identify each product's lowest and highest monthly sales within the reporting period.
 
-## Alternative 3: Sparkline with mean reference line
 
-::: panel-tabset
-## The plot
-
-```{r}
-#| echo: false
-
-reactable(
-  report,
-  defaultPageSize = 13,
-  columns = list(
-    Product = colDef(maxWidth = 200),
-    `Monthly Sales` = colDef(
-      cell = react_sparkline(
-        report,
-        statline = "mean"
-      )
-    )
-  )
-)
-
-```
-
-## The code
-
-```{r}
-#| eval: false
-
-reactable(
-  report,
-  defaultPageSize = 13,
-  columns = list(
-    Product = colDef(maxWidth = 200),
-    `Monthly Sales` = colDef(
-      cell = react_sparkline(
-        report,
-        statline = "mean"
-      )
-    )
-  )
-)
-
-```
-:::
-
-## Alternative 4: Sparkline with inner quartile band
+## Alternative 3: Changing line colour
 
 ::: panel-tabset
 ## The plot
@@ -952,8 +910,7 @@ reactable(
     `Monthly Sales` = colDef(
       cell = react_sparkline(
         report,
-        bandline = "innerquartiles",
-        bandline_color = "lightgreen"
+        line_color = "darkgreen"
       )
     )
   )
@@ -966,6 +923,7 @@ reactable(
 ```{r}
 #| eval: false
 
+
 reactable(
   report,
   defaultPageSize = 13,
@@ -974,17 +932,61 @@ reactable(
     `Monthly Sales` = colDef(
       cell = react_sparkline(
         report,
-        bandline = "innerquartiles",
-        bandline_color = "lightgreen"
+        line_color = "darkgreen"
       )
     )
   )
 )
-
 ```
 :::
 
-## Alternative 5: Sparkbar instead of sparkline
+## Alternative 4: Row highlighting for readability
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+
+reactable(
+  report,
+  defaultPageSize = 13,
+  striped = TRUE,
+  highlight = TRUE,
+  columns = list(
+    Product = colDef(maxWidth = 200),
+    `Monthly Sales` = colDef(
+      cell = react_sparkline(
+        report
+      )
+    )
+  )
+)
+```
+
+## The code
+
+```{r}
+#| eval: false
+
+reactable(
+  report,
+  defaultPageSize = 13,
+  striped = TRUE,
+  highlight = TRUE,
+  columns = list(
+    Product = colDef(maxWidth = 200),
+    `Monthly Sales` = colDef(
+      cell = react_sparkline(
+        report
+      )
+    )
+  )
+)
+```
+:::
+
+## Alternative 5: Fill the area beneath the sparkline
 
 ::: panel-tabset
 ## The plot
@@ -1000,11 +1002,7 @@ reactable(
     `Monthly Sales` = colDef(
       cell = react_sparkbar(
         report,
-        highlight_bars = highlight_bars(
-          min = "red",
-          max = "blue"
-        ),
-        statline = "mean"
+        fill_color = "lightblue"
       )
     )
   )
@@ -1025,11 +1023,7 @@ reactable(
     `Monthly Sales` = colDef(
       cell = react_sparkbar(
         report,
-        highlight_bars = highlight_bars(
-          min = "red",
-          max = "blue"
-        ),
-        statline = "mean"
+        fill_color = "lightblue"
       )
     )
   )
@@ -1037,6 +1031,8 @@ reactable(
 
 ```
 :::
+
+The sparkbars clearly highlight month-to-month variations in sales while enabling quick comparisons across products.
 
 
 

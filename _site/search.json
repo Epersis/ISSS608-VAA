@@ -130,14 +130,14 @@
     "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#alternative-1-interactive-sparkline-with-labels",
     "title": "Hands-on_Ex10",
     "section": "Alternative 1: Interactive sparkline with labels",
-    "text": "Alternative 1: Interactive sparkline with labels\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nreactable(\n  report,\n  defaultPageSize = 13,\n  columns = list(\n    Product = colDef(maxWidth = 200),\n    `Monthly Sales` = colDef(\n      cell = react_sparkline(\n        report,\n        labels = c(\"first\", \"last\")\n      )\n    )\n  )\n)"
+    "text": "Alternative 1: Interactive sparkline with labels\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nreactable(\n  report,\n  defaultPageSize = 13,\n  columns = list(\n    Product = colDef(maxWidth = 200),\n    `Monthly Sales` = colDef(\n      cell = react_sparkline(\n        report,\n        labels = c(\"first\", \"last\")\n      )\n    )\n  )\n)\n\n\n\n\nEach sparkline summarises a product’s monthly sales trend, while the first and last values highlight overall changes throughout the year."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#alternative-2-sparkline-with-min-and-max-points",
     "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#alternative-2-sparkline-with-min-and-max-points",
     "title": "Hands-on_Ex10",
     "section": "Alternative 2: Sparkline with min and max points",
-    "text": "Alternative 2: Sparkline with min and max points\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nreactable(\n  report,\n  defaultPageSize = 13,\n  columns = list(\n    Product = colDef(maxWidth = 200),\n    `Monthly Sales` = colDef(\n      cell = react_sparkline(\n        report,\n        highlight_points = highlight_points(\n          min = \"red\",\n          max = \"blue\"\n        )\n      )\n    )\n  )\n)"
+    "text": "Alternative 2: Sparkline with min and max points\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nreactable(\n  report,\n  defaultPageSize = 13,\n  columns = list(\n    Product = colDef(maxWidth = 200),\n    `Monthly Sales` = colDef(\n      cell = react_sparkline(\n        report,\n        highlight_points = highlight_points(\n          min = \"red\",\n          max = \"blue\"\n        )\n      )\n    )\n  )\n)\n\n\n\n\nThe highlighted minimum (red) and maximum (blue) points make it easy to identify each product’s lowest and highest monthly sales within the reporting period."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#alternative-3-sparkline-with-mean-reference-line",
@@ -159,5 +159,40 @@
     "title": "Hands-on_Ex10",
     "section": "Alternative 5: Sparkbar instead of sparkline",
     "text": "Alternative 5: Sparkbar instead of sparkline\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nreactable(\n  report,\n  defaultPageSize = 13,\n  columns = list(\n    Product = colDef(maxWidth = 200),\n    `Monthly Sales` = colDef(\n      cell = react_sparkbar(\n        report,\n        highlight_bars = highlight_bars(\n          min = \"red\",\n          max = \"blue\"\n        ),\n        statline = \"mean\"\n      )\n    )\n  )\n)"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ISSS608-VAA",
+    "section": "",
+    "text": "Welcome to ISSS608 Visual Analytics and Applications homepage. In this website, you will find my coursework prepared for this course."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#alternative-3-changing-line-colour",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#alternative-3-changing-line-colour",
+    "title": "Hands-on_Ex10",
+    "section": "Alternative 3: Changing line colour",
+    "text": "Alternative 3: Changing line colour\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nreactable(\n  report,\n  defaultPageSize = 13,\n  columns = list(\n    Product = colDef(maxWidth = 200),\n    `Monthly Sales` = colDef(\n      cell = react_sparkline(\n        report,\n        line_color = \"darkgreen\"\n      )\n    )\n  )\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#alternative-5-fill-the-area-beneath-the-sparkline",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#alternative-5-fill-the-area-beneath-the-sparkline",
+    "title": "Hands-on_Ex10",
+    "section": "Alternative 5: Fill the area beneath the sparkline",
+    "text": "Alternative 5: Fill the area beneath the sparkline\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nreactable(\n  report,\n  defaultPageSize = 13,\n  columns = list(\n    Product = colDef(maxWidth = 200),\n    `Monthly Sales` = colDef(\n      cell = react_sparkbar(\n        report,\n        fill_color = \"lightblue\"\n      )\n    )\n  )\n)\n\n\n\n\nThe sparkbars clearly highlight month-to-month variations in sales while enabling quick comparisons across products."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#alternative-4-label-first-and-last-line",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#alternative-4-label-first-and-last-line",
+    "title": "Hands-on_Ex10",
+    "section": "Alternative 4: Label first and last line",
+    "text": "Alternative 4: Label first and last line\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nreactable(\n  report,\n  defaultPageSize = 13,\n  columns = list(\n    Product = colDef(maxWidth = 200),\n    `Monthly Sales` = colDef(\n      cell = react_sparkline(\n        report,\n        line_curve = \"linear\",\n        labels = c(\"first\", \"last\")\n      )\n    )\n  )\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#alternative-4-row-highlighting-for-readability",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#alternative-4-row-highlighting-for-readability",
+    "title": "Hands-on_Ex10",
+    "section": "Alternative 4: Row highlighting for readability",
+    "text": "Alternative 4: Row highlighting for readability\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\n\nreactable(\n  report,\n  defaultPageSize = 13,\n  striped = TRUE,\n  highlight = TRUE,\n  columns = list(\n    Product = colDef(maxWidth = 200),\n    `Monthly Sales` = colDef(\n      cell = react_sparkline(\n        report\n      )\n    )\n  )\n)"
   }
 ]
